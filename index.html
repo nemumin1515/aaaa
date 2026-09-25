@@ -22,6 +22,66 @@ button,input,textarea{font:inherit}button{border:0;cursor:pointer}button:disable
 @media(max-width:850px){.mobilemode .main{overflow:auto;display:block}.mobilemode .stage{min-height:350px;height:auto;overflow:visible}.mobilemode .right{max-height:none;overflow:visible;margin-top:10px}.mobilemode .stage .board{min-height:95px;max-height:190px;overflow:auto}.mobilemode .scene-dialogue{max-height:25%;padding:4px 7px;font-size:10px}.mobilemode .scene-suitor{width:6.5%}.mobilemode .scene-suitor figcaption{font-size:8px}.mobilemode .stage .treasure{grid-template-columns:47px 1fr;padding:5px 8px}.mobilemode .stage .treasure img{width:44px;height:44px}.mobilemode .stage .treasure p{font-size:10px}}
 @media(max-width:850px){body:not(.mobilemode) .main{display:block;overflow:auto}body:not(.mobilemode) .stage{min-height:0;height:auto;overflow:visible}body:not(.mobilemode) .right{overflow:visible;margin-top:12px}}
 </style>
+<style>
+/* The illustrated court fills the viewport; all controls stay within it. */
+html,body{margin:0;padding:0;width:100vw;height:100vh;overflow:hidden}
+*,*::before,*::after{box-sizing:border-box}
+body,.shell{width:100vw;height:100vh;overflow:hidden}
+.shell{position:relative;background:transparent}
+.top{position:relative;z-index:3;height:58px;flex:0 0 58px;padding:0 16px}
+.main{position:relative;z-index:1;min-height:0;height:calc(100vh - 78px);display:grid;grid-template-columns:minmax(0,1fr) minmax(285px,320px);gap:10px;padding:10px;overflow:hidden}
+.foot{position:relative;z-index:3;flex:0 0 20px;height:20px;padding:2px 8px;background:#211813b8}
+.stage{position:relative;min-height:0;height:100%;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:hidden}
+.scene{position:fixed;inset:0;z-index:0;width:100vw;height:100vh;aspect-ratio:auto;overflow:hidden;border:0;pointer-events:none}
+.scene-palace{inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.scene-kaguya{left:50%;top:27%;width:min(16vw,26vh);min-width:72px}
+.scene-misu{inset:auto;left:50%;top:24%;width:min(41vw,59vh);height:min(31vh,23vw);object-fit:fill;transform:translateX(-50%);opacity:.72}
+.scene-suitor{bottom:17%;width:min(6vw,10vh);max-width:78px;min-width:36px}
+.scene-dialogue{top:66px;left:1%;right:26%;max-height:16vh;overflow:hidden;font-size:clamp(11px,1.05vw,14px);line-height:1.28}
+.stage .treasure{position:absolute;z-index:2;left:0;bottom:0;width:min(640px,100%);min-height:56px;margin:0;padding:4px 8px;background:#231810e8}
+.stage .treasure img{width:48px;height:46px}
+.stage .treasure h2{font-size:16px}
+.stage .treasure p{font-size:10px}
+.stage .board{display:none}
+.right{position:relative;z-index:2;display:flex;flex-direction:column;min-height:0;gap:7px;overflow:hidden}
+.panel{min-height:0;flex:0 0 auto;padding:10px;background:#1d1612eb;overflow:hidden}
+.panel h3{margin:0 0 5px;font-size:15px}
+.panel .muted{font-size:11px;line-height:1.35}
+.right .btnblock{margin-top:5px;padding:7px 9px}
+.room-link summary,.roster-panel summary{cursor:pointer;color:#f2d69e;font:700 14px serif}.room-link[open] summary,.roster-panel[open] summary{margin-bottom:7px}.qrwrap{gap:6px}.qr{min-width:104px;min-height:104px;padding:4px}
+.qr canvas,.qr img{width:96px!important;height:96px!important}
+.peerid,.urlbox{font-size:9px;line-height:1.2}.urlbox{display:none}
+.plist{gap:3px}.person{padding:4px 6px}.person .state{display:none}
+.entries-panel{flex:1 1 auto}.entries-panel .cards{display:block}.entries-panel .entry{padding:7px}.entries-panel .joke{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:12px}.entries-panel .object{margin:4px 0 2px;font-size:12px}
+.entry-picker{display:flex;gap:3px;margin:3px 0 6px}.entry-picker .btn{flex:1;padding:5px 2px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.judge{margin-top:5px;padding-top:5px;gap:4px}.judge input{padding:4px}.judge select{padding:4px}
+.field{margin:6px 0;gap:3px}.field input,.field textarea{padding:7px}.field textarea{min-height:64px;max-height:16vh;overflow:hidden}
+.scene-dialogue,.right,.panel,.mobilemode .main,.mobilemode .right,textarea{scrollbar-width:none}
+@media(max-width:850px){
+ body:not(.mobilemode) .main{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,37vw);grid-template-rows:minmax(0,1fr);overflow:hidden}
+ body:not(.mobilemode) .stage{height:100%;overflow:hidden}
+ body:not(.mobilemode) .right{overflow:hidden;margin:0}
+ .mobilemode .main{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,42fr) minmax(0,58fr);gap:5px;padding:5px;overflow:hidden}
+ .mobilemode .top{height:46px;flex-basis:46px;padding:0 7px}
+ .mobilemode .brand{font-size:12px;gap:5px}.mobilemode .moon{width:20px;height:20px}.mobilemode .net{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .mobilemode .stage{height:100%;min-height:0;overflow:hidden}
+ .mobilemode .scene-kaguya{left:50%;top:16%;width:20vw;min-width:60px}
+ .mobilemode .scene-misu{left:50%;top:15%;width:76vw;height:16vh;max-height:180px;opacity:.73}
+ .mobilemode .scene-suitor{bottom:59%;width:10vw;min-width:26px;max-width:48px}
+ .mobilemode .scene-suitor figcaption{font-size:8px}
+ .mobilemode .scene-dialogue{top:50px;left:2%;right:2%;max-height:9vh;padding:4px 6px;font-size:10px;line-height:1.2}
+ .mobilemode .stage .treasure{left:0;bottom:0;width:100%;min-height:42px;grid-template-columns:40px 1fr;padding:3px 5px;gap:5px}
+ .mobilemode .stage .treasure img{width:38px;height:37px}.mobilemode .stage .treasure h2{font-size:13px}.mobilemode .stage .treasure p{display:none}
+ .mobilemode .right{height:100%;max-height:none;margin:0;gap:4px;overflow:hidden}
+ .mobilemode .right>.panel:nth-child(2){display:none}
+ .mobilemode .right>.panel:first-child{flex:1 1 auto}
+ .mobilemode .right .panel{padding:8px}
+ .mobilemode .right .muted{font-size:10px}
+ .mobilemode .field textarea{min-height:60px;max-height:10vh}
+ .mobilemode .entries-panel{display:none}
+ .mobilemode .foot{font-size:8px}
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -55,11 +115,14 @@ function updateNet(text,online=false){const e=document.getElementById('net');if(
 function stageBlock(entriesHtml='',label='御前のようす',scenePlayers=[],sceneEntries=[],scenePhase=phase,focus=0){
  const active=['reveal','result'].includes(scenePhase)&&sceneEntries.length?sceneEntries[focus%sceneEntries.length]:null;
  const dialogue=active?`<strong>${esc(active.name)}「${esc(active.object)}こそ本物です！」</strong><span>${esc(active.joke)}</span>${scenePhase==='result'?`<span class="reply"><strong>かぐや姫「${esc(active.comment||'')}${active.points==null?'':` ${active.points}点！` }」</strong></span>`:''}`:`<strong>かぐや姫</strong>「${esc(currentTreasure().name)}を持ってきて。身近な物でも、本物だと言い切れるかしら？」`;
- const suitors=scenePlayers.map((p,i)=>{const x=50+(i-(scenePlayers.length-1)/2)*12.5;return `<figure class="scene-suitor ${p.online?'':'offline'} ${active?.id===p.id?'active':''}" style="--x:${x}%"><img src="assets/suitor.png" alt=""><figcaption>${esc(p.name)}</figcaption></figure>`}).join('');
+ const suitors=scenePlayers.map((p,i)=>{const x=48+(i-(scenePlayers.length-1)/2)*9;return `<figure class="scene-suitor ${p.online?'':'offline'} ${active?.id===p.id?'active':''}" style="--x:${x}%"><img src="assets/suitor.png" alt=""><figcaption>${esc(p.name)}</figcaption></figure>`}).join('');
  return `<section class="stage"><div class="scene" aria-label="御殿の大喜利舞台"><img class="scene-palace" src="assets/stage.png" alt=""><div class="scene-kaguya ${['reveal','result'].includes(scenePhase)?'laughing':''}" role="img" aria-label="かぐや姫"></div><img class="scene-misu" src="assets/misu.png" alt=""><div class="scene-suitors">${suitors}</div><div class="scene-dialogue">${dialogue}</div></div>${treasurePanel()}<div class="board"><div class="section-label">${esc(label)}</div>${entriesHtml||`<div class="waiting"><span class="seal">☾</span>まだ御前に提出はありません。<br>求婚者たちの支度を待っています。</div>`}</div></section>`
 }
 function renderHost(){const t=currentTreasure();const playerList=[...players.values()];const entries=playerList.filter(p=>p.submissions[round]);const cards=['reveal','result'].includes(phase)?entries.map(p=>{const s=p.submissions[round];return `<article class="entry"><div class="entrytop"><span>${esc(p.name)}</span><span class="tag">${phase==='result'?`${s.points||0}点`:'判定中'}</span></div><div class="object">持参品：${esc(s.object)}</div><p class="joke">${esc(s.joke)}</p>${phase==='reveal'?`<div class="judge"><label>姫の判定</label><select data-score="${esc(p.id)}"><option value="0" ${s.points===0?'selected':''}>0点</option><option value="1" ${s.points===1?'selected':''}>1点</option><option value="2" ${s.points===2?'selected':''}>2点</option><option value="3" ${s.points===3?'selected':''}>3点</option></select><input data-comment="${esc(p.id)}" maxlength="60" value="${esc(s.comment||'')}" placeholder="姫のひと言（空欄なら自動）"><button class="btn small primary" data-award="${esc(p.id)}">判定保存</button></div>`:''}</article>`}).join(''):'';
  const roster=playerList.map(p=>`<div class="person"><div><div class="name">${esc(p.name)}</div><div class="status">${p.recovering?'◌ 復帰待ち':p.online?'● 接続中':'○ 一時離席中'} · ${p.ready?'準備OK':'準備中'} · 合計 ${visibleTotal(p)}点</div></div><button class="btn small soft" data-kick="${esc(p.id)}" title="参加者を退出">退出</button><div class="state">${p.submissions[round]?'提出済み':'未提出'}</div></div>`).join('')||'<div class="muted">参加者はまだいません。QRコードを読み取ってもらいましょう。</div>';
+ const focusEntry=entries[spotlightIndex%Math.max(1,entries.length)];
+ const focusCard=focusEntry&&['reveal','result'].includes(phase)?cards.split('</article>')[spotlightIndex%entries.length]+'</article>':'';
+ const entryPanel=focusCard?`<section class="panel entries-panel"><h3>公開されたボケ · ${spotlightIndex%entries.length+1}/${entries.length}</h3><div class="entry-picker">${entries.map((p,i)=>`<button class="btn small ${i===spotlightIndex%entries.length?'primary':'soft'}" data-focus-index="${i}" title="${esc(p.name)}">${esc(p.name)}</button>`).join('')}</div><div class="cards">${focusCard}</div></section>`:'';
  let action='';if(phase==='lobby')action=`<button class="btn primary btnblock" data-action="prep">準備を始める</button>`;
  if(phase==='prep')action=`<button class="btn primary btnblock" data-action="operate">提出スタート</button>`;
  if(phase==='operate')action=`<button class="btn primary btnblock" data-action="confirm">提出を締め切る</button>`;
@@ -69,7 +132,7 @@ function renderHost(){const t=currentTreasure();const playerList=[...players.val
  if(['reveal','result'].includes(phase)&&entries.length>1)action+=`<button class="btn soft btnblock" data-action="spotlight-next">次の求婚者を舞台に映す</button>`;
  const linkHtml=hostPeer?`<div class="qrwrap"><div class="qr" id="qr"></div><div><div class="muted">スマホでQRを読み取ると参加できます<br>参加上限：求婚者5人</div><div class="peerid">Peer ID: ${esc(hostPeer.id)}</div><div class="urlbox">${esc(joinUrl)}</div><button class="btn small soft" data-action="copy">参加URLをコピー</button></div></div>`:`<div class="muted">親PCで部屋を作り、Peer IDと参加QRを発行します。</div><button class="btn primary btnblock" data-action="create">部屋を作る</button>`;
  const leaderboard=phase==='result'&&round===4?`<section class="panel"><h3>最終順位</h3><div class="plist">${playerList.slice().sort((a,b)=>b.total-a.total).map((p,i)=>`<div class="person"><div class="name">${i===0?'👑 ':''}${i+1}位 · ${esc(p.name)}</div><span class="tag">${p.total}点</span></div>`).join('')}</div></section>`:'';
- const controls=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>進行管理</h3><span class="phase">${PHASES[phase]}</span></div><div class="muted">${phase==='lobby'?'参加者がそろったら準備へ。':`難題 ${round+1}/5 · ${esc(t.name)}`}</div><div class="host-actions" style="margin-top:11px"><span class="tag">接続 ${playerList.filter(p=>p.online).length}/5</span><span class="tag">提出 ${entries.length}/${playerList.length}</span></div>${action}</section><section class="panel"><h3>参加用QRコード</h3>${linkHtml}</section><section class="panel"><div class="row" style="justify-content:space-between"><h3>求婚者</h3><span class="tag">最大5人</span></div><div class="plist">${roster}</div></section>${leaderboard}</div>`;
+ const controls=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>進行管理</h3><span class="phase">${PHASES[phase]}</span></div><div class="muted">${phase==='lobby'?'参加者がそろったら準備へ。':`難題 ${round+1}/5 · ${esc(t.name)}`}</div><div class="host-actions" style="margin-top:7px"><span class="tag">接続 ${playerList.filter(p=>p.online).length}/5</span><span class="tag">提出 ${entries.length}/${playerList.length}</span></div>${action}</section><details class="panel room-link" ${phase==='lobby'?'open':''}><summary>参加用QRコード</summary>${linkHtml}</details><details class="panel roster-panel" ${phase==='lobby'?'open':''}><summary>求婚者 ${playerList.length}/5</summary><div class="plist">${roster}</div></details>${entryPanel}${leaderboard}</div>`;
  const board=cards?`<div class="cards">${cards}</div>`:`<div class="waiting"><span class="seal">📜</span>公開まで宝物は封印中。<br>${entries.length}件の提出を受け付けています。</div>`;
  app.innerHTML=chrome(`${stageBlock(board,'提出された現代の宝物',playerList,entries.map(p=>({id:p.id,name:p.name,...p.submissions[round]})),phase,spotlightIndex)}${controls}`,'','Host · 親PC');if(hostPeer&&window.QRCode){const q=document.getElementById('qr');if(q){q.innerHTML='';new QRCode(q,{text:joinUrl,width:114,height:114,colorDark:'#211813',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}}
 }
@@ -84,7 +147,7 @@ function renderClient(){const keepObject=document.getElementById('object')?.valu
  else if(s.phase==='confirm')content=`<div class="waiting"><span class="seal">📜</span>提出を締め切りました。<br>全員への一斉公開をお待ちください。</div>`;
  else if(s.phase==='reveal')content=`<div class="waiting"><span class="seal">🎭</span>全員のボケが公開されました。<br>かぐや姫が判定中です……</div>`;
  else if(s.phase==='result')content=`<div class="client-result"><div class="eyebrow">姫のご判定</div><strong>${s.submission?.points||0} 点</strong><div class="muted">${s.submission?.comment?esc(s.submission.comment):'姫のひと言はありません'}</div><div class="tag" style="display:inline-block;margin-top:10px">累計 ${s.total||0}点</div></div>`;
- const boardLabel=['reveal','result'].includes(s.phase)?'一斉公開されたボケ':'御前のようす';const stage=stageBlock(['reveal','result'].includes(s.phase)?`<div class="cards">${entries}</div>`:'',boardLabel,s.roster||[],s.entries||[],s.phase,s.spotlightIndex||0);const ranked=(s.roster||[]).slice().sort((a,b)=>b.total-a.total);const finalBoard=s.phase==='result'&&s.round===4?`<section class="panel"><h3>五つの難題・最終順位</h3><div class="plist">${ranked.map((p,i)=>`<div class="person"><div><div class="name">${i===0?'👑 ':''}${i+1}位 · ${esc(p.name)}</div></div><span class="tag">${p.total}点</span></div>`).join('')||'<div class="muted">順位はありません。</div>'}</div></section>`:'';const side=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>${esc(PHASES[s.phase]||'参加受付')}</h3><span class="tag">難題 ${Math.min((s.round||0)+1,5)}/5</span></div><div class="muted">接続先のホストPCと直接通信しています。画面を閉じた場合は再表示後に自動で再接続します。</div><div id="client-content">${content}</div></section><section class="panel"><h3>求婚者たち</h3><div class="plist">${(s.roster||[]).map(p=>`<div class="person"><div><div class="name">${esc(p.name)}${p.id===participantId?'（あなた）':''}</div><div class="status">${p.recovering?'◌ 復帰待ち':p.online?'● 接続中':'○ 一時離席中'}</div></div><span class="tag">${p.total}点</span><div class="state">${p.submitted?'提出済み':p.ready?'準備OK':'待機中'}</div></div>`).join('')||'<div class="muted">接続しています…</div>'}</div></section>${finalBoard}</div>`;
+ const boardLabel=['reveal','result'].includes(s.phase)?'一斉公開されたボケ':'御前のようす';const stage=stageBlock(['reveal','result'].includes(s.phase)?`<div class="cards">${entries}</div>`:'',boardLabel,s.roster||[],s.entries||[],s.phase,s.spotlightIndex||0);const ranked=(s.roster||[]).slice().sort((a,b)=>b.total-a.total);const finalBoard=s.phase==='result'&&s.round===4?`<section class="panel"><h3>五つの難題・最終順位</h3><div class="plist">${ranked.map((p,i)=>`<div class="person"><div><div class="name">${i===0?'👑 ':''}${i+1}位 · ${esc(p.name)}</div></div><span class="tag">${p.total}点</span></div>`).join('')||'<div class="muted">順位はありません。</div>'}</div></section>`:'';const side=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>${esc(PHASES[s.phase]||'参加受付')}</h3><span class="tag">難題 ${Math.min((s.round||0)+1,5)}/5</span></div><div class="muted">接続先のホストPCと直接通信しています。画面を閉じた場合は再表示後に自動で再接続します。</div><div id="client-content">${content}</div>${finalBoard}</section><section class="panel"><h3>求婚者たち</h3><div class="plist">${(s.roster||[]).map(p=>`<div class="person"><div><div class="name">${esc(p.name)}${p.id===participantId?'（あなた）':''}</div><div class="status">${p.recovering?'◌ 復帰待ち':p.online?'● 接続中':'○ 一時離席中'}</div></div><span class="tag">${p.total}点</span><div class="state">${p.submitted?'提出済み':p.ready?'準備OK':'待機中'}</div></div>`).join('')||'<div class="muted">接続しています…</div>'}</div></section></div>`;
  app.innerHTML=chrome(`${stage}${side}`,'',snapshot?'ホストと接続中':'接続を試みています');updateNet(snapshot?'ホストと接続中':'再接続中',Boolean(snapshot));
  const n=app.querySelector('#object'),j=app.querySelector('#joke');if(n)n.value=keepObject;if(j){j.value=keepJoke;const updateCount=()=>{const c=document.getElementById('joke-count');if(c)c.textContent=`${j.value.length} / 180`};updateCount();j.addEventListener('input',updateCount)}if(activeId){const field=app.querySelector(`#${activeId}`);if(field){field.focus({preventScroll:true});if(Number.isInteger(caret))field.setSelectionRange(caret,caret)}}
 }
@@ -104,7 +167,8 @@ function connectClient(){if(!roomId||!window.Peer)return;if(document.visibilityS
 function openRoomConnection(){if(!clientPeer||clientPeer.__rejected||!clientPeer.open||document.visibilityState==='hidden')return;if(clientPeer.__connecting||clientPeer.__conn?.open)return;clientPeer.__connecting=true;const c=clientPeer.connect(roomId,{reliable:true});clientPeer.__conn=c;c.on('open',()=>{clientPeer.__connecting=false;clientPeer.__lastPong=Date.now();if(clientName)send(c,{type:'join',participantId,nickname:clientName});updateNet(clientName?'ホストに接続中…':'ニックネームを入力してください',Boolean(clientName));if(clientPeer.__retry){clearInterval(clientPeer.__retry);clientPeer.__retry=null}});c.on('data',d=>{let m=d;try{if(typeof d==='string')m=JSON.parse(d)}catch{return}if(m.type==='joined'){localStorage.setItem(nameKey,clientName);snapshot=m.state;ready=Boolean(snapshot.roster?.find(x=>x.id===participantId)?.ready);renderClient()}else if(m.type==='state'){snapshot=m.state;ready=Boolean(snapshot.roster?.find(x=>x.id===participantId)?.ready);renderClient()}else if(m.type==='pong'){clientPeer.__lastPong=Date.now()}else if(m.type==='reject'){clientPeer.__rejected=true;toast(m.reason||'参加できません');updateNet('参加できません');try{c.close()}catch{}}else if(m.type==='notice')toast(m.text)});c.on('close',()=>{clientPeer.__connecting=false;if(!clientPeer.__rejected){updateNet('再接続中…');scheduleClientRetry()}});c.on('error',()=>{clientPeer.__connecting=false;if(!clientPeer.__rejected)scheduleClientRetry()})}
 function scheduleClientRetry(){if(!clientPeer||clientPeer.__retry)return;clientPeer.__retry=setInterval(()=>openRoomConnection(),3000)}
 if(!isClient){phase='lobby';renderHost()}else{if(clientName)clientName=localStorage.getItem(nameKey)||'';renderClient();connectClient();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){setTimeout(connectClient,250);if(clientPeer?.__conn?.open){const before=clientPeer.__lastPong||0;send(clientPeer.__conn,{type:'ping'});setTimeout(()=>{if(clientPeer?.__conn?.open&&(clientPeer.__lastPong||0)<=before){try{clientPeer.__conn.close()}catch{}scheduleClientRetry()}},6000)}}});setInterval(()=>{if(document.visibilityState==='visible'&&clientPeer?.__conn?.open){if(Date.now()-(clientPeer.__lastPong||Date.now())>45000){try{clientPeer.__conn.close()}catch{}scheduleClientRetry()}else send(clientPeer.__conn,{type:'ping'})}},15000);setTimeout(scheduleClientRetry,4000)}
-document.addEventListener('click',e=>{const btn=e.target.closest('[data-action],[data-award],[data-kick]');if(!btn)return;const action=btn.dataset.action;
+document.addEventListener('click',e=>{const btn=e.target.closest('[data-action],[data-award],[data-kick],[data-focus-index]');if(!btn)return;const action=btn.dataset.action;
+ if(btn.dataset.focusIndex!==undefined&&!isClient){const i=Number(btn.dataset.focusIndex),count=[...players.values()].filter(p=>p.submissions[round]).length;if(Number.isInteger(i)&&i>=0&&i<count){spotlightIndex=i;broadcast();renderHost()}return}
  if(btn.dataset.kick){const p=players.get(btn.dataset.kick);if(p){send(p.conn,{type:'reject',reason:'ホストが退出にしました。'});try{p.conn?.close()}catch{}players.delete(p.id);broadcast();renderHost()}return}
  if(btn.dataset.award){const p=players.get(btn.dataset.award),select=app.querySelector(`[data-score="${CSS.escape(btn.dataset.award)}"]`),input=app.querySelector(`[data-comment="${CSS.escape(btn.dataset.award)}"]`);if(p?.submissions[round]){const points=Math.max(0,Math.min(3,Number(select?.value)||0));p.submissions[round].points=points;p.submissions[round].comment=String(input?.value||'').trim().slice(0,60)||KAGUYA_COMMENTS[points];p.total=Object.values(p.submissions).reduce((a,x)=>a+(x.points||0),0);broadcast();renderHost()}return}
  if(action==='create'){startHost();return}if(action==='copy'){navigator.clipboard?.writeText(joinUrl).then(()=>toast('参加URLをコピーしました')).catch(()=>toast('URLを選択してコピーしてください'));return}
