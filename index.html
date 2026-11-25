@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v6</title>
+<title>もちもちゅ おみくじ v7</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -239,7 +239,7 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v6</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v7</p>
     </div>
   </div>
 
@@ -1555,7 +1555,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     $('storeWarn').hidden = canStore;
     renderAppStatus();
   }
-  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); $('admin').hidden = false; });
+  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); updateFsBtn(); $('admin').hidden = false; });
   $('adCloseBtn').addEventListener('click', () => { $('admin').hidden = true; });
   $('resetBtn').addEventListener('click', () => {
     if (!confirm('出たおみくじの記録をすべて消します。\nすべての区分が最初から（20個ずつ）になります。よろしいですか？')) return;
@@ -1568,10 +1568,36 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       download(res.blob, 'omikuji_mihon_' + stamp() + '.png');
     } catch (e) { alert('見本画像を作れませんでした。'); }
   });
-  $('fsBtn').addEventListener('click', () => {
+  // ---------- 全画面 ----------
+  // ホーム画面のアプリから開いたときは、最初から全画面（manifest の設定）。
+  // ブラウザやショートカットで開いたときも、最初に画面をタップしたところで全画面にする。
+  // （ブラウザの決まりで、タップなどの操作がないと全画面にはできません）
+  let autoFullscreen = true;
+  function isAppFullscreen() { return window.matchMedia('(display-mode: fullscreen)').matches; }
+  function enterFullscreen() {
     const el = document.documentElement;
-    if (document.fullscreenElement) document.exitFullscreen && document.exitFullscreen();
-    else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+    if (document.fullscreenElement || isAppFullscreen() || !el.requestFullscreen) return;
+    el.requestFullscreen({ navigationUI: 'hide' })
+      .then(() => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); })
+      .catch(() => {});
+  }
+  document.addEventListener('click', e => {
+    if (!autoFullscreen || e.target.closest('#admin')) return;   // 管理メニューの操作では切り替えない
+    enterFullscreen();
+  }, true);
+  function updateFsBtn() {
+    $('fsBtn').textContent = (document.fullscreenElement || isAppFullscreen()) ? '全画面をやめる' : '全画面にする';
+    $('fsBtn').hidden = isAppFullscreen();                       // アプリで開いているときは常に全画面なので出さない
+  }
+  document.addEventListener('fullscreenchange', updateFsBtn);
+  $('fsBtn').addEventListener('click', () => {
+    if (document.fullscreenElement) {
+      autoFullscreen = false;                                     // 自分でやめたときは、自動で戻さない（開き直すと元に戻る）
+      if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+    } else {
+      autoFullscreen = true;
+      enterFullscreen();
+    }
   });
 
   // ---------- ホーム画面アプリ（PWA） ----------
@@ -1615,6 +1641,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   window.__omikuji = {
     splitColumns, printColumns, makeImage, peek, commit, remaining, GROUPS, BY_ID,
     measure: t => { setText(t); const f = fitText(); otext.textContent = ''; return f; },
+    get autoFullscreen() { return autoFullscreen; },
     get store() { return store; }
   };
 })();
