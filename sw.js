@@ -1,6 +1,6 @@
 // もちもちゅ おみくじ：ネットがなくても動くようにするしくみ（Service Worker）
 // ★ 更新したら、下の CACHE の v番号を index.html のバージョンと同じにしてください
-const CACHE = 'mochimochu-omikuji-v7';
+const CACHE = 'mochimochu-omikuji-v8';
 const CORE = [
   './',
   './index.html',

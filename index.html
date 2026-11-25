@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v7</title>
+<title>もちもちゅ おみくじ v8</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -98,6 +98,28 @@
   table.counts th:first-child, table.counts td:first-child { text-align: left; }
   table.counts td.low { color: #A3201A; font-weight: 900; }
 
+  /* 画像を保存したあと：「お店の人にわたしてね」画面 */
+  .handoff { position: absolute; left: 0; right: 0; top: 150px; bottom: 0; z-index: 12; background: #121A3A;
+    display: flex; flex-direction: column; align-items: center; }
+  .handoff[hidden] { display: none; }
+  .hoInner { display: flex; flex-direction: column; align-items: center; animation: flipIn .7s cubic-bezier(.2,1.2,.4,1) both; }
+  .hoSaved { margin: 14px 0 0; display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #C9CDE6; }
+  .hoMoon { margin-top: 14px; width: 270px; height: 270px; border-radius: 50%; background: #F3DFA2; box-shadow: 0 0 60px #F3DFA266;
+    display: flex; align-items: center; justify-content: center; }
+  .hoChara { width: 168px; height: 208px; object-fit: contain; }
+  .hoTitle { margin: 26px 0 0; font-family: "Kaisei Decol", serif; font-weight: 700; font-size: 66px; line-height: 1.1; letter-spacing: 6px;
+    color: #F2C14E; text-shadow: 0 0 30px #F2C14E66; }
+  .hoStaff { position: absolute; left: 40px; right: 40px; bottom: 22px; display: flex; align-items: center; gap: 14px;
+    padding-top: 14px; border-top: 1px dashed #4A5590; }
+  .hoStaff p { flex: 1; margin: 0; font-size: 16px; line-height: 1.5; color: #C9CDE6; }
+  .hoBtnSub { height: 52px; padding: 0 20px; border: 2px solid #5A6194; border-radius: 999px; background: transparent; color: #C9CDE6; font-size: 16px; font-weight: 700; }
+  .hoBtnHold { position: relative; overflow: hidden; height: 52px; padding: 0 24px; border: 2px solid #F2C14E; border-radius: 999px;
+    background: transparent; color: #F2C14E; font-size: 17px; font-weight: 900; touch-action: none; -webkit-touch-callout: none; }
+  .hoBtnHold .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: #F2C14E55; }
+  .hoBtnHold.holding .fill { width: 100%; transition: width 1.2s linear; }
+  .hoBtnHold .lbl { position: relative; }
+  @keyframes flipIn { 0% { transform: perspective(900px) rotateY(-90deg) scale(.8); opacity: 0; } 100% { transform: perspective(900px) rotateY(0) scale(1); opacity: 1; } }
+
   @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
   @keyframes shake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-16deg); } 75% { transform: rotate(16deg); } }
   @keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
@@ -108,7 +130,7 @@
   .shake { animation: shake .3s ease-in-out infinite; transform-origin: 50% 85%; }
   .twinkle { animation: twinkle 2.4s ease-in-out infinite; }
   .sway { animation: sway 4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
-  @media (prefers-reduced-motion: reduce) { .bob, .shake, .twinkle, .sway, #drawBtn.ready { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .bob, .shake, .twinkle, .sway, #drawBtn.ready, .hoInner { animation: none; } }
 
   /* 画像づくり用の用紙（画面の外に置く。表示はされない） */
   #offscreen { position: fixed; left: -20000px; top: 0; pointer-events: none; }
@@ -211,7 +233,21 @@
     <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
   </button>
 
-  <!-- 保存しました／エラー -->
+  <!-- 画像を保存したあと：お店の人にわたしてね（お店の人が長押しするまで出たまま） -->
+  <div id="handoff" class="handoff" role="dialog" aria-modal="true" aria-labelledby="hoTitle" hidden>
+    <div class="hoInner">
+      <p class="hoSaved"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F2C14E" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>おみくじを ひきました</p>
+      <div class="hoMoon"><img id="hoChara" class="hoChara bob" alt=""></div>
+      <h2 id="hoTitle" class="hoTitle">お店の人にわたしてね</h2>
+    </div>
+    <div class="hoStaff">
+      <p>お店の人へ：おみくじ画像はタブレットの「ダウンロード」に保存されています。<br>印刷がすんだら、右のボタンを長押しすると最初の画面にもどります。</p>
+      <button id="hoResave" type="button" class="hoBtnSub">もう一度保存</button>
+      <button id="hoNext" type="button" class="hoBtnHold"><span class="fill"></span><span class="lbl">長押しで つぎの人へ</span></button>
+    </div>
+  </div>
+
+  <!-- 保存できなかったとき -->
   <div id="overlay" class="overlay" hidden>
     <div class="card" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
       <svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#D2402F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
@@ -239,7 +275,7 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v7</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v8</p>
     </div>
   </div>
 
@@ -1237,7 +1273,8 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   // ---------- 設定 ----------
   const STORE_KEY = 'mochimochu_omikuji_bags';   // 出たおみくじの記録（バージョンが変わっても引き継ぐ）
   const MIN_SHAKE_MS = 1600;                      // 筒をふる演出の最短時間
-  const AUTO_CLOSE_MS = 12000;                    // 「保存しました」を自動で閉じるまで
+  const AUTO_CLOSE_MS = 12000;                    // 「保存できませんでした」を自動で閉じるまで
+  const HOLD_MS = 1200;                           // 「つぎの人へ」の長押しの長さ
   const DPI = 300;                                // 画像の画質（kanban_v7 の「高画質 300dpi」）
   const A4 = { w: 210, h: 297 };                  // A4縦（mm）
   const PX_PER_MM = 96 / 25.4;
@@ -1513,17 +1550,24 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     setTimeout(() => { showResult(ok); }, wait);
   }
   function showResult(ok) {
-    $('ovTitle').textContent = ok ? 'おみくじ画像を保存しました' : '保存できませんでした';
-    $('ovMsg').textContent = ok ? 'タブレットの「ダウンロード」に入っています。' : 'もう一度「おみくじを ひく」をおしてください。';
-    $('resaveBtn').hidden = !ok;
+    clearTimeout(closeTimer);
+    if (ok) {
+      // 保存できた：「お店の人にわたしてね」画面へ（自動では閉じない）
+      $('handoff').hidden = false;
+      $('hoNext').focus();
+      return;
+    }
+    $('ovTitle').textContent = '保存できませんでした';
+    $('ovMsg').textContent = 'もう一度「おみくじを ひく」をおしてください。';
+    $('resaveBtn').hidden = true;
     $('overlay').hidden = false;
     $('okBtn').focus();
-    clearTimeout(closeTimer);
     closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
   }
   function closeResult() {
     clearTimeout(closeTimer);
     $('overlay').hidden = true;
+    $('handoff').hidden = true;
     sel.g = sel.a = sel.c = null;                  // つぎの人のために選択をもどす
     busy = false; phase = 'idle'; refresh();
   }
@@ -1533,6 +1577,21 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     if (last) download(last.blob, last.name);
     clearTimeout(closeTimer); closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
   });
+  // 「お店の人にわたしてね」画面
+  $('hoChara').src = document.querySelector('.kb-chara').src;   // 看板と同じキャラクター
+  $('hoResave').addEventListener('click', () => { if (last) download(last.blob, last.name); });
+  const hold = $('hoNext');
+  let holdTimer = 0;
+  function holdStart(e) {
+    if (e.button > 0) return;
+    hold.classList.add('holding');
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => { hold.classList.remove('holding'); closeResult(); }, HOLD_MS);
+  }
+  function holdEnd() { clearTimeout(holdTimer); hold.classList.remove('holding'); }
+  hold.addEventListener('pointerdown', holdStart);
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(t => hold.addEventListener(t, holdEnd));
+  hold.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); closeResult(); } });
 
   // ---------- 管理メニュー ----------
   function renderCounts() {
