@@ -1,185 +1,1622 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#211813">
-<title>かぐや姫のむちゃぶり御前</title>
-<style>
-:root{--ink:#211813;--paper:#fff8e9;--gold:#e8bd69;--red:#8c3026;--green:#476253;--muted:#c7bba5;--line:#6c5135}
-*{box-sizing:border-box}html,body{margin:0;padding:0;width:100vw;height:100vh;overflow:hidden}body{font-family:system-ui,-apple-system,"Yu Gothic",Meiryo,sans-serif;color:var(--paper);background:#17120f}
-button,input,textarea{font:inherit}button{border:0;cursor:pointer}button:disabled{opacity:.48;cursor:not-allowed}.shell{height:100%;width:100%;display:flex;flex-direction:column;background:linear-gradient(90deg,rgba(21,15,11,.82),rgba(26,18,12,.68) 48%,rgba(21,15,11,.82))}
-.top{height:68px;flex:0 0 68px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #bb9455;background:rgba(25,17,12,.88)}.brand{display:flex;align-items:center;gap:12px;font-family:serif;font-weight:800;letter-spacing:.08em}.moon{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff7d0,#d7a94f 68%,#8d5528);box-shadow:0 0 18px #f1cf7b77}.net{font-size:12px;color:#d9c9ab}.net:before{content:"";display:inline-block;width:8px;height:8px;margin-right:7px;border-radius:50%;background:#9c7253}.net.online:before{background:#73d99c;box-shadow:0 0 7px #73d99c}
-.main{min-height:0;flex:1;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(320px,.85fr);gap:16px;padding:16px;overflow:hidden}.stage{min-width:0;position:relative;display:flex;flex-direction:column;border:1px solid #b58a50;border-radius:14px;background:#1d1713;box-shadow:0 14px 50px #0008;overflow:hidden}.stagehead{position:relative;z-index:1;padding:22px 26px 10px;text-align:center}.eyebrow{font-size:11px;letter-spacing:.3em;color:var(--gold)}h1{margin:4px 0 8px;font-family:serif;font-size:clamp(22px,3vw,36px);color:#fff1cd}.stagehead p{margin:0;color:#ddcfb4;font-size:13px}.treasure{position:relative;z-index:1;margin:0 auto;width:min(92%,690px);padding:15px 20px;display:grid;grid-template-columns:94px 1fr;gap:18px;align-items:center;border:1px solid #d6ae68;border-radius:12px;background:linear-gradient(110deg,#322217ed,#181412ed);box-shadow:0 8px 24px #0007}.treasure img{width:90px;height:80px;object-fit:contain;image-rendering:pixelated;background:#0002;border-radius:9px}.treasure .num{font-size:11px;color:#d1a85c;letter-spacing:.15em}.treasure h2{margin:3px 0;font-family:serif;color:#ffe9b6;font-size:clamp(18px,2.3vw,26px)}.treasure p{margin:4px 0 0;color:#d8c9ac;font-size:12px}.board{position:relative;z-index:1;display:flex;flex:1;min-height:0;flex-direction:column;overflow:auto;padding:16px 22px 20px}.section-label{font-size:11px;letter-spacing:.2em;color:#d8b36f;margin:0 0 10px}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;align-content:start}.entry{padding:12px;border:1px solid #755b3e;background:#191514dc;border-radius:10px}.entrytop{display:flex;justify-content:space-between;gap:8px;font-weight:700;color:#ffedca;font-size:14px}.entry small{color:#bdaa8b}.entry .object{color:#f3ca79;font-size:13px;margin:8px 0 4px}.entry .joke{margin:0;white-space:pre-wrap;line-height:1.5;color:#f7f0e6;font-size:14px;overflow-wrap:anywhere}.waiting{margin:auto;text-align:center;color:#c9baa1;max-width:430px;line-height:1.8}.waiting .seal{font-size:40px;display:block;margin-bottom:5px}.right{display:flex;flex-direction:column;min-height:0;gap:12px;overflow:auto}.panel{border:1px solid #997349;border-radius:12px;background:rgba(29,22,18,.94);box-shadow:0 8px 30px #0006;padding:16px}.panel h3{margin:0 0 12px;color:#f2d69e;font-family:serif;font-size:17px}.phase{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid #86683f;border-radius:99px;color:#f1d08b;font-size:11px}.phase:before{content:"";width:7px;height:7px;border-radius:50%;background:#e1b55e}.muted{color:#c4b49b;font-size:12px;line-height:1.6}.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}.btn{padding:10px 13px;border-radius:8px;color:#fff9eb;background:#6a3827;font-weight:700;box-shadow:inset 0 0 0 1px #bd8153}.btn.primary{color:#27190e;background:linear-gradient(#f3d88f,#d6aa59);box-shadow:inset 0 0 0 1px #fff0b3}.btn.soft{color:#f7e8c9;background:#37302a;box-shadow:inset 0 0 0 1px #635649}.btn.red{background:#8c3026}.btn.small{padding:6px 9px;font-size:12px}.btnblock{width:100%;margin-top:8px}.qrwrap{display:flex;align-items:center;gap:14px}.qr{background:#fff;padding:8px;border-radius:8px;min-width:130px;min-height:130px;display:grid;place-items:center}.peerid{font:11px ui-monospace,monospace;word-break:break-all;color:#ded0bb;margin-top:8px}.urlbox{font-size:10px;word-break:break-all;color:#b6a68c;margin-top:4px}.plist{display:flex;flex-direction:column;gap:7px}.person{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;padding:8px 9px;background:#ffffff0b;border:1px solid #514133;border-radius:8px}.person .name{font-size:13px;color:#f7ecd4;font-weight:650}.person .status{font-size:10px;color:#b8a78b}.person .state{grid-column:1/-1;color:#cbb992;font-size:11px}.tag{padding:3px 7px;border:1px solid #816745;border-radius:99px;font-size:10px;color:#e6c783}.judge{border-top:1px solid #523f2c;margin-top:9px;padding-top:9px;display:grid;grid-template-columns:1fr auto;gap:7px;align-items:center}.judge select,.judge input{width:66px;padding:5px;background:#211a16;color:#fff1d4;border:1px solid #7b6344;border-radius:6px}.host-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field{display:flex;flex-direction:column;gap:6px;margin:10px 0}.field label{font-size:12px;color:#dfcda9}.field input,.field textarea{width:100%;border:1px solid #806344;border-radius:8px;background:#17120f;color:#fff8e9;padding:11px;outline:none}.field input:focus,.field textarea:focus{border-color:#f0cc79;box-shadow:0 0 0 2px #f0cc7933}.field textarea{resize:vertical;min-height:92px;max-height:24vh}.counter{display:flex;justify-content:space-between;color:#b8a78b;font-size:11px}.mobilemode .main{display:flex;flex-direction:column;padding:10px;gap:10px}.mobilemode .stage{flex:1;min-height:0}.mobilemode .right{flex:0 0 auto;overflow:auto;max-height:47vh}.mobilemode .stagehead{padding:14px 12px 8px}.mobilemode .treasure{grid-template-columns:66px 1fr;padding:9px 12px;width:calc(100% - 16px);gap:12px}.mobilemode .treasure img{width:64px;height:58px}.mobilemode .board{padding:12px}.mobilemode .top{height:54px;flex-basis:54px;padding:0 14px}.mobilemode .brand{font-size:14px}.mobilemode .cards{grid-template-columns:1fr}.mobilemode .main{overflow:hidden}.client-result{text-align:center;padding:10px}.client-result strong{display:block;color:#f4d589;font-size:24px;margin:8px}.toast{position:fixed;z-index:10;left:50%;bottom:20px;transform:translateX(-50%);background:#17120f;border:1px solid #d4b574;color:#fff1d3;padding:10px 16px;border-radius:9px;box-shadow:0 6px 24px #0009;max-width:90vw;text-align:center}.foot{color:#b6a88f;font-size:10px;text-align:center;padding:4px 10px 8px}.hidden{display:none!important}
-@media(max-width:850px){.main{grid-template-columns:1fr;grid-template-rows:minmax(320px,1fr) minmax(190px,.75fr);overflow:auto}.right{overflow:auto}.stage{min-height:330px}.top{height:58px;flex-basis:58px}.net{font-size:10px}}
-</style>
-<style>
+<title>もちもちゅ おみくじ v6</title>
+<!-- ホーム画面アプリ（PWA）用 -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#121A3A">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaisei+Decol:wght@700&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
 
-@keyframes kaguya-laugh{0%{background-position:0 0}6.25%{background-position:33.333% 0}12.5%{background-position:66.667% 0}18.75%{background-position:100% 0}25%{background-position:0 33.333%}31.25%{background-position:33.333% 33.333%}37.5%{background-position:66.667% 33.333%}43.75%{background-position:100% 33.333%}50%{background-position:0 66.667%}56.25%{background-position:33.333% 66.667%}62.5%{background-position:66.667% 66.667%}68.75%{background-position:100% 66.667%}75%{background-position:0 100%}81.25%{background-position:33.333% 100%}87.5%{background-position:66.667% 100%}93.75%,100%{background-position:100% 100%}}
+<!-- ===== 画面（タブレット）のデザイン ===== -->
+<style id="appStyle">
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  html, body { margin: 0; height: 100%; background: #0B1029; overflow: hidden; }
+  body {
+    font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+    color: #F6E7C1;
+    -webkit-user-select: none; user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  #viewport { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  #stage { position: relative; flex: none; width: 1180px; height: 820px; background: #121A3A; overflow: hidden; transform-origin: center center; }
+  button { font-family: inherit; cursor: pointer; transition: transform .12s, background-color .15s, box-shadow .15s; }
+  button:active { transform: translateY(3px); }
 
-.judge input{width:100%}
-.scene{position:relative;flex:0 0 auto;width:100%;aspect-ratio:1671/941;overflow:hidden;isolation:isolate;background:#261c16;border-bottom:2px solid #d0a864}.scene-palace,.scene-misu{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}.scene-palace{z-index:1}.scene-kaguya{position:absolute;z-index:2;left:50%;top:21%;width:18%;aspect-ratio:1;transform:translateX(-50%);background:url("assets/kaguya.png") 0 0/400% 400% no-repeat;image-rendering:pixelated;filter:drop-shadow(0 3px 5px #24150d88)}.scene-kaguya.laughing{animation:kaguya-laugh 1.6s steps(1,end) infinite}.scene-misu{z-index:3}.scene-suitors{position:absolute;inset:0;z-index:4;pointer-events:none}.scene-suitor{position:absolute;left:var(--x);bottom:1.2%;width:clamp(24px,5.8%,84px);margin:0;transform:translateX(-50%);text-align:center;filter:drop-shadow(0 3px 3px #24150dcc)}.scene-suitor img{display:block;width:100%;height:auto}.scene-suitor figcaption{max-width:95px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px 4px;border-radius:4px;background:#221811d9;color:#fff2d1;font-size:clamp(8px,.9vw,12px);line-height:1.2}.scene-suitor.offline{opacity:.55;filter:grayscale(.8) drop-shadow(0 3px 3px #24150dcc)}.scene-suitor.active img{filter:drop-shadow(0 0 8px #fff0a0)}.scene-dialogue{position:absolute;z-index:5;left:4%;right:4%;top:2%;max-height:21%;overflow:auto;padding:7px 12px;border:1px solid #e9c783;border-radius:9px;background:#241710eb;color:#fff8e8;box-shadow:0 4px 14px #1c110dbb;font-size:clamp(10px,1.15vw,15px);line-height:1.4}.scene-dialogue strong{color:#f4d58e;margin-right:.4em}.scene-dialogue .reply{display:block;color:#ffe4b5}.stage .treasure{width:calc(100% - 20px);min-height:64px;grid-template-columns:58px 1fr;margin:9px auto 0;padding:7px 12px;gap:10px}.stage .treasure img{width:55px;height:52px;object-fit:cover;object-position:center}.stage .treasure h2{font-size:clamp(16px,1.6vw,23px)}.stage .treasure p{font-size:11px}.stage .board{padding:10px 14px 14px}
-@media(max-width:850px){.mobilemode .main{overflow:auto;display:block}.mobilemode .stage{min-height:350px;height:auto;overflow:visible}.mobilemode .right{max-height:none;overflow:visible;margin-top:10px}.mobilemode .stage .board{min-height:95px;max-height:190px;overflow:auto}.mobilemode .scene-dialogue{max-height:25%;padding:4px 7px;font-size:10px}.mobilemode .scene-suitor{width:6.5%}.mobilemode .scene-suitor figcaption{font-size:8px}.mobilemode .stage .treasure{grid-template-columns:47px 1fr;padding:5px 8px}.mobilemode .stage .treasure img{width:44px;height:44px}.mobilemode .stage .treasure p{font-size:10px}}
-@media(max-width:850px){body:not(.mobilemode) .main{display:block;overflow:auto}body:not(.mobilemode) .stage{min-height:0;height:auto;overflow:visible}body:not(.mobilemode) .right{overflow:visible;margin-top:12px}}
+  .bg { position: absolute; left: 0; top: 0; }
+  .title { position: absolute; left: 0; right: 0; top: 158px; margin: 0; text-align: center;
+    font-family: "Kaisei Decol", serif; font-weight: 700; font-size: 58px; line-height: 1.1; letter-spacing: 6px;
+    color: #F6E7C1; text-shadow: 0 0 24px #F2C14E44; }
+
+  .moon { position: absolute; left: 465px; top: 286px; width: 250px; height: 250px; border-radius: 50%; background: #F3DFA2; box-shadow: 0 0 60px #F3DFA266; }
+  .moonRing { position: absolute; left: 452px; top: 273px; width: 276px; height: 276px; border-radius: 50%; border: 2px dashed #F3DFA255; }
+
+  /* 中央のおみくじ筒 */
+  .tube { position: absolute; left: 515px; top: 262px; width: 150px; height: 300px; }
+  .tube .stick { position: absolute; left: 80px; top: 0; width: 14px; height: 80px; background: #E9CF9A; border: 3px solid #121A3A; border-radius: 4px; transform: rotate(10deg); }
+  .tube .body { position: absolute; left: 0; top: 60px; width: 150px; height: 236px; background: #D2402F; border: 4px solid #121A3A; border-radius: 20px; overflow: hidden; }
+  .tube .band { height: 24px; background: #F2C14E; border-bottom: 4px solid #121A3A; }
+  .tube .band.bottom { position: absolute; left: 0; right: 0; bottom: 0; height: 22px; border-bottom: 0; border-top: 4px solid #121A3A; }
+  /* 文字が途中で折り返さないよう、高さに余裕を持たせて nowrap */
+  .tube .label { margin: 14px auto 0; width: 62px; height: 152px; background: #FFF8E6; border: 3px solid #121A3A; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl; white-space: nowrap;
+    font-family: "Kaisei Decol", serif; font-weight: 700; font-size: 28px; letter-spacing: 3px; color: #121A3A; }
+
+  .summary { position: absolute; left: 430px; width: 320px; top: 576px; margin: 0; text-align: center; font-size: 18px; font-weight: 700; color: #C9CDE6; white-space: nowrap; }
+  .summary.shaking { font-family: "Kaisei Decol", serif; font-size: 24px; letter-spacing: 6px; color: #F3DFA2; }
+
+  /* 選択肢 */
+  .sec { position: absolute; margin: 0; }
+  .sec h2 { margin: 0 0 10px; height: 30px; display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 900; color: #F2C14E; }
+  .num { width: 30px; height: 30px; border-radius: 50%; background: #E0483E; color: #FFF4D6; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; box-shadow: 0 0 10px #E0483E99; }
+  .opts { display: grid; gap: 8px; }
+  .opts.cols2 { grid-template-columns: 1fr 1fr; gap: 8px 12px; }
+  .opt { height: 56px; padding: 0 14px; border-radius: 14px; border: 2px solid #4A5590; background: #1E2852; color: #F6E7C1;
+    font-size: 22px; font-weight: 700; line-height: 1.15; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .opt small { font-size: 15px; font-weight: 700; opacity: .85; }
+  .opt.row { flex-direction: row; gap: 12px; }
+  .opt .ico { width: 28px; height: 28px; flex: none; }
+  .opt[aria-pressed="true"] { background: #F2C14E; border-color: #F2C14E; color: #121A3A; box-shadow: 0 0 18px #F2C14E66; }
+  #optAge .opt { height: 60px; }
+  #optCat { gap: 10px; }
+  #optCat .opt { height: 64px; }
+
+  /* ひくボタン */
+  #drawBtn { position: absolute; left: 350px; top: 624px; width: 480px; height: 88px; border: none; border-radius: 999px;
+    background: #F2C14E; color: #121A3A; box-shadow: 0 0 0 6px #121A3A, 0 0 0 8px #F2C14E, 0 0 40px #F2C14E66;
+    font-family: "Kaisei Decol", serif; font-weight: 700; font-size: 36px; letter-spacing: 5px; }
+  #drawBtn.ready { animation: glow 1.8s ease-in-out infinite; }
+  #drawBtn:disabled { background: #2A3466; color: #AEB4DA; box-shadow: 0 0 0 6px #121A3A, 0 0 0 8px #3A4478; cursor: default; font-size: 28px; animation: none; }
+  #drawBtn:disabled:active { transform: none; }
+  .note { position: absolute; left: 0; right: 0; top: 730px; margin: 0; text-align: center; font-size: 18px; font-weight: 500; color: #C9CDE6; }
+
+  #adminBtn { position: absolute; right: 14px; bottom: 14px; width: 44px; height: 44px; padding: 8px; border: none; border-radius: 50%; background: transparent; color: #5A6194; }
+
+  /* 保存しました・管理メニュー */
+  .overlay { position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center; background: #0B1029CC; }
+  .overlay[hidden] { display: none; }
+  .card { width: 560px; padding: 30px 32px; border-radius: 28px; background: #F6E7C1; color: #121A3A; text-align: center; box-shadow: 0 20px 60px #000000AA; animation: pop .35s cubic-bezier(.2,1.5,.4,1) both; }
+  .card h2 { margin: 10px 0 6px; font-size: 28px; font-weight: 900; }
+  .card p { margin: 0; font-size: 18px; line-height: 1.6; }
+  .card .row { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .btnMain { height: 56px; padding: 0 34px; border: none; border-radius: 999px; background: #121A3A; color: #F6E7C1; font-size: 20px; font-weight: 900; }
+  .btnSub { height: 56px; padding: 0 22px; border: 2px solid #121A3A; border-radius: 999px; background: transparent; color: #121A3A; font-size: 18px; font-weight: 700; }
+  .btnDanger { height: 56px; padding: 0 22px; border: 2px solid #A3201A; border-radius: 999px; background: transparent; color: #A3201A; font-size: 18px; font-weight: 700; }
+  .card.wide { width: 1000px; padding: 26px 30px; text-align: left; }
+  .card.wide h2 { margin: 0 0 4px; }
+  .small { font-size: 15px !important; color: #4A4F6E; }
+  table.counts { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 16px; }
+  table.counts th, table.counts td { padding: 5px 8px; border-bottom: 1px solid #D9C9A0; text-align: center; }
+  table.counts th:first-child, table.counts td:first-child { text-align: left; }
+  table.counts td.low { color: #A3201A; font-weight: 900; }
+
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+  @keyframes shake { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-16deg); } 75% { transform: rotate(16deg); } }
+  @keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: 1; } }
+  @keyframes sway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+  @keyframes glow { 0%,100% { box-shadow: 0 0 0 6px #121A3A, 0 0 0 8px #F2C14E, 0 0 30px #F2C14E55; } 50% { box-shadow: 0 0 0 6px #121A3A, 0 0 0 8px #F2C14E, 0 0 60px #F2C14EAA; } }
+  @keyframes pop { 0% { transform: scale(.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .bob { animation: bob 3s ease-in-out infinite; }
+  .shake { animation: shake .3s ease-in-out infinite; transform-origin: 50% 85%; }
+  .twinkle { animation: twinkle 2.4s ease-in-out infinite; }
+  .sway { animation: sway 4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
+  @media (prefers-reduced-motion: reduce) { .bob, .shake, .twinkle, .sway, #drawBtn.ready { animation: none; } }
+
+  /* 画像づくり用の用紙（画面の外に置く。表示はされない） */
+  #offscreen { position: fixed; left: -20000px; top: 0; pointer-events: none; }
 </style>
-<style>
-/* The illustrated court fills the viewport; all controls stay within it. */
-html,body{margin:0;padding:0;width:100vw;height:100vh;overflow:hidden}
-*,*::before,*::after{box-sizing:border-box}
-body,.shell{width:100vw;height:100vh;overflow:hidden}
-.shell{position:relative;background:transparent}
-.top{position:relative;z-index:3;height:58px;flex:0 0 58px;padding:0 16px}
-.main{position:relative;z-index:1;min-height:0;height:calc(100vh - 78px);display:grid;grid-template-columns:minmax(0,1fr) minmax(285px,320px);gap:10px;padding:10px;overflow:hidden}
-.foot{position:relative;z-index:3;flex:0 0 20px;height:20px;padding:2px 8px;background:#211813b8}
-.stage{position:relative;min-height:0;height:100%;border:0;border-radius:0;background:transparent;box-shadow:none;overflow:hidden}
-.scene{position:fixed;inset:0;z-index:0;width:100vw;height:100vh;aspect-ratio:auto;overflow:hidden;border:0;pointer-events:none}
-.scene-palace{inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-.scene-kaguya{left:50%;top:30%;width:min(11vw,18vh);min-width:58px}
-.scene-misu{inset:auto;left:50%;top:24%;width:min(41vw,59vh);height:min(31vh,23vw);object-fit:fill;transform:translateX(-50%);opacity:.72}
-.scene-suitor{bottom:15%;width:min(8vw,14vh);max-width:125px;min-width:45px}
-.scene-dialogue{top:66px;left:1%;right:26%;max-height:16vh;overflow:hidden;font-size:clamp(11px,1.05vw,14px);line-height:1.28}
-.stage .treasure{position:absolute;z-index:2;left:0;bottom:0;width:min(640px,100%);min-height:56px;margin:0;padding:4px 8px;background:#231810e8}
-.stage .treasure img{width:48px;height:46px}
-.stage .treasure h2{font-size:16px}
-.stage .treasure p{font-size:10px}
-.stage .board{display:none}
-.right{position:relative;z-index:2;display:flex;flex-direction:column;min-height:0;gap:7px;overflow:hidden}
-.panel{min-height:0;flex:0 0 auto;padding:10px;background:#1d1612eb;overflow:hidden}
-.panel h3{margin:0 0 5px;font-size:15px}
-.panel .muted{font-size:11px;line-height:1.35}
-.right .btnblock{margin-top:5px;padding:7px 9px}
-.room-link summary,.roster-panel summary{cursor:pointer;color:#f2d69e;font:700 14px serif}.room-link[open] summary,.roster-panel[open] summary{margin-bottom:7px}.qrwrap{gap:6px}.qr{min-width:104px;min-height:104px;padding:4px}
-.qr canvas,.qr img{width:96px!important;height:96px!important}
-.peerid,.urlbox{font-size:9px;line-height:1.2}.urlbox{display:none}
-.plist{gap:3px}.person{padding:4px 6px}.person .state{display:none}
-.entries-panel{flex:1 1 auto}.entries-panel .cards{display:block}.entries-panel .entry{padding:7px}.entries-panel .joke{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;font-size:12px}.entries-panel .object{margin:4px 0 2px;font-size:12px}
-.entry-picker{display:flex;gap:3px;margin:3px 0 6px}.entry-picker .btn{flex:1;padding:5px 2px;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.judge{margin-top:5px;padding-top:5px;gap:4px}.judge input{padding:4px}.judge select{padding:4px}
-.field{margin:6px 0;gap:3px}.field input,.field textarea{padding:7px}.field textarea{min-height:64px;max-height:16vh;overflow:hidden}
-.scene-dialogue,.right,.panel,.mobilemode .main,.mobilemode .right,textarea{scrollbar-width:none}
-@media(max-width:850px){
- body:not(.mobilemode) .main{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,37vw);grid-template-rows:minmax(0,1fr);overflow:hidden}
- body:not(.mobilemode) .stage{height:100%;overflow:hidden}
- body:not(.mobilemode) .right{overflow:hidden;margin:0}
- .mobilemode .main{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,42fr) minmax(0,58fr);gap:5px;padding:5px;overflow:hidden}
- .mobilemode .top{height:46px;flex-basis:46px;padding:0 7px}
- .mobilemode .brand{font-size:12px;gap:5px}.mobilemode .moon{width:20px;height:20px}.mobilemode .net{max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
- .mobilemode .stage{height:100%;min-height:0;overflow:hidden}
- .mobilemode .scene-kaguya{left:50%;top:17%;width:16vw;min-width:52px}
- .mobilemode .scene-misu{left:50%;top:15%;width:76vw;height:16vh;max-height:180px;opacity:.73}
- .mobilemode .scene-suitor{bottom:59%;width:11vw;min-width:34px;max-width:56px}
- .mobilemode .scene-suitor figcaption{font-size:8px}
- .mobilemode .scene-dialogue{top:50px;left:2%;right:2%;max-height:9vh;padding:4px 6px;font-size:10px;line-height:1.2}
- .mobilemode .stage .treasure{left:0;bottom:0;width:100%;min-height:42px;grid-template-columns:40px 1fr;padding:3px 5px;gap:5px}
- .mobilemode .stage .treasure img{width:38px;height:37px}.mobilemode .stage .treasure h2{font-size:13px}.mobilemode .stage .treasure p{display:none}
- .mobilemode .right{height:100%;max-height:none;margin:0;gap:4px;overflow:hidden}
- .mobilemode .right>.panel:nth-child(2){display:none}
- .mobilemode .right>.panel:first-child{flex:1 1 auto}
- .mobilemode .right .panel{padding:8px}
- .mobilemode .right .muted{font-size:10px}
- .mobilemode .field textarea{min-height:60px;max-height:10vh}
- .mobilemode .entries-panel{display:none}
- .mobilemode .foot{font-size:8px}
-}
+
+<!-- ===== おみくじ画像（A4縦）のデザイン：kanban_v7 と同じ設定 =====
+     用紙：縦（A4）／フォント：ゴシック／文字の大きさ：天地いっぱい（縦書き）
+     揃え：左右 中央・上下 上寄せ／枠線あり／太字（kanban_v7 の初期値）
+     列は「、」「。」のあとで分け、印刷する文字からは「、」「。」を消す（v2）
+     ※ この <style> の中身は、そのまま画像の中にも埋め込まれます -->
+<style id="sheetStyle">
+  #sheet { width: 210mm; height: 297mm; margin: 0; padding: 8mm; box-sizing: border-box; overflow: hidden;
+    display: flex; flex-direction: column; gap: 5mm; background: #fff; color: #000; line-height: 1.2;
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; }
+  #sheet * { box-sizing: border-box; }
+
+  /* ▼ 看板（デザインを変えるときは、ここの .kb〜 と、下のHTMLの #kanban を書き換えてください） */
+  .kb { flex: none; height: 42mm; border: 2mm solid #000; border-radius: 5mm;
+    box-shadow: inset 0 0 0 1.4mm #fff, inset 0 0 0 2.2mm #000;
+    display: flex; align-items: center; justify-content: center; gap: 9mm; }
+  .kb-text { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .kb-brand { display: flex; align-items: center; gap: 3mm; font-size: 9mm; font-weight: 700; letter-spacing: 2.2mm; padding-left: 2.2mm; }
+  .kb-brand::before, .kb-brand::after { content: ""; width: 10mm; height: 0.8mm; background: #000; }
+  .kb-main { margin-top: 2.5mm; font-size: 21mm; font-weight: 900; letter-spacing: 3mm; padding-left: 3mm; }
+  /* もちもちゅ（キャラクター）。画像を変えるときは、下のHTMLの img の src（data:image/png;base64,…）を差し替え */
+  .kb-chara { flex: none; width: 25mm; height: 31mm; object-fit: contain; display: block; }
+  /* ▲ 看板 */
+
+  /* 枠線（kanban_v7：3mmの線＋内側6mmの余白） */
+  #frame { flex: 1; min-height: 0; border: 3mm solid #000; padding: 6mm; overflow: hidden;
+    display: flex; align-items: flex-start; justify-content: center; }
+  /* 天地いっぱい：縦書き。いちばん長い列を上下いっぱいにする（kanban_v7 と同じ指定） */
+  #otext { writing-mode: vertical-rl; -webkit-writing-mode: vertical-rl; width: auto; height: max-content; flex: none;
+    white-space: pre; overflow-wrap: normal; line-height: 1.3; font-weight: 700; text-align: start; color: #000; }
+  /* 1〜2けたの数字・英字は縦中横（たて向きにそろえる） */
+  #otext .tcy { text-combine-upright: all; -webkit-text-combine: horizontal; }
 </style>
 </head>
 <body>
-<div id="app"></div>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<div id="viewport">
+<div id="stage">
+
+  <svg class="bg" aria-hidden="true" width="1180" height="820" viewBox="0 0 1180 820">
+    <g fill="#F6E7C1">
+      <circle class="twinkle" cx="40" cy="230" r="3"/>
+      <circle class="twinkle" style="animation-delay:.8s" cx="1140" cy="250" r="3"/>
+      <circle class="twinkle" style="animation-delay:1.6s" cx="250" cy="180" r="2.5"/>
+      <circle class="twinkle" style="animation-delay:.4s" cx="930" cy="190" r="2.5"/>
+      <circle class="twinkle" style="animation-delay:1.2s" cx="30" cy="700" r="3"/>
+      <circle class="twinkle" style="animation-delay:2s" cx="1150" cy="690" r="3"/>
+      <circle class="twinkle" style="animation-delay:.6s" cx="470" cy="250" r="2"/>
+      <circle class="twinkle" style="animation-delay:1.4s" cx="710" cy="250" r="2"/>
+      <circle cx="140" cy="770" r="2" opacity=".5"/>
+      <circle cx="1040" cy="780" r="2" opacity=".5"/>
+      <circle cx="360" cy="790" r="1.6" opacity=".5"/>
+      <circle cx="820" cy="795" r="1.6" opacity=".5"/>
+    </g>
+    <path d="M0 10Q590 60 1180 10" stroke="#5A6194" stroke-width="3" fill="none"/>
+    <g style="filter:drop-shadow(0 0 14px #FF7A3C88)">
+      <g transform="translate(130 20)"><g class="sway"><path d="M0 0V8" stroke="#5A6194" stroke-width="3"/><rect x="-18" y="8" width="36" height="8" fill="#2A2A2A"/><ellipse cy="54" rx="34" ry="38" fill="#E0483E"/><ellipse cy="54" rx="22" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><ellipse cy="54" rx="9" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><text y="64" text-anchor="middle" font-family="Kaisei Decol, serif" font-size="28" fill="#FFF4D6">福</text><rect x="-18" y="90" width="36" height="8" fill="#2A2A2A"/><path d="M0 98V114" stroke="#F2C14E" stroke-width="4"/></g></g>
+      <g transform="translate(360 31)"><g class="sway" style="animation-delay:.6s"><path d="M0 0V8" stroke="#5A6194" stroke-width="3"/><rect x="-18" y="8" width="36" height="8" fill="#2A2A2A"/><ellipse cy="54" rx="34" ry="38" fill="#E0483E"/><ellipse cy="54" rx="22" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><ellipse cy="54" rx="9" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><text y="64" text-anchor="middle" font-family="Kaisei Decol, serif" font-size="28" fill="#FFF4D6">吉</text><rect x="-18" y="90" width="36" height="8" fill="#2A2A2A"/><path d="M0 98V114" stroke="#F2C14E" stroke-width="4"/></g></g>
+      <g transform="translate(590 35)"><g class="sway" style="animation-delay:1.2s"><path d="M0 0V8" stroke="#5A6194" stroke-width="3"/><rect x="-18" y="8" width="36" height="8" fill="#2A2A2A"/><ellipse cy="54" rx="34" ry="38" fill="#F2C14E"/><ellipse cy="54" rx="22" ry="38" fill="none" stroke="#C49A2C" stroke-width="2"/><ellipse cy="54" rx="9" ry="38" fill="none" stroke="#C49A2C" stroke-width="2"/><text y="64" text-anchor="middle" font-family="Kaisei Decol, serif" font-size="28" fill="#121A3A">祭</text><rect x="-18" y="90" width="36" height="8" fill="#2A2A2A"/><path d="M0 98V114" stroke="#E0483E" stroke-width="4"/></g></g>
+      <g transform="translate(820 31)"><g class="sway" style="animation-delay:.3s"><path d="M0 0V8" stroke="#5A6194" stroke-width="3"/><rect x="-18" y="8" width="36" height="8" fill="#2A2A2A"/><ellipse cy="54" rx="34" ry="38" fill="#E0483E"/><ellipse cy="54" rx="22" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><ellipse cy="54" rx="9" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><text y="64" text-anchor="middle" font-family="Kaisei Decol, serif" font-size="28" fill="#FFF4D6">吉</text><rect x="-18" y="90" width="36" height="8" fill="#2A2A2A"/><path d="M0 98V114" stroke="#F2C14E" stroke-width="4"/></g></g>
+      <g transform="translate(1050 20)"><g class="sway" style="animation-delay:.9s"><path d="M0 0V8" stroke="#5A6194" stroke-width="3"/><rect x="-18" y="8" width="36" height="8" fill="#2A2A2A"/><ellipse cy="54" rx="34" ry="38" fill="#E0483E"/><ellipse cy="54" rx="22" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><ellipse cy="54" rx="9" ry="38" fill="none" stroke="#A92E27" stroke-width="2"/><text y="64" text-anchor="middle" font-family="Kaisei Decol, serif" font-size="28" fill="#FFF4D6">福</text><rect x="-18" y="90" width="36" height="8" fill="#2A2A2A"/><path d="M0 98V114" stroke="#F2C14E" stroke-width="4"/></g></g>
+    </g>
+  </svg>
+
+  <h1 class="title">もちもちゅ おみくじ</h1>
+
+  <div class="moon"></div>
+  <div class="moonRing"></div>
+  <div id="tube" class="tube bob" aria-hidden="true">
+    <div class="stick"></div>
+    <div class="body">
+      <div class="band"></div>
+      <div class="label">おみくじ</div>
+      <div class="band bottom"></div>
+    </div>
+  </div>
+  <p id="summary" class="summary" aria-live="polite"></p>
+
+  <section class="sec" style="left:50px;top:250px;width:380px">
+    <h2><span class="num">1</span>せいべつ</h2>
+    <div class="opts cols2" id="optGender"></div>
+  </section>
+  <section class="sec" style="left:50px;top:364px;width:380px">
+    <h2><span class="num">2</span>ねんだい</h2>
+    <div class="opts cols2" id="optAge"></div>
+  </section>
+  <section class="sec" style="left:750px;top:250px;width:380px">
+    <h2><span class="num">3</span>カテゴリ</h2>
+    <div class="opts" id="optCat"></div>
+  </section>
+
+  <button id="drawBtn" type="button" disabled>3つ えらんでね</button>
+  <p class="note">けっかは画面には出ません ・ 画像で保存されます</p>
+
+  <button id="adminBtn" type="button" aria-label="管理メニュー">
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+  </button>
+
+  <!-- 保存しました／エラー -->
+  <div id="overlay" class="overlay" hidden>
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
+      <svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#D2402F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+      <h2 id="ovTitle">おみくじ画像を保存しました</h2>
+      <p id="ovMsg">タブレットの「ダウンロード」に入っています。</p>
+      <div class="row">
+        <button id="resaveBtn" type="button" class="btnSub">もう一度保存する</button>
+        <button id="okBtn" type="button" class="btnMain">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 管理メニュー（右下の歯車） -->
+  <div id="admin" class="overlay" hidden>
+    <div class="card wide" role="dialog" aria-modal="true" aria-labelledby="adTitle">
+      <h2 id="adTitle">管理メニュー</h2>
+      <p class="small">区分ごとの「まだ出ていないおみくじ」の数です。0になると、その区分は次の1周が始まります。</p>
+      <div id="countTable"></div>
+      <p id="appStatus" class="small" style="margin-top:10px;white-space:pre-line"></p>
+      <p id="storeWarn" class="small" style="color:#A3201A" hidden>⚠ このブラウザでは記録を保存できません（ページを閉じると記録が消えます）。</p>
+      <div class="row" style="justify-content:flex-start">
+        <button id="installBtn" type="button" class="btnSub" hidden>ホーム画面に追加</button>
+        <button id="fsBtn" type="button" class="btnSub">全画面にする</button>
+        <button id="sampleBtn" type="button" class="btnSub">見本画像を保存（記録しない）</button>
+        <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
+        <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
+      </div>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v6</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- 画像づくり用の用紙（画面の外。ここに文言を入れて画像にします） -->
+<div id="offscreen" aria-hidden="true">
+  <div id="sheet">
+    <!-- ▼ 看板（デザインを変えるときは、ここと上の #sheetStyle の .kb〜 を書き換えてください） -->
+    <div id="kanban" class="kb">
+      <img class="kb-chara" src="data:image/png;base64,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" alt="">
+      <div class="kb-text">
+        <div class="kb-brand">もちもちゅ</div>
+        <div class="kb-main">おみくじ</div>
+      </div>
+      <img class="kb-chara" src="data:image/png;base64,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" alt="">
+    </div>
+    <!-- ▲ 看板 -->
+    <div id="frame"><div id="otext"></div></div>
+  </div>
+</div>
+
+<!-- ===== おみくじの中身（CSV）=====
+     列：ID,性別,年代,カテゴリ,番号,おみくじ文言
+     中身を差し替えるときは、この下のCSVをまるごと貼り替えてください（1行目の見出しは残す） -->
+<script type="text/plain" id="omikujiCsv">
+ID,性別,年代,カテゴリ,番号,おみくじ文言
+1,男,小学生,健康,1,真冬に半袖、それただの我慢。
+2,男,小学生,健康,2,給食の牛乳、一気飲みするな。
+3,男,小学生,健康,3,膝のかさぶた、剥がすな。
+4,男,小学生,健康,4,鼻水、袖で拭くな。
+5,男,小学生,健康,5,ランドセル、重すぎて腰にくる。
+6,男,小学生,健康,6,保健室のベッドは、天国。
+7,男,小学生,健康,7,歯磨き、30秒で終わらせるな。
+8,男,小学生,健康,8,うんちは、学校でしてもいい。
+9,男,小学生,健康,9,走りすぎ。明日、足がつる。
+10,男,小学生,健康,10,早く寝ろ。背が伸びないぞ。
+11,男,小学生,健康,11,給食のカレー、おかわりは戦争。
+12,男,小学生,健康,12,鉄棒のやりすぎ、手のひらにマメ。
+13,男,小学生,健康,13,運動会の前日、興奮して眠れない。
+14,男,小学生,健康,14,プール後の授業、だいたい白目。
+15,男,小学生,健康,15,虫歯ゼロ、それだけで英雄。
+16,男,小学生,健康,16,転んでも泣くな。でも血が出たら泣け。
+17,男,小学生,健康,17,野菜残すな。昼休みが削られるぞ。
+18,男,小学生,健康,18,縄跳びでムチ打ち、あるある。
+19,男,小学生,健康,19,水筒の中身、2時間目で空っぽ。
+20,男,小学生,健康,20,成長期、靴が半年でキツくなる。
+21,男,小学生,恋愛,1,好きな子に意地悪、逆効果。
+22,男,小学生,恋愛,2,足が速いだけで、モテる時期。
+23,男,小学生,恋愛,3,消しゴムの貸し借り、それは恋。
+24,男,小学生,恋愛,4,バレンタイン、母のチョコはノーカン。
+25,男,小学生,恋愛,5,「あいつと、付き合ってんだろ」、は照れろ。
+26,男,小学生,恋愛,6,席替え、神に祈れ。
+27,男,小学生,恋愛,7,女子のグループ、強すぎる。
+28,男,小学生,恋愛,8,好きな子の前だけ、声デカい。
+29,男,小学生,恋愛,9,交換日記、まだ早い。
+30,男,小学生,恋愛,10,初恋は、だいたい実らない。
+31,男,小学生,恋愛,11,隣の席、それだけで結婚を意識。
+32,男,小学生,恋愛,12,掃除の時間、ほうきで戦うな。モテないぞ。
+33,男,小学生,恋愛,13,好きな子の名前、黒板に書かれる地獄。
+34,男,小学生,恋愛,14,リレーの選手、それだけで無双。
+35,男,小学生,恋愛,15,女子の字、なんであんなに綺麗なんだ。
+36,男,小学生,恋愛,16,「好きな人だれ？」、絶対言うな。広まるぞ。
+37,男,小学生,恋愛,17,音楽のペア、女子と組んで固まる。
+38,男,小学生,恋愛,18,チョコゼロ個、平気なフリが一番ダサい。
+39,男,小学生,恋愛,19,卒業アルバム、好きな子のページだけ見返す。
+40,男,小学生,恋愛,20,女子の方が背が高い、それが現実。
+41,男,小学生,友情,1,公園に集合。時間は適当。
+42,男,小学生,友情,2,謎の棒、拾ったら負け。
+43,男,小学生,友情,3,ゲームの貸し借り、返ってこない。
+44,男,小学生,友情,4,昨日の敵は、今日のドッジボール仲間。
+45,男,小学生,友情,5,秘密基地、だいたいバレてる。
+46,男,小学生,友情,6,帰り道、白線から落ちたらアウト。
+47,男,小学生,友情,7,親が来たら、急に静かになる。
+48,男,小学生,友情,8,じゃんけんのローカルルール、多すぎ。
+49,男,小学生,友情,9,「絶交」は、翌朝リセット。
+50,男,小学生,友情,10,友達の家の麦茶、なんか美味い。
+51,男,小学生,友情,11,チャイムが鳴るまで、鬼ごっこ延長戦。
+52,男,小学生,友情,12,友達の家のゲーム、セーブ消したら終わり。
+53,男,小学生,友情,13,「お前んち行ってもいい？」、親に聞け。
+54,男,小学生,友情,14,駄菓子屋で100円、真剣勝負。
+55,男,小学生,友情,15,傘でチャンバラ、だいたい骨が折れる。
+56,男,小学生,友情,16,クラスで一人、異様に虫に詳しい奴がいる。
+57,男,小学生,友情,17,謎の替え歌、学年中に流行る。
+58,男,小学生,友情,18,自転車のカゴ、なぜか石が入っている。
+59,男,小学生,友情,19,転校生の噂、だいたい盛られてる。
+60,男,小学生,友情,20,放課後の校庭、日が暮れるまでが本番。
+61,男,小学生,学業&仕事,1,漢字ドリル、同じ字ばかり書くな。
+62,男,小学生,学業&仕事,2,テストの裏面、見落とすな。
+63,男,小学生,学業&仕事,3,習字の墨、服についたら終わり。
+64,男,小学生,学業&仕事,4,音読のサイン、自分で書くな。
+65,男,小学生,学業&仕事,5,宿題やった、はだいたい嘘。
+66,男,小学生,学業&仕事,6,リコーダー、指がズレてる。
+67,男,小学生,学業&仕事,7,夏休みの工作、親の作品。
+68,男,小学生,学業&仕事,8,筆箱の中、鉛筆の芯だらけ。
+69,男,小学生,学業&仕事,9,計算ドリル、答えを写すな。
+70,男,小学生,学業&仕事,10,忘れ物、廊下に立つ覚悟。
+71,男,小学生,学業&仕事,11,プリント、ランドセルの底で化石化。
+72,男,小学生,学業&仕事,12,消しゴム、最後まで使い切ったことがない。
+73,男,小学生,学業&仕事,13,九九の7の段、ここでつまずく。
+74,男,小学生,学業&仕事,14,読書感想文、あらすじ書いて終了。
+75,男,小学生,学業&仕事,15,彫刻刀、指を切る前に集中しろ。
+76,男,小学生,学業&仕事,16,連絡帳、字が汚すぎて読めない。
+77,男,小学生,学業&仕事,17,100点テスト、親に見せるまでが勝負。
+78,男,小学生,学業&仕事,18,お手伝い、皿を割ったらマイナス査定。
+79,男,小学生,学業&仕事,19,社会の地図帳、変な地名ばっか探すな。
+80,男,小学生,学業&仕事,20,始業式の前夜、終わらない自由研究。
+81,男,中学生,健康,1,成長痛、それは強くなる証。
+82,男,中学生,健康,2,部活後のポカリ、命の水。
+83,男,中学生,健康,3,寝癖、水で濡らしても直らない。
+84,男,中学生,健康,4,ニキビ、潰したら一生残る。
+85,男,中学生,健康,5,夜更かし、目の下のクマが語る。
+86,男,中学生,健康,6,腹筋、割れてると思い込むな。
+87,男,中学生,健康,7,制汗スプレー、かけすぎ注意。
+88,男,中学生,健康,8,弁当、2時間目で早弁するな。
+89,男,中学生,健康,9,視力低下、ゲームのやりすぎ。
+90,男,中学生,健康,10,声変わり、急に裏返る。
+91,男,中学生,健康,11,白飯3合、それが中学生の胃袋。
+92,男,中学生,健康,12,ワックスつけすぎ、頭がテカってるぞ。
+93,男,中学生,健康,13,筋肉痛、階段の下りが一番キツい。
+94,男,中学生,健康,14,試合前日の緊張、腹痛でトイレ往復。
+95,男,中学生,健康,15,部活の筋トレ、サボるとすぐバレる。
+96,男,中学生,健康,16,朝練の眠気、授業の1時間目で爆発。
+97,男,中学生,健康,17,身長、夏休み明けに急に伸びろ。
+98,男,中学生,健康,18,捻挫、湿布貼ってごまかすな。
+99,男,中学生,健康,19,髭、まだ薄いのに剃りたがる。
+100,男,中学生,健康,20,汗だくの体操服、バッグに放置するな。
+101,男,中学生,恋愛,1,LINEの返信、5分待て。
+102,男,中学生,恋愛,2,脈あり、たぶん勘違い。
+103,男,中学生,恋愛,3,隣のクラスのあの子、高嶺の花。
+104,男,中学生,恋愛,4,体育祭のハチマキ、巻くだけでモテない。
+105,男,中学生,恋愛,5,告白は、放課後の靴箱で。
+106,男,中学生,恋愛,6,「彼氏いるの？」、聞けずに終わる。
+107,男,中学生,恋愛,7,好きな子の前、急に無口。
+108,男,中学生,恋愛,8,恋愛相談、だいたい友達に奪われる。
+109,男,中学生,恋愛,9,廊下ですれ違うだけ。それでいい。
+110,男,中学生,恋愛,10,黒歴史、今まさに作成中。
+111,男,中学生,恋愛,11,合唱コンクール、ピアノ伴奏の子に惚れる。
+112,男,中学生,恋愛,12,修学旅行の夜、好きな人発表会は義務。
+113,男,中学生,恋愛,13,女子と目が合った。それだけで今日勝った。
+114,男,中学生,恋愛,14,塾の隣の席、勉強どころじゃない。
+115,男,中学生,恋愛,15,卒業式の第二ボタン、余る覚悟もしとけ。
+116,男,中学生,恋愛,16,バレンタイン、靴箱を何度も確認するな。
+117,男,中学生,恋愛,17,好きな子の部活、なぜか詳しくなる。
+118,男,中学生,恋愛,18,プリクラ撮る勇気、まだない。
+119,男,中学生,恋愛,19,休日の私服、ダサすぎて自信喪失。
+120,男,中学生,恋愛,20,両思いの噂、だいたいデマ。
+121,男,中学生,友情,1,部活の先輩、絶対服従。
+122,男,中学生,友情,2,テスト前、「全然勉強してない」は嘘。
+123,男,中学生,友情,3,帰り道のコンビニ、買い食い最高。
+124,男,中学生,友情,4,謎のあだ名、卒業まで消えない。
+125,男,中学生,友情,5,廊下でふざけて、先生に怒られる。
+126,男,中学生,友情,6,友達の家でスマブラ、夜までコース。
+127,男,中学生,友情,7,クラス替え、親友と離れて絶望。
+128,男,中学生,友情,8,変顔の写真、一生のネタ。
+129,男,中学生,友情,9,貸した漫画、3巻だけ行方不明。
+130,男,中学生,友情,10,しょうもないことで、腹抱えて笑え。
+131,男,中学生,友情,11,テスト返却、点数の見せ合いは地獄。
+132,男,中学生,友情,12,自転車の並走、先生に見つかるぞ。
+133,男,中学生,友情,13,部活引退後、急に遊ぶ暇が増える。
+134,男,中学生,友情,14,友達の親の前、急に敬語になる。
+135,男,中学生,友情,15,体育の着替え、なぜかプロレスが始まる。
+136,男,中学生,友情,16,グループ通話、無言の時間も楽しい。
+137,男,中学生,友情,17,先生のモノマネ、本人の後ろでやるな。
+138,男,中学生,友情,18,昼休みのサッカー、チャイム無視するな。
+139,男,中学生,友情,19,「明日休むわ」、だいたい来る。
+140,男,中学生,友情,20,中二病、みんなでやれば怖くない。
+141,男,中学生,学業&仕事,1,英単語、書いても覚えない。
+142,男,中学生,学業&仕事,2,数学のX、もう探すな。
+143,男,中学生,学業&仕事,3,提出物、期限を守れ。
+144,男,中学生,学業&仕事,4,授業中の居眠り、バレてるぞ。
+145,男,中学生,学業&仕事,5,赤点、親に見せる勇気。
+146,男,中学生,学業&仕事,6,ノート、綺麗に書くだけじゃ意味ない。
+147,男,中学生,学業&仕事,7,受験生、まだ本気出してないだけ。
+148,男,中学生,学業&仕事,8,歴史の年号、語呂合わせで逃げろ。
+149,男,中学生,学業&仕事,9,定期テスト、一夜漬けの限界。
+150,男,中学生,学業&仕事,10,志望校、そろそろ現実を見ろ。
+151,男,中学生,学業&仕事,11,ワークの丸つけ、赤ペンで写すな。
+152,男,中学生,学業&仕事,12,塾の帰り道、勉強した気になるだけ。
+153,男,中学生,学業&仕事,13,英語のリスニング、早すぎて宇宙語。
+154,男,中学生,学業&仕事,14,内申点、忘れ物1回で削られるぞ。
+155,男,中学生,学業&仕事,15,テスト範囲表、見て見ぬふりするな。
+156,男,中学生,学業&仕事,16,実技教科、甘く見てると痛い目見る。
+157,男,中学生,学業&仕事,17,机の掃除、テスト前日に始めるな。
+158,男,中学生,学業&仕事,18,三者面談、親と先生のタッグが強すぎる。
+159,男,中学生,学業&仕事,19,過去問、時間配分で毎回死ぬ。
+160,男,中学生,学業&仕事,20,「明日から本気出す」、もう12月だぞ。
+161,男,高校生,健康,1,ラーメン大盛り、今しか食えない。
+162,男,高校生,健康,2,睡眠不足、授業で補うな。
+163,男,高校生,健康,3,エナジードリンク、頼りすぎ。
+164,男,高校生,健康,4,筋トレ、3日で終わるな。
+165,男,高校生,健康,5,通学のチャリ、立ち漕ぎで鍛えろ。
+166,男,高校生,健康,6,昼休み、購買のパン争奪戦。
+167,男,高校生,健康,7,夜中のカップ麺、背徳の味。
+168,男,高校生,健康,8,体調不良、気合いで治すな。
+169,男,高校生,健康,9,姿勢悪いぞ、スマホ見すぎ。
+170,男,高校生,健康,10,青春の汗、臭いから着替えろ。
+171,男,高校生,健康,11,プロテイン、飲むだけでムキムキにはならん。
+172,男,高校生,健康,12,昼飯2回食う、それが高校生の燃費。
+173,男,高校生,健康,13,オール明けの1限、記憶がない。
+174,男,高校生,健康,14,電車通学、立ったまま寝る技術。
+175,男,高校生,健康,15,焼肉食べ放題、元を取ろうとして吐きそう。
+176,男,高校生,健康,16,コンタクト、つけたまま寝るな。
+177,男,高校生,健康,17,部活引退、そのまま太るぞ。
+178,男,高校生,健康,18,朝飯抜き、3時間目で腹が鳴る。
+179,男,高校生,健康,19,夏の満員電車、体力ゲージが半分消える。
+180,男,高校生,健康,20,怪我の治り、まだ早い。今のうちに感謝しろ。
+181,男,高校生,恋愛,1,共学でも、彼女ができない現実。
+182,男,高校生,恋愛,2,文化祭、マジックは起きない。
+183,男,高校生,恋愛,3,バイト先の先輩、絶対無理。
+184,男,高校生,恋愛,4,告白、LINEで済ますな。
+185,男,高校生,恋愛,5,既読スルー、それが答え。
+186,男,高校生,恋愛,6,彼女いない歴＝年齢、まだ焦るな。
+187,男,高校生,恋愛,7,放課後デート、サイゼリヤで十分。
+188,男,高校生,恋愛,8,髪型セット、風で全部終わる。
+189,男,高校生,恋愛,9,友達の彼女、羨ましがるな。
+190,男,高校生,恋愛,10,恋をしろ。勉強はその後だ。
+191,男,高校生,恋愛,11,男子校、夢を見すぎて現実が辛い。
+192,男,高校生,恋愛,12,通学電車のあの子、話しかけられず卒業。
+193,男,高校生,恋愛,13,美容院で「おまかせ」、だいたい事故る。
+194,男,高校生,恋愛,14,彼女の機嫌、理由はだいたい些細なこと。
+195,男,高校生,恋愛,15,クリスマス、予定がないならバイト入れろ。
+196,男,高校生,恋愛,16,制服デート、今しかできない特権。
+197,男,高校生,恋愛,17,インスタのDM、送る前に3回読み直せ。
+198,男,高校生,恋愛,18,好きバレ、もう開き直って突っ込め。
+199,男,高校生,恋愛,19,初デート、映画なら会話に困らない。
+200,男,高校生,恋愛,20,振られても死なない。ネタにしろ。
+201,男,高校生,友情,1,ファミレスでドリンクバー、3時間粘る。
+202,男,高校生,友情,2,終電逃して、友達の家に泊まれ。
+203,男,高校生,友情,3,卒業しても、連絡とるのは3人だけ。
+204,男,高校生,友情,4,文化祭の準備、サボるな。
+205,男,高校生,友情,5,「今日ヒマ？」、最強の誘い文句。
+206,男,高校生,友情,6,テスト明けのカラオケ、声枯れるまで歌え。
+207,男,高校生,友情,7,友達の恋バナ、朝まで付き合え。
+208,男,高校生,友情,8,謎のノリ、大人になったら通じない。
+209,男,高校生,友情,9,割り勘、1円単位でケチるな。
+210,男,高校生,友情,10,今のバカ騒ぎ、一生の宝。
+211,男,高校生,友情,11,放課後のマック、ポテトLをみんなで突け。
+212,男,高校生,友情,12,クラスのLINEグループ、既読だけ増える。
+213,男,高校生,友情,13,友達のバイト先、冷やかしに行くな。
+214,男,高校生,友情,14,体育祭の打ち上げ、食べ放題で崩壊。
+215,男,高校生,友情,15,借りた1000円、ちゃんと返せ。
+216,男,高校生,友情,16,遅刻の言い訳、友達と口裏合わせろ。
+217,男,高校生,友情,17,免許取ったらドライブ、だいたい実現しない。
+218,男,高校生,友情,18,バンド結成、文化祭前に解散するな。
+219,男,高校生,友情,19,卒業式の寄せ書き、変なこと書くな。
+220,男,高校生,友情,20,金はない。でも時間と仲間はある。
+221,男,高校生,学業&仕事,1,バイト代、気づいたら消えている。
+222,男,高校生,学業&仕事,2,赤点回避、先生に媚びろ。
+223,男,高校生,学業&仕事,3,進路希望調査、白紙で出すな。
+224,男,高校生,学業&仕事,4,模試のE判定、まだ伸びしろ。
+225,男,高校生,学業&仕事,5,授業中のスマホ、机の下でもバレてる。
+226,男,高校生,学業&仕事,6,現代文、筆者の気持ちは知らん。
+227,男,高校生,学業&仕事,7,バイトのシフト、入れすぎ注意。
+228,男,高校生,学業&仕事,8,指定校推薦、狙えるなら狙え。
+229,男,高校生,学業&仕事,9,予備校の自習室、寝に行くな。
+230,男,高校生,学業&仕事,10,単位、落とすなよ。
+231,男,高校生,学業&仕事,11,古文、主語が消えすぎて推理ゲーム。
+232,男,高校生,学業&仕事,12,バイトの初出勤、覚えること多すぎ。
+233,男,高校生,学業&仕事,13,数学ⅡB、ここから急に異世界。
+234,男,高校生,学業&仕事,14,欠席日数、ギリギリを攻めるな。
+235,男,高校生,学業&仕事,15,オープンキャンパス、学食だけ食って帰るな。
+236,男,高校生,学業&仕事,16,共通テスト、マークミスで人生変わるぞ。
+237,男,高校生,学業&仕事,17,バイト先の店長、急にシフト頼んでくる。
+238,男,高校生,学業&仕事,18,受験勉強、スマホを別室に置け。
+239,男,高校生,学業&仕事,19,推薦で決まった奴、周りに配慮しろ。
+240,男,高校生,学業&仕事,20,高校卒業、そこからが本当のスタート。
+241,男,大学生,健康,1,1限の講義、体が拒否反応。
+242,男,大学生,健康,2,昼夜逆転、太陽をいつ見たか思い出せ。
+243,男,大学生,健康,3,もやしとパスタ、それだけで生きるな。
+244,男,大学生,健康,4,オール明けの2限、もはやゾンビ。
+245,男,大学生,健康,5,宅飲みの酒、安物ほど翌朝が地獄。
+246,男,大学生,健康,6,一人暮らし、野菜の存在を忘れるな。
+247,男,大学生,健康,7,学食のカレー、週4はやりすぎ。
+248,男,大学生,健康,8,バイト終わりのラーメン、脂肪への直行便。
+249,男,大学生,健康,9,二日酔い、水とポカリが親友。
+250,男,大学生,健康,10,運動不足、駅までのダッシュで息切れ。
+251,男,大学生,健康,11,深夜3時のカップ麺、罪悪感ごと食え。
+252,男,大学生,健康,12,コンタクト、つけたまま寝落ちするな。
+253,男,大学生,健康,13,洗濯物、山になる前に回せ。
+254,男,大学生,健康,14,エナジードリンク、水代わりに飲むな。
+255,男,大学生,健康,15,夏休みの引きこもり、体力がゼロになる。
+256,男,大学生,健康,16,飲み会のコール、喉を潰してまでやるな。
+257,男,大学生,健康,17,筋トレ、モテたいなら3ヶ月続けろ。
+258,男,大学生,健康,18,風邪ひいた。一人暮らしの孤独が刺さる。
+259,男,大学生,健康,19,歯医者、親に言われないと行かないな。
+260,男,大学生,健康,20,若さの無茶、ツケは25歳で来るぞ。
+261,男,大学生,恋愛,1,サークル内恋愛、別れたら居場所が消える。
+262,男,大学生,恋愛,2,マッチングアプリ、課金しても結果が出ない現実。
+263,男,大学生,恋愛,3,一人暮らしの部屋、片付けてから誘え。
+264,男,大学生,恋愛,4,バイト先の可愛い子、だいたい彼氏持ち。
+265,男,大学生,恋愛,5,「終電逃した」、期待しすぎるな。
+266,男,大学生,恋愛,6,ゼミの発表より、隣の席の子が気になる。
+267,男,大学生,恋愛,7,合コン、幹事が一番割を食う。
+268,男,大学生,恋愛,8,私服のバリエーション、3パターンで回すな。
+269,男,大学生,恋愛,9,恋愛より今はバイト、それただの言い訳。
+270,男,大学生,恋愛,10,SNSのDM、深夜のテンションで送るな。
+271,男,大学生,恋愛,11,教習所の出会い、ドラマみたいに起きない。
+272,男,大学生,恋愛,12,初デート、チェーン店でも笑顔があれば勝てる。
+273,男,大学生,恋愛,13,既読スルー、追撃LINEは即死フラグ。
+274,男,大学生,恋愛,14,「いい人だね」、それは不合格通知。
+275,男,大学生,恋愛,15,女友達からの恋愛相談、脈なし確定演出。
+276,男,大学生,恋愛,16,学祭の打ち上げ、勢いで告白するな。
+277,男,大学生,恋愛,17,彼女との旅行、計画を丸投げするな。
+278,男,大学生,恋愛,18,卒業前の駆け込み恋愛、だいたい遠距離で終わる。
+279,男,大学生,恋愛,19,清潔感、高い服よりまず髪を切れ。
+280,男,大学生,恋愛,20,大学4年間、恋をせず終わるのはもったいない。
+281,男,大学生,友情,1,空きコマ、学食でダベるだけの贅沢。
+282,男,大学生,友情,2,「今日お前んち行っていい？」、たまり場の宿命。
+283,男,大学生,友情,3,サークルのノリ、3年生になると急に冷める。
+284,男,大学生,友情,4,テスト前の過去問、くれる奴は神。
+285,男,大学生,友情,5,免許合宿、一生モノの友達ができる場所。
+286,男,大学生,友情,6,オールカラオケ、朝5時のテンションは異常。
+287,男,大学生,友情,7,「単位ヤバい」、お互い傷を舐め合うだけ。
+288,男,大学生,友情,8,卒業旅行、計画倒れにするな。
+289,男,大学生,友情,9,割り勘のPayPay、その場で送れ。
+290,男,大学生,友情,10,ゼミの飲み会、教授の武勇伝を耐え抜け。
+291,男,大学生,友情,11,大学の友達、卒業したら半分は消える。
+292,男,大学生,友情,12,バイト先の仲間、シフトが被ると無敵。
+293,男,大学生,友情,13,深夜のドライブ、目的地はだいたい海かドンキ。
+294,男,大学生,友情,14,麻雀とスマブラ、単位を溶かす魔のツール。
+295,男,大学生,友情,15,「明日1限起こすわ」、だいたい両方寝坊。
+296,男,大学生,友情,16,友達の恋バナ、朝まで付き合うのが礼儀。
+297,男,大学生,友情,17,就活の愚痴、居酒屋で吐き出せ。
+298,男,大学生,友情,18,貸した教科書、もう返ってこないと思え。
+299,男,大学生,友情,19,しょうもないノリ、今しかできない宝物。
+300,男,大学生,友情,20,一生付き合える奴、大学で1人見つけろ。
+301,男,大学生,学業&仕事,1,レポート締切23時59分、本当の戦いは23時から。
+302,男,大学生,学業&仕事,2,履修登録、楽単の情報戦を制せ。
+303,男,大学生,学業&仕事,3,1限を切るな。そこから留年が始まる。
+304,男,大学生,学業&仕事,4,フル単、言いたいだけの魔法の言葉。
+305,男,大学生,学業&仕事,5,ガクチカ、盛るのも就活のスキル。
+306,男,大学生,学業&仕事,6,ESの締切、コピペの社名ミスで即死。
+307,男,大学生,学業&仕事,7,バイト掛け持ち、学業を忘れるな。
+308,男,大学生,学業&仕事,8,オンライン授業、カメラオフで二度寝するな。
+309,男,大学生,学業&仕事,9,卒論のテーマ、12月に焦っても遅い。
+310,男,大学生,学業&仕事,10,インターン、スーツがまだ着られてる感。
+311,男,大学生,学業&仕事,11,ゼミ選び、教授の優しさだけで選ぶな。
+312,男,大学生,学業&仕事,12,出席カード、代返はバレたら終わり。
+313,男,大学生,学業&仕事,13,就活のお祈りメール、気にしたら負け。
+314,男,大学生,学業&仕事,14,奨学金の返済、将来の自分への宿題。
+315,男,大学生,学業&仕事,15,シフトの穴埋め、断る勇気も覚えろ。
+316,男,大学生,学業&仕事,16,単位取得数、計算ミスが一番怖い。
+317,男,大学生,学業&仕事,17,SPI対策、一夜漬けでなんとかなると思うな。
+318,男,大学生,学業&仕事,18,「大学で何学んだ？」、答えられるようにしとけ。
+319,男,大学生,学業&仕事,19,内定ブルー、決まった後に悩み出す贅沢。
+320,男,大学生,学業&仕事,20,人生の夏休み、ダラダラ過ごすな。遊び倒せ。
+321,男,社会人（ルーキー）,健康,1,デスクワーク、20代でも肩こりは来る。
+322,男,社会人（ルーキー）,健康,2,歓迎会続き、肝臓を休ませろ。
+323,男,社会人（ルーキー）,健康,3,コンビニ飯と牛丼、野菜を忘れるな。
+324,男,社会人（ルーキー）,健康,4,休日の昼まで爆睡、体内時計が狂うぞ。
+325,男,社会人（ルーキー）,健康,5,ジム契約、月会費の寄付になるな。
+326,男,社会人（ルーキー）,健康,6,学生時代の体力、もう過信するな。
+327,男,社会人（ルーキー）,健康,7,徹夜の仕事、翌週まで引きずるぞ。
+328,男,社会人（ルーキー）,健康,8,ストレス食い、スーツのズボンがキツい。
+329,男,社会人（ルーキー）,健康,9,朝飯抜き、満員電車で貧血になるぞ。
+330,男,社会人（ルーキー）,健康,10,エナジードリンク、頼りすぎると体が壊れる。
+331,男,社会人（ルーキー）,健康,11,姿勢悪いぞ、PC画面に顔が近すぎる。
+332,男,社会人（ルーキー）,健康,12,二日酔いで出社、二度と飲まないと誓う朝。
+333,男,社会人（ルーキー）,健康,13,歯医者、痛くなる前に行っとけ。
+334,男,社会人（ルーキー）,健康,14,週末の寝だめ、実は疲れが取れてない。
+335,男,社会人（ルーキー）,健康,15,自炊デビュー、調味料だけ増えて終了。
+336,男,社会人（ルーキー）,健康,16,運動不足、階段だけで息が切れるな。
+337,男,社会人（ルーキー）,健康,17,目の疲れ、寝る前のスマホを15分減らせ。
+338,男,社会人（ルーキー）,健康,18,体調不良、気合いで出社しても誰も褒めない。
+339,男,社会人（ルーキー）,健康,19,健康診断、まだA判定のうちに習慣を作れ。
+340,男,社会人（ルーキー）,健康,20,体が資本。若いうちからちゃんと寝ろ。
+341,男,社会人（ルーキー）,恋愛,1,マッチングアプリ、写真詐欺に気をつけろ。
+342,男,社会人（ルーキー）,恋愛,2,その優しさ、ただの都合のいい男。
+343,男,社会人（ルーキー）,恋愛,3,職場恋愛、別れた後の気まずさを想像しろ。
+344,男,社会人（ルーキー）,恋愛,4,「仕事が忙しい」、一番ダサい言い訳。
+345,男,社会人（ルーキー）,恋愛,5,初任給で奢る、見栄を張りすぎるな。
+346,男,社会人（ルーキー）,恋愛,6,友達の結婚報告、急に焦り出すな。
+347,男,社会人（ルーキー）,恋愛,7,「いい人」で終わるな。一歩踏み込め。
+348,男,社会人（ルーキー）,恋愛,8,元カノのSNS、未練がましく見るな。
+349,男,社会人（ルーキー）,恋愛,9,店の予約、スマートにできる男は強い。
+350,男,社会人（ルーキー）,恋愛,10,清潔感、スーツのシワと靴の汚れを見られてるぞ。
+351,男,社会人（ルーキー）,恋愛,11,既読無視、忙しくても一言返せ。
+352,男,社会人（ルーキー）,恋愛,12,部屋を片付けろ。急な来客に備えろ。
+353,男,社会人（ルーキー）,恋愛,13,割り勘か奢りか、ケチくさい態度は一発アウト。
+354,男,社会人（ルーキー）,恋愛,14,合コンで仕事の愚痴、絶対にモテない。
+355,男,社会人（ルーキー）,恋愛,15,「何でもいい」は、何でもよくない。
+356,男,社会人（ルーキー）,恋愛,16,休日の私服、大学生のまま止まってないか。
+357,男,社会人（ルーキー）,恋愛,17,恋愛より今は趣味、それも立派な選択。
+358,男,社会人（ルーキー）,恋愛,18,相手の話を聞け。アドバイスは要らん。
+359,男,社会人（ルーキー）,恋愛,19,結婚、まだ早いと思ってるうちに30歳が来る。
+360,男,社会人（ルーキー）,恋愛,20,愛は、言葉にしないと伝わらない。
+361,男,社会人（ルーキー）,友情,1,同期は戦友。辞めても一生付き合える。
+362,男,社会人（ルーキー）,友情,2,学生時代の友達、休みが合わなくなってきたな。
+363,男,社会人（ルーキー）,友情,3,「また今度飲もう」、だいたい実現しない。
+364,男,社会人（ルーキー）,友情,4,結婚式のご祝儀、財布が悲鳴を上げる時期。
+365,男,社会人（ルーキー）,友情,5,友達の年収、探るな。惨めになるだけ。
+366,男,社会人（ルーキー）,友情,6,割り勘、1円単位で細かい男は嫌われる。
+367,男,社会人（ルーキー）,友情,7,仕事の愚痴、ほどほどにしないと人が離れる。
+368,男,社会人（ルーキー）,友情,8,SNSのリア充投稿、見比べて病むな。
+369,男,社会人（ルーキー）,友情,9,地元の友達、帰省した時が一番ラク。
+370,男,社会人（ルーキー）,友情,10,飲み会の二次会、断る勇気も覚えろ。
+371,男,社会人（ルーキー）,友情,11,久しぶりの再会、話は結局学生時代のまま。
+372,男,社会人（ルーキー）,友情,12,友達の自慢話、笑顔で聞き流せ。
+373,男,社会人（ルーキー）,友情,13,既読スルー、お互いに忙しいから許せ。
+374,男,社会人（ルーキー）,友情,14,趣味のコミュニティ、会社外の友達を作れ。
+375,男,社会人（ルーキー）,友情,15,金の貸し借り、友情が終わるスイッチ。
+376,男,社会人（ルーキー）,友情,16,休日に誘える友達、今のうちに大事にしろ。
+377,男,社会人（ルーキー）,友情,17,連絡先、年々減っていくのが社会人。
+378,男,社会人（ルーキー）,友情,18,終電で帰る勇気、朝まで飲む体力はない。
+379,男,社会人（ルーキー）,友情,19,利害関係のない友達、一生の財産。
+380,男,社会人（ルーキー）,友情,20,「元気？」の一言、たまには送ってみろ。
+381,男,社会人（ルーキー）,学業&仕事,1,「報連相」、結局それが一番大事。
+382,男,社会人（ルーキー）,学業&仕事,2,メールの誤送信、冷や汗止まらん。
+383,男,社会人（ルーキー）,学業&仕事,3,定時で帰れ。残業しても誰も褒めないぞ。
+384,男,社会人（ルーキー）,学業&仕事,4,初任給、気づいたら税金と家賃で消える。
+385,男,社会人（ルーキー）,学業&仕事,5,上司の機嫌、天気と同じ。気にするな。
+386,男,社会人（ルーキー）,学業&仕事,6,議事録、最初は全員そこから始まる。
+387,男,社会人（ルーキー）,学業&仕事,7,転職サイト、登録だけならタダ。
+388,男,社会人（ルーキー）,学業&仕事,8,電話応対、最初は噛んでも死なない。
+389,男,社会人（ルーキー）,学業&仕事,9,有給、遠慮せず堂々と使え。
+390,男,社会人（ルーキー）,学業&仕事,10,エクセルのショートカット、覚えるだけで神扱い。
+391,男,社会人（ルーキー）,学業&仕事,11,月曜の朝、会社に行っただけで満点。
+392,男,社会人（ルーキー）,学業&仕事,12,会議、専門用語がわからなくてもメモを取れ。
+393,男,社会人（ルーキー）,学業&仕事,13,ミスしたら即報告。隠すのが一番ヤバい。
+394,男,社会人（ルーキー）,学業&仕事,14,残業代、ちゃんと申請しろよ。
+395,男,社会人（ルーキー）,学業&仕事,15,会社の飲み会、一次会で撤退が正解。
+396,男,社会人（ルーキー）,学業&仕事,16,資格の勉強、本だけ買って満足するな。
+397,男,社会人（ルーキー）,学業&仕事,17,「石の上にも三年」、ブラックならすぐ逃げろ。
+398,男,社会人（ルーキー）,学業&仕事,18,メモを取れ。自分の記憶力を過信するな。
+399,男,社会人（ルーキー）,学業&仕事,19,週末のために、平日を生きろ。
+400,男,社会人（ルーキー）,学業&仕事,20,仕事はほどほど。命を削るな。
+401,男,大人（ベテラン）,健康,1,ラーメンのスープ、全部飲むな。
+402,男,大人（ベテラン）,健康,2,健康診断、再検査から逃げるな。
+403,男,大人（ベテラン）,健康,3,ぎっくり腰、明日は我が身。
+404,男,大人（ベテラン）,健康,4,二日酔い、もう2日抜けない。
+405,男,大人（ベテラン）,健康,5,痛風、ビールの飲みすぎ。
+406,男,大人（ベテラン）,健康,6,脂っこいカルビ、3枚で胃もたれ。
+407,男,大人（ベテラン）,健康,7,腹囲、去年より増えてるぞ。
+408,男,大人（ベテラン）,健康,8,血圧とγ-GTP、数字は嘘をつかない。
+409,男,大人（ベテラン）,健康,9,スマホを離して見る。それは老眼だ。
+410,男,大人（ベテラン）,健康,10,髪のボリューム、現実から目を逸らすな。
+411,男,大人（ベテラン）,健康,11,寝違え、一週間首が回らない。
+412,男,大人（ベテラン）,健康,12,サプリメント、飲むだけで健康になった気になるな。
+413,男,大人（ベテラン）,健康,13,休日の昼寝、夜眠れなくなる罠。
+414,男,大人（ベテラン）,健康,14,締めのラーメン、翌朝の顔がパンパン。
+415,男,大人（ベテラン）,健康,15,整体に行け。金で体を治せ。
+416,男,大人（ベテラン）,健康,16,階段で息切れ、そろそろ歩け。
+417,男,大人（ベテラン）,健康,17,徹夜は禁止。命に関わる年齢だ。
+418,男,大人（ベテラン）,健康,18,夜中のトイレ、1回増えたら老化のサイン。
+419,男,大人（ベテラン）,健康,19,「昔は細かった」、誰も信じてないぞ。
+420,男,大人（ベテラン）,健康,20,気合いより睡眠。無理が効かない体を受け入れろ。
+421,男,大人（ベテラン）,恋愛,1,感謝の言葉、照れずに今日言え。
+422,男,大人（ベテラン）,恋愛,2,記念日、忘れたら命取り。
+423,男,大人（ベテラン）,恋愛,3,過去の武勇伝、誰も聞いてないぞ。
+424,男,大人（ベテラン）,恋愛,4,清潔感と加齢臭、そこが一番の分かれ道。
+425,男,大人（ベテラン）,恋愛,5,「釣った魚に餌をやらない」、熟年離婚フラグ。
+426,男,大人（ベテラン）,恋愛,6,既婚者の愚痴、実は惚気だったりする。
+427,男,大人（ベテラン）,恋愛,7,休日の家事、手伝うじゃなくて自分事だ。
+428,男,大人（ベテラン）,恋愛,8,若い頃と同じ口説き方、もう通用しないぞ。
+429,男,大人（ベテラン）,恋愛,9,パートナーの話、スマホ見ながら聞くな。
+430,男,大人（ベテラン）,恋愛,10,独身の自由、気楽だがたまに寂しい夜もある。
+431,男,大人（ベテラン）,恋愛,11,恋の駆け引き、大人はシンプルにいけ。
+432,男,大人（ベテラン）,恋愛,12,「何でもいい」で、飯を丸投げするな。
+433,男,大人（ベテラン）,恋愛,13,たまには花でも買って帰れ。怪しまれてもやれ。
+434,男,大人（ベテラン）,恋愛,14,自分の機嫌、家族に八つ当たりするな。
+435,男,大人（ベテラン）,恋愛,15,過去の栄光、今の魅力にはならん。
+436,男,大人（ベテラン）,恋愛,16,距離感、近すぎず遠すぎずが長続きのコツ。
+437,男,大人（ベテラン）,恋愛,17,「ありがとう」と「ごめんね」、言える男はカッコいい。
+438,男,大人（ベテラン）,恋愛,18,趣味への課金、家族への報告は正直に。
+439,男,大人（ベテラン）,恋愛,19,いくつになっても、ときめきを忘れるな。
+440,男,大人（ベテラン）,恋愛,20,一緒に黙っていても心地いい、それが本物。
+441,男,大人（ベテラン）,友情,1,昔の仲間、集まれば全員健康と薬の話。
+442,男,大人（ベテラン）,友情,2,同窓会、行けば楽しいが行くまでが億劫。
+443,男,大人（ベテラン）,友情,3,終電より早く帰る。それが大人の嗜み。
+444,男,大人（ベテラン）,友情,4,結局、一人が一番ラク。
+445,男,大人（ベテラン）,友情,5,冠婚葬祭、久しぶりに会うのがそればかり。
+446,男,大人（ベテラン）,友情,6,友達の役職や年収、もう気にしなくていい。
+447,男,大人（ベテラン）,友情,7,「また飲もう」、3年後に実現すれば上出来。
+448,男,大人（ベテラン）,友情,8,昔の親友、今はそれぞれの家族が最優先。
+449,男,大人（ベテラン）,友情,9,趣味の仲間、年齢関係なく付き合えて最高。
+450,男,大人（ベテラン）,友情,10,無理な人付き合い、そろそろ断捨離しろ。
+451,男,大人（ベテラン）,友情,11,地元に帰れ。親と旧友に顔を出せ。
+452,男,大人（ベテラン）,友情,12,昔話で笑える仲間、何歳になっても宝。
+453,男,大人（ベテラン）,友情,13,SNSのいいね、それだけの繋がりも悪くない。
+454,男,大人（ベテラン）,友情,14,愚痴を言い合える相手、1人いれば十分。
+455,男,大人（ベテラン）,友情,15,飲み会の幹事、そろそろ若手に譲れ。
+456,男,大人（ベテラン）,友情,16,自慢話ばかりする奴、そっとフェードアウトしろ。
+457,男,大人（ベテラン）,友情,17,久しぶりの電話、用事がなくてもかけてみろ。
+458,男,大人（ベテラン）,友情,18,利害関係のない友、この歳になると奇跡だ。
+459,男,大人（ベテラン）,友情,19,「元気にしてるか？」、それだけで救われる夜がある。
+460,男,大人（ベテラン）,友情,20,細く長く、それが大人の友情。
+461,男,大人（ベテラン）,学業&仕事,1,中間管理職、上と下の板挟みお疲れさま。
+462,男,大人（ベテラン）,学業&仕事,2,「最近の若い奴は」、口に出したら老害だ。
+463,男,大人（ベテラン）,学業&仕事,3,昇進より、定時退社と健康が一番。
+464,男,大人（ベテラン）,学業&仕事,4,会議、結論が出ないまま1時間経過。
+465,男,大人（ベテラン）,学業&仕事,5,後輩のミス、怒る前にまずフォローしろ。
+466,男,大人（ベテラン）,学業&仕事,6,老後資金とNISA、現実から目を逸らすな。
+467,男,大人（ベテラン）,学業&仕事,7,エクセルのフリーズ、保存してない地獄。
+468,男,大人（ベテラン）,学業&仕事,8,リスキリング、時代についていくだけで大変だ。
+469,男,大人（ベテラン）,学業&仕事,9,評価は他人が決める。腐るな。
+470,男,大人（ベテラン）,学業&仕事,10,休日の仕事メール、見なかったことにしろ。
+471,男,大人（ベテラン）,学業&仕事,11,会社は守ってくれない。自分のスキルを磨け。
+472,男,大人（ベテラン）,学業&仕事,12,「昔はこうだった」、アップデートしろ。
+473,男,大人（ベテラン）,学業&仕事,13,給料日、ローンと引き落としで即終了。
+474,男,大人（ベテラン）,学業&仕事,14,有給消化、部下の手本になるように休め。
+475,男,大人（ベテラン）,学業&仕事,15,セカンドキャリア、今から少し考えておけ。
+476,男,大人（ベテラン）,学業&仕事,16,完璧を目指すな。70点で回せば合格。
+477,男,大人（ベテラン）,学業&仕事,17,AIに仕事を奪われる前に、AIを使い倒せ。
+478,男,大人（ベテラン）,学業&仕事,18,会社の肩書き、外した時に何が残るか考えろ。
+479,男,大人（ベテラン）,学業&仕事,19,たまにはサボれ。長い仕事人生だ。
+480,男,大人（ベテラン）,学業&仕事,20,仕事は生活の手段。家族と自分の体を最優先にしろ。
+481,女,小学生,健康,1,ランドセル、好きな色でよかったね。
+482,女,小学生,健康,2,体育の着替え、急げ。
+483,女,小学生,健康,3,お菓子、ご飯の前に食べるな。
+484,女,小学生,健康,4,爪、噛むな。
+485,女,小学生,健康,5,寒い日も、スカートで頑張るな。
+486,女,小学生,健康,6,給食のパン、机の中に隠すな。
+487,女,小学生,健康,7,髪の毛、自分で結べるようになれ。
+488,女,小学生,健康,8,早く寝ないと、明日クマができる。
+489,女,小学生,健康,9,縄跳び、二重跳びで転ぶな。
+490,女,小学生,健康,10,手洗い、うがい、ちゃんとしろ。
+491,女,小学生,健康,11,給食のデザート、じゃんけんは本気。
+492,女,小学生,健康,12,鉄棒の逆上がり、怖がらずに回れ。
+493,女,小学生,健康,13,水筒のヒモ、肩に食い込んで痛い。
+494,女,小学生,健康,14,リップクリーム、塗りすぎてテカテカ。
+495,女,小学生,健康,15,体育のドッジボール、端っこで逃げ切れ。
+496,女,小学生,健康,16,視力検査、Cの向きをカンで答えるな。
+497,女,小学生,健康,17,プール開き、水が冷たすぎて悲鳴。
+498,女,小学生,健康,18,朝ごはん、パンの耳も残さず食べろ。
+499,女,小学生,健康,19,保健室の先生、だいたい優しい。
+500,女,小学生,健康,20,いっぱい食べて、いっぱい寝るのが一番可愛い。
+501,女,小学生,恋愛,1,好きな人、クラスで一番足が速い子。
+502,女,小学生,恋愛,2,男子、みんな幼稚すぎる。
+503,女,小学生,恋愛,3,交換ノート、秘密はすぐバレる。
+504,女,小学生,恋愛,4,恋占い、信じすぎ。
+505,女,小学生,恋愛,5,席が隣、それだけで一日ハッピー。
+506,女,小学生,恋愛,6,バレンタイン、友チョコ作りが本番。
+507,女,小学生,恋愛,7,「〇〇くんのこと好きでしょ」、否定するな。
+508,女,小学生,恋愛,8,好きな子の前だけ、声が高くなる。
+509,女,小学生,恋愛,9,先生に恋、よくあること。
+510,女,小学生,恋愛,10,恋バナ、お泊まり会の必須科目。
+511,女,小学生,恋愛,11,消しゴムに好きな人の名前、使い切れるわけない。
+512,女,小学生,恋愛,12,好きな子と目が合った。今日は記念日。
+513,女,小学生,恋愛,13,男子の「変なちょっかい」、実は好きの裏返し。
+514,女,小学生,恋愛,14,プロフィール帳、「好きな人」の欄はイニシャルで逃げろ。
+515,女,小学生,恋愛,15,同じ班になれた。神様ありがとう。
+516,女,小学生,恋愛,16,習い事のカッコいいお兄さん、憧れ。
+517,女,小学生,恋愛,17,席替えの前日、必死におまじない。
+518,女,小学生,恋愛,18,バレンタイン、手作りチョコでキッチン爆発。
+519,女,小学生,恋愛,19,「結婚しようね」の約束、だいたい忘れる。
+520,女,小学生,恋愛,20,今の推し、半年後には変わってるぞ。
+521,女,小学生,友情,1,トイレ、一人で行けるようになれ。
+522,女,小学生,友情,2,「一番の親友」、毎週変わる。
+523,女,小学生,友情,3,シール交換、レートに気をつけろ。
+524,女,小学生,友情,4,グループ分け、余ったら地獄。
+525,女,小学生,友情,5,秘密の話、だいたい広まる。
+526,女,小学生,友情,6,お揃いのキーホルダー、友情の証。
+527,女,小学生,友情,7,ケンカしても、次の日ケロッとしてる。
+528,女,小学生,友情,8,悪口、聞かれてるぞ。
+529,女,小学生,友情,9,放課後、プリクラまだ早い。
+530,女,小学生,友情,10,友達の文房具、羨ましがるな。
+531,女,小学生,友情,11,手紙交換、折り方がどんどん複雑になる。
+532,女,小学生,友情,12,誕生日会、プレゼント選びで親が悩む。
+533,女,小学生,友情,13,帰り道、家の前まで送ってまた送る。
+534,女,小学生,友情,14,「一緒に帰ろう」、言えずにソワソワ。
+535,女,小学生,友情,15,お揃いのシャーペン、それだけで無敵。
+536,女,小学生,友情,16,グループに一人、リーダー気質がいる。
+537,女,小学生,友情,17,仲直りのきっかけ、だいたい消しゴムの貸し借り。
+538,女,小学生,友情,18,友達の家のルール、うちと違って驚く。
+539,女,小学生,友情,19,「絶対ヒミツね」、次の日にはクラス全員知ってる。
+540,女,小学生,友情,20,笑顔で「おはよう」、それだけで友達は増える。
+541,女,小学生,学業&仕事,1,習い事、週5は多すぎ。
+542,女,小学生,学業&仕事,2,ノート、カラーペン使いすぎ。
+543,女,小学生,学業&仕事,3,漢字テスト、ハネとハライに気をつけろ。
+544,女,小学生,学業&仕事,4,テスト100点、ご褒美をねだれ。
+545,女,小学生,学業&仕事,5,ピアノの練習、サボるとバレる。
+546,女,小学生,学業&仕事,6,宿題、リビングでやると進まない。
+547,女,小学生,学業&仕事,7,自由研究、毎年同じテーマにするな。
+548,女,小学生,学業&仕事,8,筆箱の中、可愛いけど使えないペンだらけ。
+549,女,小学生,学業&仕事,9,算数、図形問題で止まるな。
+550,女,小学生,学業&仕事,10,お手伝い、お小遣い交渉のチャンス。
+551,女,小学生,学業&仕事,11,家庭科の裁縫、玉止めが永遠にできない。
+552,女,小学生,学業&仕事,12,読書感想文、原稿用紙のマスが埋まらない。
+553,女,小学生,学業&仕事,13,テストの見直し、めんどくさがるな。
+554,女,小学生,学業&仕事,14,習字の清書、一番最初が一番上手い。
+555,女,小学生,学業&仕事,15,音読カード、親のハンコ忘れずに。
+556,女,小学生,学業&仕事,16,係決め、人気のある係はじゃんけん勝負。
+557,女,小学生,学業&仕事,17,算数セット、名前シール貼るだけで親が泣く。
+558,女,小学生,学業&仕事,18,消しカス、机の端に集めるな。
+559,女,小学生,学業&仕事,19,夏休みの宿題、7月中に終わらせたら伝説。
+560,女,小学生,学業&仕事,20,自分の部屋、まずは床が見えるようにしろ。
+561,女,中学生,健康,1,無理なダイエット、今すぐやめろ。
+562,女,中学生,健康,2,前髪、命より大事。
+563,女,中学生,健康,3,部活の日焼け、夏が終われば戻る。
+564,女,中学生,健康,4,生理痛、我慢せず保健室へ行け。
+565,女,中学生,健康,5,夜中のスマホ、肌が荒れるぞ。
+566,女,中学生,健康,6,姿勢、猫背になってる。
+567,女,中学生,健康,7,体育祭のハチマキ、可愛く巻け。
+568,女,中学生,健康,8,甘いもの、テスト前のご褒美。
+569,女,中学生,健康,9,睡眠時間、削って美肌は作れない。
+570,女,中学生,健康,10,制汗シート、いい匂いさせすぎ。
+571,女,中学生,健康,11,朝の前髪セット、雨の日は絶望。
+572,女,中学生,健康,12,体育の後、日焼け止めの塗り直し忘れるな。
+573,女,中学生,健康,13,部活の筋肉、足が太くなるのを気にするな。
+574,女,中学生,健康,14,校則ギリギリのヘアアレンジ、気合い入れすぎ。
+575,女,中学生,健康,15,給食のおかわり、恥ずかしがるな。
+576,女,中学生,健康,16,寝不足の顔、鏡を見て絶望する朝。
+577,女,中学生,健康,17,体重計の数字、気にしすぎるな。成長期だ。
+578,女,中学生,健康,18,水分補給、部活中は遠慮するな。
+579,女,中学生,健康,19,ニキビパッチ、隠すより早く寝ろ。
+580,女,中学生,健康,20,笑顔が一番の、スキンケア。
+581,女,中学生,恋愛,1,脈ありサイン、深読みしすぎ。
+582,女,中学生,恋愛,2,好きな人、だいたい同じ部活の先輩。
+583,女,中学生,恋愛,3,LINEのアイコン、毎日変えるな。
+584,女,中学生,恋愛,4,既読がつかない。それだけで泣くな。
+585,女,中学生,恋愛,5,友達と好きな人が被る、地獄の始まり。
+586,女,中学生,恋愛,6,告白待ち、自分から行け。
+587,女,中学生,恋愛,7,男子の「お前」、脈ありとは限らない。
+588,女,中学生,恋愛,8,恋愛相談、相談相手を好きになるな。
+589,女,中学生,恋愛,9,放課後、わざと遠回りして帰れ。
+590,女,中学生,恋愛,10,初恋、美化して思い出にしろ。
+591,女,中学生,恋愛,11,体育祭の応援、好きな人だけ目で追うな。
+592,女,中学生,恋愛,12,好きな人のLINE、スクショして見返すな。
+593,女,中学生,恋愛,13,男子のさりげない優しさ、それだけで沼る。
+594,女,中学生,恋愛,14,修学旅行の自由行動、好きな班とすれ違え。
+595,女,中学生,恋愛,15,卒業式の先輩、かっこよさが3割増し。
+596,女,中学生,恋愛,16,「彼氏できた」の報告、素直に喜べ。
+597,女,中学生,恋愛,17,ノート貸して、それだけで恋が始まる。
+598,女,中学生,恋愛,18,自分の可愛さ、過小評価するな。
+599,女,中学生,恋愛,19,駆け引きするより、笑顔で挨拶。
+600,女,中学生,恋愛,20,恋してる時間、女子は一番綺麗になる。
+601,女,中学生,友情,1,グループLINE、通知が止まらない。
+602,女,中学生,友情,2,女子の派閥、巻き込まれるな。
+603,女,中学生,友情,3,「絶対言わないでね」、絶対広まる。
+604,女,中学生,友情,4,プリクラ、原型とどめてない。
+605,女,中学生,友情,5,誕生日の動画作り、徹夜するな。
+606,女,中学生,友情,6,仲良し3人組、だいたい2対1になる。
+607,女,中学生,友情,7,テスト前、「全然やってない」を信じるな。
+608,女,中学生,友情,8,休日のショッピングモール、誰かに会う。
+609,女,中学生,友情,9,親友の恋、全力で応援しろ。
+610,女,中学生,友情,10,今の友達、一生モノかもしれない。
+611,女,中学生,友情,11,昼休みのお弁当、机をくっつける瞬間が平和。
+612,女,中学生,友情,12,移動教室、トイレ待ちで遅刻するな。
+613,女,中学生,友情,13,友達の誕生日、ロッカーをサプライズだらけにする。
+614,女,中学生,友情,14,「ちょっと聞いて」、だいたい1時間コース。
+615,女,中学生,友情,15,お揃いの筆箱、友情の証。
+616,女,中学生,友情,16,部活の愚痴、同期と語り合えば軽くなる。
+617,女,中学生,友情,17,既読スルー、悪気はないから気にするな。
+618,女,中学生,友情,18,クラス替え、親友と同じクラスを必死に祈れ。
+619,女,中学生,友情,19,変な動画、撮った後に見返して爆笑。
+620,女,中学生,友情,20,無理して合わせなくていい。本音を言える奴を選べ。
+621,女,中学生,学業&仕事,1,マーカー引きすぎ、全部大事に見える。
+622,女,中学生,学業&仕事,2,英単語、赤シートで隠して満足するな。
+623,女,中学生,学業&仕事,3,部活と勉強、両立できなくて普通。
+624,女,中学生,学業&仕事,4,内申点、先生への笑顔がカギ。
+625,女,中学生,学業&仕事,5,提出物、綺麗にまとめれば勝ち。
+626,女,中学生,学業&仕事,6,数学、公式を呪文のように唱えろ。
+627,女,中学生,学業&仕事,7,受験のストレス、お菓子で発散。
+628,女,中学生,学業&仕事,8,授業中の手紙回し、バレてるぞ。
+629,女,中学生,学業&仕事,9,暗記科目、寝る前が一番入る。
+630,女,中学生,学業&仕事,10,志望校、制服の可愛さで選んでもいい。
+631,女,中学生,学業&仕事,11,可愛い文房具、買っただけで勉強した気になるな。
+632,女,中学生,学業&仕事,12,テスト計画表、作るのに2時間かけるな。
+633,女,中学生,学業&仕事,13,塾の自習室、友達と行くと喋って終わる。
+634,女,中学生,学業&仕事,14,英語のワーク、答えを丸写しするな。
+635,女,中学生,学業&仕事,15,音楽や美術、実技テストも手を抜くな。
+636,女,中学生,学業&仕事,16,漢字テスト、満点狙えば自信がつく。
+637,女,中学生,学業&仕事,17,受験前のSNS、見すぎると病むぞ。
+638,女,中学生,学業&仕事,18,授業のノート、色分けしすぎて板書に追いつかない。
+639,女,中学生,学業&仕事,19,模試の結果、泣くより復習しろ。
+640,女,中学生,学業&仕事,20,コツコツやった奴が、最後に笑う。
+641,女,高校生,健康,1,タピオカ・スイーツ、別腹にも限界がある。
+642,女,高校生,健康,2,冬の生足、将来ひざが泣く。
+643,女,高校生,健康,3,メイク落とし、寝落ち厳禁。
+644,女,高校生,健康,4,カフェイン摂りすぎ、夜眠れないぞ。
+645,女,高校生,健康,5,放課後の食べ歩き、それが青春。
+646,女,高校生,健康,6,ダイエットは、明日から。
+647,女,高校生,健康,7,立ちっぱなしのバイト、足がむくむ。
+648,女,高校生,健康,8,睡眠不足、クマはコンシーラーで隠せ。
+649,女,高校生,健康,9,肩こり、スマホの見すぎ。
+650,女,高校生,健康,10,若さで乗り切るな、ちゃんと休め。
+651,女,高校生,健康,11,朝のヘアアイロン、おでこ火傷するな。
+652,女,高校生,健康,12,体育の持久走、メイクが全部落ちる地獄。
+653,女,高校生,健康,13,昼休みのコンビニスイーツ、毎日食べてたら太るぞ。
+654,女,高校生,健康,14,カラコン、装着時間はちゃんと守れ。
+655,女,高校生,健康,15,バイト終わりの夜食、悪魔の誘惑。
+656,女,高校生,健康,16,日焼け対策、夏前の本気度が未来を変える。
+657,女,高校生,健康,17,生理前のイライラ、チョコを食べて自分を許せ。
+658,女,高校生,健康,18,姿勢良くしろ。それだけで3割増し。
+659,女,高校生,健康,19,テスト期間、夜中のポテチは裏切らない。
+660,女,高校生,健康,20,痩せることより、元気でいることが一番可愛い。
+661,女,高校生,恋愛,1,その男、やめとけ。
+662,女,高校生,恋愛,2,文化祭、彼氏と回るのが夢。
+663,女,高校生,恋愛,3,バイト先のイケメン、だいたい彼女持ち。
+664,女,高校生,恋愛,4,駆け引き、考えすぎて自滅する。
+665,女,高校生,恋愛,5,追う恋より、追われる恋をしろ。
+666,女,高校生,恋愛,6,「優しいだけ」、の男に騙されるな。
+667,女,高校生,恋愛,7,失恋、カラオケで泣いて忘れろ。
+668,女,高校生,恋愛,8,彼氏ができたら、友達を捨てるな。
+669,女,高校生,恋愛,9,記念日、毎月祝うのは最初だけ。
+670,女,高校生,恋愛,10,恋に悩む時間、今が一番贅沢。
+671,女,高校生,恋愛,11,連絡マメな男、他にも送ってるぞ。
+672,女,高校生,恋愛,12,制服デート、写真だけは山ほど撮っとけ。
+673,女,高校生,恋愛,13,彼氏の元カノ、SNSで探すな。病むだけ。
+674,女,高校生,恋愛,14,都合のいい女、今すぐ卒業しろ。
+675,女,高校生,恋愛,15,「好き」は、重いくらいが、ちょうどいい時期。
+676,女,高校生,恋愛,16,体育祭のメガホン、彼氏の名前書く前に考えろ。
+677,女,高校生,恋愛,17,インスタの匂わせ、だいたい全員気づいてる。
+678,女,高校生,恋愛,18,恋の相談、男子にすると意外と的確。
+679,女,高校生,恋愛,19,振られたら、髪切って可愛くなって見返せ。
+680,女,高校生,恋愛,20,自分を、大切にしてくれる男、を選べ。
+681,女,高校生,友情,1,放課後のカフェ、気づけば閉店間際。
+682,女,高校生,友情,2,ストーリーの親しい友達、厳選しろ。
+683,女,高校生,友情,3,恋バナ、朝まで電話コース。
+684,女,高校生,友情,4,卒業旅行、計画だけで終わらせるな。
+685,女,高校生,友情,5,プリクラ代、積み重なると高い。
+686,女,高校生,友情,6,「可愛い」の言い合い、世界平和。
+687,女,高校生,友情,7,友達の元カレ、絶対に手を出すな。
+688,女,高校生,友情,8,クラス替え、ぼっちを恐れるな。
+689,女,高校生,友情,9,しょうもない愚痴、聞いてくれる奴が本物。
+690,女,高校生,友情,10,制服ディズニー、今しかできない。
+691,女,高校生,友情,11,写真の加工、自分だけ盛るな。
+692,女,高校生,友情,12,誕生日の0時ピッタリ、長文LINEは愛の証。
+693,女,高校生,友情,13,バイトの愚痴、カフェで3時間は語れる。
+694,女,高校生,友情,14,テスト終わりのカラオケ、ストレス全解放。
+695,女,高校生,友情,15,友達の推し、全力で一緒に拝め。
+696,女,高校生,友情,16,グループ写真、半目のやつを載せるな。
+697,女,高校生,友情,17,卒業しても、年1回は絶対集まれ。
+698,女,高校生,友情,18,変なプライド、親友の前では捨てろ。
+699,女,高校生,友情,19,「今日盛れてる」、最高の褒め言葉。
+700,女,高校生,友情,20,泣きたい時に隣にいてくれる奴、一生大事にしろ。
+701,女,高校生,学業&仕事,1,バイト代、全部コスメと服に消える。
+702,女,高校生,学業&仕事,2,授業中の内職、バレない技術。
+703,女,高校生,学業&仕事,3,進路、親の言いなりになるな。
+704,女,高校生,学業&仕事,4,テスト前のカフェ勉、半分おしゃべり。
+705,女,高校生,学業&仕事,5,バイトのシフト、テスト前は減らせ。
+706,女,高校生,学業&仕事,6,推薦入試、面接の笑顔が命。
+707,女,高校生,学業&仕事,7,英検、取っておいて損はない。
+708,女,高校生,学業&仕事,8,課題、提出5分前の奇跡。
+709,女,高校生,学業&仕事,9,将来の夢、まだなくていい。
+710,女,高校生,学業&仕事,10,単位だけは、死守しろ。
+711,女,高校生,学業&仕事,11,バイトの面接、笑顔と元気でだいたい受かる。
+712,女,高校生,学業&仕事,12,暗記アプリ、開いただけで満足するな。
+713,女,高校生,学業&仕事,13,志望理由書、盛るのも実力のうち。
+714,女,高校生,学業&仕事,14,バイト先の理不尽な客、心の中で舌打ちしろ。
+715,女,高校生,学業&仕事,15,受験勉強、可愛いペンケースでモチベ上げろ。
+716,女,高校生,学業&仕事,16,貯金、バイト代の2割は残しとけ。
+717,女,高校生,学業&仕事,17,模試の偏差値、一喜一憂するな。
+718,女,高校生,学業&仕事,18,遅刻ギリギリ、走るより10分早く起きろ。
+719,女,高校生,学業&仕事,19,進路選び、友達に流されるな。自分の人生だ。
+720,女,高校生,学業&仕事,20,頑張った分だけ、未来の選択肢が増える。
+721,女,大学生,健康,1,1限のメイク、すっぴんにマスクで妥協。
+722,女,大学生,健康,2,昼夜逆転、肌荒れの原因はそれだ。
+723,女,大学生,健康,3,カフェ巡りのスイーツ、糖分の摂りすぎ。
+724,女,大学生,健康,4,バイト終わりの夜食、翌朝のむくみ確定。
+725,女,大学生,健康,5,一人暮らしの自炊、3日でコンビニに戻る。
+726,女,大学生,健康,6,オール明けの顔、鏡を見て絶望するな。
+727,女,大学生,健康,7,ヒールで通学、足が死ぬからスニーカー履け。
+728,女,大学生,健康,8,宅飲みのほろよい、調子に乗って飲みすぎるな。
+729,女,大学生,健康,9,ダイエット、飲み会1回でリセット。
+730,女,大学生,健康,10,睡眠不足、クマはコンシーラーじゃ隠れない。
+731,女,大学生,健康,11,冷房効きすぎの講義室、羽織りものを忘れるな。
+732,女,大学生,健康,12,メイク落とさず寝落ち、一番やっちゃダメなやつ。
+733,女,大学生,健康,13,日焼け止め、夏休みの海で塗り直すな。いや塗り直せ。
+734,女,大学生,健康,14,運動不足、階段で息が上がってるぞ。
+735,女,大学生,健康,15,生理痛、無理してバイトに入るな。
+736,女,大学生,健康,16,カラコンとマツエク、目の休憩も大事。
+737,女,大学生,健康,17,朝ごはん抜き、1限でお腹が鳴る地獄。
+738,女,大学生,健康,18,ストレス発散の爆買い、心は軽いが財布が重い。
+739,女,大学生,健康,19,自炊の作り置き、腐らせる前に食え。
+740,女,大学生,健康,20,今が一番体力ある。寝る時間削って遊ぶな。
+741,女,大学生,恋愛,1,サークルクラッシャー、噂になる前に気をつけろ。
+742,女,大学生,恋愛,2,マッチングアプリ、ヤリモクを見抜く目を持て。
+743,女,大学生,恋愛,3,バイト先の先輩、制服補正でカッコよく見えてるだけ。
+744,女,大学生,恋愛,4,「終電なくなった」、計算ならそれでよし。
+745,女,大学生,恋愛,5,彼氏の一人暮らし、半同棲で家政婦になるな。
+746,女,大学生,恋愛,6,飲み会のボディタッチ、誰にでもやってるぞその男。
+747,女,大学生,恋愛,7,卒業後の進路、彼氏に合わせて妥協するな。
+748,女,大学生,恋愛,8,インスタの匂わせ、女子には100%バレてる。
+749,女,大学生,恋愛,9,「都合のいい女」、大学のうちに卒業しろ。
+750,女,大学生,恋愛,10,ゼミの真面目な男子、実は一番の優良物件。
+751,女,大学生,恋愛,11,合コンのさしすせそ、やりすぎると引かれる。
+752,女,大学生,恋愛,12,元カレのSNS、ブロックしてスッキリしろ。
+753,女,大学生,恋愛,13,記念日デート、期待しすぎると勝手に傷つく。
+754,女,大学生,恋愛,14,「忙しい」は言い訳。会いたい奴は時間を作る。
+755,女,大学生,恋愛,15,男友達との距離感、勘違いさせるな。
+756,女,大学生,恋愛,16,就活と恋愛、両方うまくいかなくて普通。
+757,女,大学生,恋愛,17,高いプレゼントより、ちゃんと話を聞いてくれる男。
+758,女,大学生,恋愛,18,失恋したら、友達と韓国旅行かカラオケへ行け。
+759,女,大学生,恋愛,19,自分の価値、男の態度で決めるな。
+760,女,大学生,恋愛,20,いろんな恋をして、男を見る目を養え。
+761,女,大学生,友情,1,空きコマのカフェ、気づけば2時間経過。
+762,女,大学生,友情,2,「今日何着てく？」、毎日私服のプレッシャー。
+763,女,大学生,友情,3,女子旅の計画、映えスポット優先で移動が地獄。
+764,女,大学生,友情,4,友達の恋バナ、肯定だけじゃなくたまには止めろ。
+765,女,大学生,友情,5,テスト前のレジュメ共有、助け合いが命。
+766,女,大学生,友情,6,インスタのストーリー、親しい友達リストを厳選しろ。
+767,女,大学生,友情,7,サークルの女子、裏表に巻き込まれるな。
+768,女,大学生,友情,8,ゼミの同期、卒論の苦しみを分かち合う戦友。
+769,女,大学生,友情,9,誕生日サプライズ、ホテル女子会で写真500枚。
+770,女,大学生,友情,10,「また遊ぼうね」、社交辞令か本気か見極めろ。
+771,女,大学生,友情,11,就活の進捗、比べすぎて病むな。
+772,女,大学生,友情,12,バイト先の愚痴、ファミレスで朝まで語れる。
+773,女,大学生,友情,13,友達の彼氏、ヤバい奴でも最初は見守れ。
+774,女,大学生,友情,14,卒業旅行、金欠でも絶対に行っとけ。
+775,女,大学生,友情,15,写真の加工、友達の顔もちゃんと盛ってやれ。
+776,女,大学生,友情,16,講義の席取り、遅刻常習犯を見捨てるな。
+777,女,大学生,友情,17,高校の親友、たまに会うと一番落ち着く。
+778,女,大学生,友情,18,無理して大人数に合わせるな。少数精鋭でいい。
+779,女,大学生,友情,19,「可愛い！」のシャワー、お互いの自己肯定感を上げろ。
+780,女,大学生,友情,20,大学で出会った親友、大人になっても宝になる。
+781,女,大学生,学業&仕事,1,バイト代、服とコスメと推し活で即消滅。
+782,女,大学生,学業&仕事,2,履修登録、抽選に落ちて計画が崩壊。
+783,女,大学生,学業&仕事,3,レポート締切直前、カフェインで覚醒しろ。
+784,女,大学生,学業&仕事,4,就活の証明写真、課金してでも綺麗に撮れ。
+785,女,大学生,学業&仕事,5,ESの自己PR、謙遜しすぎると落ちるぞ。
+786,女,大学生,学業&仕事,6,ゼミの発表、パワポのデザインに凝りすぎるな。
+787,女,大学生,学業&仕事,7,オンライン面接、上半身だけスーツの開放感。
+788,女,大学生,学業&仕事,8,英語の単位、落とすと卒業まで引きずるぞ。
+789,女,大学生,学業&仕事,9,バイトのシフト、テスト前は早めに減らせ。
+790,女,大学生,学業&仕事,10,資格の勉強、テキスト買って満足するな。
+791,女,大学生,学業&仕事,11,卒論の執筆、文字数が埋まらなくて泣くな。
+792,女,大学生,学業&仕事,12,インターン参加、私服指定が一番困る。
+793,女,大学生,学業&仕事,13,1限の講義、遅刻して後ろのドアから忍び込め。
+794,女,大学生,学業&仕事,14,グループワーク、何もしない奴にイラつくな。
+795,女,大学生,学業&仕事,15,就活の軸、迷ったら「休みの多さ」でいい。
+796,女,大学生,学業&仕事,16,アパレル・カフェバイト、憧れと現実のギャップ。
+797,女,大学生,学業&仕事,17,奨学金、借りてる意識を忘れるな。
+798,女,大学生,学業&仕事,18,お祈りメール、縁がなかったと切り替えて次。
+799,女,大学生,学業&仕事,19,4年間はあっという間。やりたいこと全部やれ。
+800,女,大学生,学業&仕事,20,単位と就活、最後は気合いと情報戦。
+801,女,社会人（ルーキー）,健康,1,化粧したまま寝るな。肌が死ぬ。
+802,女,社会人（ルーキー）,健康,2,デスクワークのむくみ、着圧ソックスは必須。
+803,女,社会人（ルーキー）,健康,3,ストレスの甘いもの、気づけば毎日食べてる。
+804,女,社会人（ルーキー）,健康,4,睡眠不足、翌日の顔に全部出るぞ。
+805,女,社会人（ルーキー）,健康,5,ピラティス・ヨガ、幽霊会員になるな。
+806,女,社会人（ルーキー）,健康,6,冷房の冷え性、職場のひざ掛けを常備しろ。
+807,女,社会人（ルーキー）,健康,7,立ち仕事とパンプス、足裏が限界。
+808,女,社会人（ルーキー）,健康,8,ランチ後の眠気、午後の会議が一番の敵。
+809,女,社会人（ルーキー）,健康,9,自炊の理想と現実、疲れたら惣菜でいい。
+810,女,社会人（ルーキー）,健康,10,二日酔いの出社、二度と飲まないと誓う。
+811,女,社会人（ルーキー）,健康,11,高い化粧水より、まず8時間睡眠。
+812,女,社会人（ルーキー）,健康,12,休日の寝だめ、夕方起きて自己嫌悪。
+813,女,社会人（ルーキー）,健康,13,肩こりとスマホ首、整体に課金しろ。
+814,女,社会人（ルーキー）,健康,14,生理前のイライラ、自分を甘やかしてよし。
+815,女,社会人（ルーキー）,健康,15,鉄分とタンパク質、コンビニ飯でも意識しろ。
+816,女,社会人（ルーキー）,健康,16,美容医療、SNSに煽られて課金しすぎるな。
+817,女,社会人（ルーキー）,健康,17,日焼け止め、通勤だけでもちゃんと塗れ。
+818,女,社会人（ルーキー）,健康,18,婦人科検診、20代のうちから行っとけ。
+819,女,社会人（ルーキー）,健康,19,無理して笑うな。疲れたら布団に逃げろ。
+820,女,社会人（ルーキー）,健康,20,自分の機嫌と体調、自分で取れ。
+821,女,社会人（ルーキー）,恋愛,1,その男、本当にやめとけ。
+822,女,社会人（ルーキー）,恋愛,2,マッチングアプリ、疲れたら一旦休め。
+823,女,社会人（ルーキー）,恋愛,3,「忙しい」は、優先順位が低い証拠。
+824,女,社会人（ルーキー）,恋愛,4,店員に横柄な男、100%地雷。
+825,女,社会人（ルーキー）,恋愛,5,ダメンズ育成、もうボランティアは辞めろ。
+826,女,社会人（ルーキー）,恋愛,6,結婚ラッシュ、周りに焦らされるな。
+827,女,社会人（ルーキー）,恋愛,7,既読スルー、追撃LINEは厳禁。
+828,女,社会人（ルーキー）,恋愛,8,職場恋愛、噂が広まるスピードを舐めるな。
+829,女,社会人（ルーキー）,恋愛,9,元カレの幸せ、願わなくていい。
+830,女,社会人（ルーキー）,恋愛,10,「いい人がいれば」、待ってるだけじゃ来ない。
+831,女,社会人（ルーキー）,恋愛,11,妥協はするな。でも理想は現実を見ろ。
+832,女,社会人（ルーキー）,恋愛,12,割り勘か奢りか、そこで人間性が見える。
+833,女,社会人（ルーキー）,恋愛,13,週末のデート、仕事の話ばかりする男は微妙。
+834,女,社会人（ルーキー）,恋愛,14,推し活、恋愛より裏切らない。
+835,女,社会人（ルーキー）,恋愛,15,親の「結婚まだ？」、笑顔で受け流せ。
+836,女,社会人（ルーキー）,恋愛,16,価値観の違い、早めに見極めろ。
+837,女,社会人（ルーキー）,恋愛,17,経済力、綺麗事抜きで結局そこが大事。
+838,女,社会人（ルーキー）,恋愛,18,我慢する恋は、恋じゃない。
+839,女,社会人（ルーキー）,恋愛,19,一人の時間、楽しめる女は強い。
+840,女,社会人（ルーキー）,恋愛,20,愛されたいなら、まず自分を愛せ。
+841,女,社会人（ルーキー）,友情,1,女子会、気づけば仕事の愚痴大会。
+842,女,社会人（ルーキー）,友情,2,「今度ランチ行こう」、社交辞令。
+843,女,社会人（ルーキー）,友情,3,SNSのキラキラ投稿、見なくていい。
+844,女,社会人（ルーキー）,友情,4,結婚・転職、少しずつライフステージが変わり始める。
+845,女,社会人（ルーキー）,友情,5,久々の連絡、マルチ商法と保険の勧誘に気をつけろ。
+846,女,社会人（ルーキー）,友情,6,同期の女子、ランチタイムが一番の救い。
+847,女,社会人（ルーキー）,友情,7,アフタヌーンティー、写真撮るだけで満足。
+848,女,社会人（ルーキー）,友情,8,マウント合戦、笑顔でスルーしろ。
+849,女,社会人（ルーキー）,友情,9,学生時代の親友、会えば一瞬で10代に戻る。
+850,女,社会人（ルーキー）,友情,10,予定が合わない。それが社会人の普通。
+851,女,社会人（ルーキー）,友情,11,友達の結婚報告、素直に祝えなくてもいい。
+852,女,社会人（ルーキー）,友情,12,ご祝儀とドレス代、お財布が泣く季節。
+853,女,社会人（ルーキー）,友情,13,推し活仲間、一番平和で楽しい関係。
+854,女,社会人（ルーキー）,友情,14,LINEの返信、3日後でも許してくれるのが親友。
+855,女,社会人（ルーキー）,友情,15,気を使う飲み会、断る勇気を持て。
+856,女,社会人（ルーキー）,友情,16,愚痴ばかりの友達、距離を置いてもいい。
+857,女,社会人（ルーキー）,友情,17,割り勘の計算、キャッシュレスでスマートに。
+858,女,社会人（ルーキー）,友情,18,本音で話せる友達、3人いれば十分。
+859,女,社会人（ルーキー）,友情,19,悪口で繋がる関係、いつか自分が標的にされる。
+860,女,社会人（ルーキー）,友情,20,会った後に元気になれる人だけ、そばに置け。
+861,女,社会人（ルーキー）,学業&仕事,1,給料、上がらないなら転職しろ。
+862,女,社会人（ルーキー）,学業&仕事,2,職場の人間関係、割り切れ。
+863,女,社会人（ルーキー）,学業&仕事,3,定時退社、罪悪感を持つな。
+864,女,社会人（ルーキー）,学業&仕事,4,笑顔で「確認します」、最強の防御魔法。
+865,女,社会人（ルーキー）,学業&仕事,5,上司の無茶振り、真に受けるな。
+866,女,社会人（ルーキー）,学業&仕事,6,ランチの時間だけが、唯一の救い。
+867,女,社会人（ルーキー）,学業&仕事,7,有給、旅行と推し活のために使え。
+868,女,社会人（ルーキー）,学業&仕事,8,残業後のデパ地下スイーツ、必要経費。
+869,女,社会人（ルーキー）,学業&仕事,9,「私なんて」、謙遜しすぎると損するぞ。
+870,女,社会人（ルーキー）,学業&仕事,10,職場の「お局」、敵に回すな。味方につけろ。
+871,女,社会人（ルーキー）,学業&仕事,11,ボーナス、使い道はもう決まってる。
+872,女,社会人（ルーキー）,学業&仕事,12,資格取得、形から入って満足するな。
+873,女,社会人（ルーキー）,学業&仕事,13,メールの敬語、調べすぎて送信に30分。
+874,女,社会人（ルーキー）,学業&仕事,14,頑張りすぎ注意。代わりはいくらでもいる。
+875,女,社会人（ルーキー）,学業&仕事,15,同期の存在、会社を辞めない理由になる。
+876,女,社会人（ルーキー）,学業&仕事,16,自分の市場価値、たまに転職サイトで測れ。
+877,女,社会人（ルーキー）,学業&仕事,17,キャリアプラン、変わってもいい。柔軟にいけ。
+878,女,社会人（ルーキー）,学業&仕事,18,副業とNISA、まずは少額から始めろ。
+879,女,社会人（ルーキー）,学業&仕事,19,稼いだ金で、自分を最大限に甘やかしていい。
+880,女,社会人（ルーキー）,学業&仕事,20,仕事は生活のため。人生のすべてにするな。
+881,女,大人（ベテラン）,健康,1,代謝、確実に落ちている。
+882,女,大人（ベテラン）,健康,2,健康診断のバリウム、毎年あれが地獄。
+883,女,大人（ベテラン）,健康,3,更年期の揺らぎ、気合いでどうにかするな。
+884,女,大人（ベテラン）,健康,4,白髪染め、気づけば1ヶ月があっという間。
+885,女,大人（ベテラン）,健康,5,睡眠の質、枕と布団に課金しろ。
+886,女,大人（ベテラン）,健康,6,整体とマッサージ、月一の命綱。
+887,女,大人（ベテラン）,健康,7,肩甲骨を動かせ。世界が少し軽くなる。
+888,女,大人（ベテラン）,健康,8,冷え性、首・手首・足首を冷やすな。
+889,女,大人（ベテラン）,健康,9,甘いもの、ストレスの特効薬だがほどほどに。
+890,女,大人（ベテラン）,健康,10,二日酔い、昔みたいに半日じゃ治らない。
+891,女,大人（ベテラン）,健康,11,スマホの文字、大きくするのを恥ずかしがるな。
+892,女,大人（ベテラン）,健康,12,ダイエット、食べないより動いて筋肉をつけろ。
+893,女,大人（ベテラン）,健康,13,婦人科検診とマンモ、面倒でも毎年行け。
+894,女,大人（ベテラン）,健康,14,むくみ、塩分と水分のバランスを見直せ。
+895,女,大人（ベテラン）,健康,15,「ちょっと横になる」、そのまま2時間経過。
+896,女,大人（ベテラン）,健康,16,高い美容液より、ストレスのない夜と睡眠。
+897,女,大人（ベテラン）,健康,17,膝と腰、違和感を放置するな。
+898,女,大人（ベテラン）,健康,18,白湯とストレッチ、地味だけど結局それが効く。
+899,女,大人（ベテラン）,健康,19,自分の体の変化、受け入れてうまく付き合え。
+900,女,大人（ベテラン）,健康,20,無理して頑張るな。休むのも大人の仕事だ。
+901,女,大人（ベテラン）,恋愛,1,結婚がゴールじゃない。長い生活のスタートだ。
+902,女,大人（ベテラン）,恋愛,2,パートナーへの期待、半分に下げると平和になる。
+903,女,大人（ベテラン）,恋愛,3,推し活、この世で一番平和で裏切らない恋。
+904,女,大人（ベテラン）,恋愛,4,「言わなくても察して」、男には一生無理だ。
+905,女,大人（ベテラン）,恋愛,5,自分の機嫌、誰かに取ってもらおうとするな。
+906,女,大人（ベテラン）,恋愛,6,一人の時間、これがないと窒息する。
+907,女,大人（ベテラン）,恋愛,7,経済的自立、それがある女は最強。
+908,女,大人（ベテラン）,恋愛,8,過去の恋、もう笑える思い出に昇華しろ。
+909,女,大人（ベテラン）,恋愛,9,「ありがとう」の一言、長い関係ほど大事。
+910,女,大人（ベテラン）,恋愛,10,妥協じゃなくて「許容」。それで楽になる。
+911,女,大人（ベテラン）,恋愛,11,恋をするのに、年齢制限はない。
+912,女,大人（ベテラン）,恋愛,12,休日のランチ、たまには二人で出かけてみろ。
+913,女,大人（ベテラン）,恋愛,13,相手の欠点、直そうとするだけエネルギーの無駄。
+914,女,大人（ベテラン）,恋愛,14,独身でも既婚でも、幸せの基準は自分が決めろ。
+915,女,大人（ベテラン）,恋愛,15,ときめき、ドラマでも俳優でもどんどん補給しろ。
+916,女,大人（ベテラン）,恋愛,16,我慢しすぎる関係、そろそろ見直してもいい。
+917,女,大人（ベテラン）,恋愛,17,綺麗な自分でいるのは、男のためじゃなく自分のため。
+918,女,大人（ベテラン）,恋愛,18,頼ることも甘えることも、大人のスキル。
+919,女,大人（ベテラン）,恋愛,19,一緒に、美味しいものを、食べられる相手が一番。
+920,女,大人（ベテラン）,恋愛,20,ありのままの、自分でいられる場所が、本物。
+921,女,大人（ベテラン）,友情,1,女子会、健康・老後・親の話で3時間。
+922,女,大人（ベテラン）,友情,2,距離感、大事にすれば長く続く。
+923,女,大人（ベテラン）,友情,3,無理な人付き合い、笑顔でフェードアウトしろ。
+924,女,大人（ベテラン）,友情,4,ライフステージの違い、比べなくていい。
+925,女,大人（ベテラン）,友情,5,本音で話せる友達、3人いれば人生勝ち。
+926,女,大人（ベテラン）,友情,6,ママ友・ご近所付き合い、深入りしすぎないのが吉。
+927,女,大人（ベテラン）,友情,7,学生時代の親友、何年ぶりでも一瞬で戻れる。
+928,女,大人（ベテラン）,友情,8,推し活仲間、年齢も肩書きも関係なくて最高。
+929,女,大人（ベテラン）,友情,9,マウント合戦、心の中で「はいはい」と流せ。
+930,女,大人（ベテラン）,友情,10,「今度ランチ行こう」、本当に会いたい奴とは今決めろ。
+931,女,大人（ベテラン）,友情,11,愚痴を聞き合える関係、最高のデトックス。
+932,女,大人（ベテラン）,友情,12,SNSのキラキラ投稿、見なくていい。疲れるだけ。
+933,女,大人（ベテラン）,友情,13,久しぶりに会う友達、手土産センスが光る。
+934,女,大人（ベテラン）,友情,14,気を使う集まり、体調不良を理由に断ってよし。
+935,女,大人（ベテラン）,友情,15,友達の成功、素直に「すごい！」と言える自分でいろ。
+936,女,大人（ベテラン）,友情,16,LINEの返信、遅くても気にしない関係がラク。
+937,女,大人（ベテラン）,友情,17,悪口で盛り上がるグループ、そろそろ卒業しろ。
+938,女,大人（ベテラン）,友情,18,趣味で繋がる新しい友達、大人になってからが楽しい。
+939,女,大人（ベテラン）,友情,19,会った後にどっと疲れる人とは、距離を置け。
+940,女,大人（ベテラン）,友情,20,笑いのツボが同じ友達、一生大事にしろ。
+941,女,大人（ベテラン）,学業&仕事,1,仕事も家事も、完璧を目指すな。70点でいい。
+942,女,大人（ベテラン）,学業&仕事,2,職場の人間関係、深入りせず割り切れ。
+943,女,大人（ベテラン）,学業&仕事,3,残業より定時。自分の時間を死守しろ。
+944,女,大人（ベテラン）,学業&仕事,4,「私なんて」は卒業。自分の実績をちゃんと認めろ。
+945,女,大人（ベテラン）,学業&仕事,5,会議での発言、短く言い切ればそれっぽくなる。
+946,女,大人（ベテラン）,学業&仕事,6,上司や会社の理不尽、真に受けず受け流せ。
+947,女,大人（ベテラン）,学業&仕事,7,有給、自分のリフレッシュのために堂々と使え。
+948,女,大人（ベテラン）,学業&仕事,8,老後資金と投資、知識は自分の身を守る。
+949,女,大人（ベテラン）,学業&仕事,9,新しい学び、何歳から始めても遅くない。
+950,女,大人（ベテラン）,学業&仕事,10,頑張りすぎ注意。あなたが倒れても会社は回る。
+951,女,大人（ベテラン）,学業&仕事,11,「確認します」と「検討します」、大人の魔法の言葉。
+952,女,大人（ベテラン）,学業&仕事,12,後輩へのアドバイス、求められた時だけでいい。
+953,女,大人（ベテラン）,学業&仕事,13,自分へのご褒美、理由なんてなくていい。
+954,女,大人（ベテラン）,学業&仕事,14,ランチの美味しい店、それが毎日のモチベーション。
+955,女,大人（ベテラン）,学業&仕事,15,キャリアも生き方も、何度やり直してもいい。
+956,女,大人（ベテラン）,学業&仕事,16,家のこと、全部一人で背負い込むな。
+957,女,大人（ベテラン）,学業&仕事,17,デジタルとAI、食わず嫌いせず味方につけろ。
+958,女,大人（ベテラン）,学業&仕事,18,嫌な仕事、お金のためと割り切れば少し楽になる。
+959,女,大人（ベテラン）,学業&仕事,19,稼いだ金、自分の未来と楽しみに使え。
+960,女,大人（ベテラン）,学業&仕事,20,仕事は人生の一部。自分の幸せを真ん中に置け。
+</script>
+
 <script>
-(()=>{'use strict';
-const TREASURES=[
- {name:'仏の御石の鉢',hint:'ありがたみのある「器」なら、材質も用途も問いません。堂々と本物だと言い切ろう。',image:0},
- {name:'蓬莱の玉の枝',hint:'根元から先まで、どこかに「玉」があれば勝負できるかも。',image:1},
- {name:'火鼠の裘（かわぎぬ）',hint:'火に強い、あたたかい、あるいは着られる。言い張り方が大事。',image:2},
- {name:'龍の首の珠',hint:'龍の気配がする珠。丸いものを見つけたら、あとは説明で押し切ろう。',image:3},
- {name:'燕の子安貝',hint:'燕が安心して子育てできそうな、貝っぽい何かを探そう。',image:4}
-];
-const PHASES={lobby:'参加受付',prep:'準備',operate:'操作中',confirm:'提出確定',reveal:'一斉公開',result:'結果発表'};
-const KAGUYA_COMMENTS=['それ、宝物よりレシートを見せてほしいわ。','言い切る勇気だけは月まで届いたわね。','悔しいけれど、少し欲しくなったわ。','本物かどうかはさておき、笑ったから合格！'];
-const app=document.getElementById('app');const qs=new URLSearchParams(location.search);const roomId=qs.get('room');
-const pidKey='kaguya-player-id-v1',nameKey='kaguya-player-name-v1';
-const participantId=localStorage.getItem(pidKey)||makeId();localStorage.setItem(pidKey,participantId);
-let clientName=localStorage.getItem(nameKey)||'';let hostPeer=null,clientPeer=null,players=new Map(),phase='lobby',round=0,spotlightIndex=0,joinUrl='',snapshot=null,ready=false,toastTimer=null;
-const isClient=Boolean(roomId);if(isClient)document.body.classList.add('mobilemode');
-function makeId(){return (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)+Date.now().toString(36)).replace(/-/g,'')}
-function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function toast(s){let e=document.querySelector('.toast');if(!e){e=document.createElement('div');e.className='toast';document.body.appendChild(e)}e.textContent=s;clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.remove(),3000)}
-function activeRound(){return isClient?Math.min(Math.max(Number(snapshot?.round)||0,0),4):round}
-function currentTreasure(){return TREASURES[activeRound()]}
-function visibleTotal(p){return phase==='result'?p.total:Object.entries(p.submissions).reduce((sum,[index,s])=>sum+(Number(index)<round?(s.points||0):0),0)}
-function chrome(title,subtitle,network='接続待機中'){return `<div class="shell"><header class="top"><div class="brand"><span class="moon"></span><span>かぐや姫のむちゃぶり御前</span></div><div class="net" id="net">${esc(network)}</div></header><main class="main">${title}</main><div class="foot">ホスト主導のスター型通信 · 操作とゲーム状態は親PCが管理します</div></div>`}
-function treasurePanel(){const t=currentTreasure();return `<div class="treasure"><img src="assets/treasure-${t.image+1}.png" alt="宝物のイメージ"><div><div class="num">難題 ${activeRound()+1} / 5</div><h2>${esc(t.name)}</h2><p>${esc(t.hint)}</p></div></div>`}
-function updateNet(text,online=false){const e=document.getElementById('net');if(e){e.textContent=text;e.classList.toggle('online',online)}}
-function stageBlock(entriesHtml='',label='御前のようす',scenePlayers=[],sceneEntries=[],scenePhase=phase,focus=0){
- const active=['reveal','result'].includes(scenePhase)&&sceneEntries.length?sceneEntries[focus%sceneEntries.length]:null;
- const dialogue=active?`<strong>${esc(active.name)}「${esc(active.object)}こそ本物です！」</strong><span>${esc(active.joke)}</span>${scenePhase==='result'?`<span class="reply"><strong>かぐや姫「${esc(active.comment||'')}${active.points==null?'':` ${active.points}点！` }」</strong></span>`:''}`:`<strong>かぐや姫</strong>「${esc(currentTreasure().name)}を持ってきて。身近な物でも、本物だと言い切れるかしら？」`;
- const suitors=scenePlayers.map((p,i)=>{const x=48+(i-(scenePlayers.length-1)/2)*9;return `<figure class="scene-suitor ${p.online?'':'offline'} ${active?.id===p.id?'active':''}" style="--x:${x}%"><img src="assets/suitor.png" alt=""><figcaption>${esc(p.name)}</figcaption></figure>`}).join('');
- return `<section class="stage"><div class="scene" aria-label="御殿の大喜利舞台"><img class="scene-palace" src="assets/stage.png" alt=""><div class="scene-kaguya ${['reveal','result'].includes(scenePhase)?'laughing':''}" role="img" aria-label="かぐや姫"></div><img class="scene-misu" src="assets/misu.png" alt=""><div class="scene-suitors">${suitors}</div><div class="scene-dialogue">${dialogue}</div></div>${treasurePanel()}<div class="board"><div class="section-label">${esc(label)}</div>${entriesHtml||`<div class="waiting"><span class="seal">☾</span>まだ御前に提出はありません。<br>求婚者たちの支度を待っています。</div>`}</div></section>`
-}
-function renderHost(){const t=currentTreasure();const playerList=[...players.values()];const entries=playerList.filter(p=>p.submissions[round]);const cards=['reveal','result'].includes(phase)?entries.map(p=>{const s=p.submissions[round];return `<article class="entry"><div class="entrytop"><span>${esc(p.name)}</span><span class="tag">${phase==='result'?`${s.points||0}点`:'判定中'}</span></div><div class="object">持参品：${esc(s.object)}</div><p class="joke">${esc(s.joke)}</p>${phase==='reveal'?`<div class="judge"><label>姫の判定</label><select data-score="${esc(p.id)}"><option value="0" ${s.points===0?'selected':''}>0点</option><option value="1" ${s.points===1?'selected':''}>1点</option><option value="2" ${s.points===2?'selected':''}>2点</option><option value="3" ${s.points===3?'selected':''}>3点</option></select><input data-comment="${esc(p.id)}" maxlength="60" value="${esc(s.comment||'')}" placeholder="姫のひと言（空欄なら自動）"><button class="btn small primary" data-award="${esc(p.id)}">判定保存</button></div>`:''}</article>`}).join(''):'';
- const roster=playerList.map(p=>`<div class="person"><div><div class="name">${esc(p.name)}</div><div class="status">${p.recovering?'◌ 復帰待ち':p.online?'● 接続中':'○ 一時離席中'} · ${p.ready?'準備OK':'準備中'} · 合計 ${visibleTotal(p)}点</div></div><button class="btn small soft" data-kick="${esc(p.id)}" title="参加者を退出">退出</button><div class="state">${p.submissions[round]?'提出済み':'未提出'}</div></div>`).join('')||'<div class="muted">参加者はまだいません。QRコードを読み取ってもらいましょう。</div>';
- const focusEntry=entries[spotlightIndex%Math.max(1,entries.length)];
- const focusCard=focusEntry&&['reveal','result'].includes(phase)?cards.split('</article>')[spotlightIndex%entries.length]+'</article>':'';
- const entryPanel=focusCard?`<section class="panel entries-panel"><h3>公開されたボケ · ${spotlightIndex%entries.length+1}/${entries.length}</h3><div class="entry-picker">${entries.map((p,i)=>`<button class="btn small ${i===spotlightIndex%entries.length?'primary':'soft'}" data-focus-index="${i}" title="${esc(p.name)}">${esc(p.name)}</button>`).join('')}</div><div class="cards">${focusCard}</div></section>`:'';
- let action='';if(phase==='lobby')action=`<button class="btn primary btnblock" data-action="prep">準備を始める</button>`;
- if(phase==='prep')action=`<button class="btn primary btnblock" data-action="operate">提出スタート</button>`;
- if(phase==='operate')action=`<button class="btn primary btnblock" data-action="confirm">提出を締め切る</button>`;
- if(phase==='confirm')action=`<button class="btn primary btnblock" data-action="reveal">全員へ一斉公開</button>`;
- if(phase==='reveal')action=`<button class="btn primary btnblock" data-action="result">結果を発表する</button>`;
- if(phase==='result')action=round<4?`<button class="btn primary btnblock" data-action="next">次の宝物へ</button>`:`<div class="muted" style="text-align:center;margin-top:10px">五つの難題、これにて結着！</div>`;
- if(['reveal','result'].includes(phase)&&entries.length>1)action+=`<button class="btn soft btnblock" data-action="spotlight-next">次の求婚者を舞台に映す</button>`;
- const linkHtml=hostPeer?.id&&joinUrl?`<div class="qrwrap"><div class="qr" id="qr"></div><div><div class="muted">スマホでQRを読み取ると参加できます<br>参加上限：求婚者5人</div><div class="peerid">Peer ID: ${esc(hostPeer.id)}</div><div class="urlbox">${esc(joinUrl)}</div><button class="btn small soft" data-action="copy">参加URLをコピー</button></div></div>`:(hostPeer?`<div class="muted">参加用QRコードを準備しています…</div>`:`<div class="muted">通信を開始できませんでした。インターネット接続を確認して、再試行してください。</div><button class="btn primary btnblock" data-action="create">部屋の作成を再試行</button>`);
- const leaderboard=phase==='result'&&round===4?`<section class="panel"><h3>最終順位</h3><div class="plist">${playerList.slice().sort((a,b)=>b.total-a.total).map((p,i)=>`<div class="person"><div class="name">${i===0?'👑 ':''}${i+1}位 · ${esc(p.name)}</div><span class="tag">${p.total}点</span></div>`).join('')}</div></section>`:'';
- const controls=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>進行管理</h3><span class="phase">${PHASES[phase]}</span></div><div class="muted">${phase==='lobby'?'参加者がそろったら準備へ。':`難題 ${round+1}/5 · ${esc(t.name)}`}</div><div class="host-actions" style="margin-top:7px"><span class="tag">接続 ${playerList.filter(p=>p.online).length}/5</span><span class="tag">提出 ${entries.length}/${playerList.length}</span></div>${action}</section><details class="panel room-link" open><summary>参加用QRコード</summary>${linkHtml}</details><details class="panel roster-panel" ${phase==='lobby'?'open':''}><summary>求婚者 ${playerList.length}/5</summary><div class="plist">${roster}</div></details>${entryPanel}${leaderboard}</div>`;
- const board=cards?`<div class="cards">${cards}</div>`:`<div class="waiting"><span class="seal">📜</span>公開まで宝物は封印中。<br>${entries.length}件の提出を受け付けています。</div>`;
- app.innerHTML=chrome(`${stageBlock(board,'提出された現代の宝物',playerList,entries.map(p=>({id:p.id,name:p.name,...p.submissions[round]})),phase,spotlightIndex)}${controls}`,'','Host · 親PC');if(hostPeer&&window.QRCode){const q=document.getElementById('qr');if(q){q.innerHTML='';new QRCode(q,{text:joinUrl,width:114,height:114,colorDark:'#211813',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M})}}
-}
-function stateFor(p){const submitted=p?.submissions?.[round];return {phase,round,spotlightIndex,treasure:currentTreasure(),roster:[...players.values()].map(x=>({id:x.id,name:x.name,online:x.online,recovering:x.recovering,ready:x.ready,submitted:Boolean(x.submissions[round]),total:visibleTotal(x)})),submitted:Boolean(submitted),submission:phase==='result'?submitted:null,entries:['reveal','result'].includes(phase)?[...players.values()].filter(x=>x.submissions[round]).map(x=>{const s=x.submissions[round];return phase==='result'?{id:x.id,name:x.name,object:s.object,joke:s.joke,points:s.points,comment:s.comment}:{id:x.id,name:x.name,object:s.object,joke:s.joke}}):[],total:p?visibleTotal(p):0}}
-function send(conn,msg){if(conn&&conn.open)try{conn.send(msg)}catch{}}
-function broadcast(){for(const p of players.values())if(p.conn&&p.conn.open)send(p.conn,{type:'state',state:stateFor(p)})}
-function renderClient(){const keepObject=document.getElementById('object')?.value||'',keepJoke=document.getElementById('joke')?.value||'';const activeId=['object','joke'].includes(document.activeElement?.id)?document.activeElement.id:null;const caret=document.activeElement?.selectionStart;const s=snapshot||{phase:'lobby',round:0,treasure:TREASURES[0],roster:[],entries:[],submitted:false};const entries=(s.entries||[]).map((x,i)=>`<article class="entry"><div class="entrytop"><span>${esc(x.name)}</span><span class="tag">${i+1}人目</span></div><div class="object">持参品：${esc(x.object)}</div><p class="joke">${esc(x.joke)}</p>${s.phase==='result'?`<div class="muted" style="margin-top:8px">姫の判定：${x.points||0}点${x.comment?' · '+esc(x.comment):''}</div>`:''}</article>`).join('');let content='';
- if(!clientName){content=`<div class="panel" style="max-width:480px;margin:auto"><h3>求婚者として参加</h3><div class="muted">呼ばれたい名前を入力してください。</div><div class="field"><label>ニックネーム（12文字まで）</label><input id="nickname" maxlength="12" autocomplete="nickname" value="${esc(clientName)}" placeholder="例：月見だんご"></div><button class="btn primary btnblock" data-action="join">御前に参上する</button></div>`}
- else if(s.phase==='lobby')content=`<div class="waiting"><span class="seal">☾</span>${esc(clientName)}さま、御前へようこそ。<br>ホストが準備を始めるまでお待ちください。</div>`;
- else if(s.phase==='prep')content=`<div class="panel" style="max-width:480px;margin:auto;text-align:center"><h3>支度を整えましょう</h3><p class="muted">お題を確認して、提出の準備ができたら押してください。</p><button class="btn primary" data-action="ready">${ready?'準備OK ✓':'準備OKにする'}</button></div>`;
- else if(s.phase==='operate'){if(s.submitted)content=`<div class="panel" style="max-width:480px;margin:auto;text-align:center"><h3>提出を受け付けました</h3><p class="muted">姫がほかの求婚者のボケも見られるよう、提出を隠して待ちます。</p><span class="tag">提出済み · 確定待ち</span></div>`;else content=`<div class="panel" style="max-width:520px;margin:auto"><h3>本物の宝物を持参！</h3><p class="muted">日用品をひとつ選び、宝物だと言い張るボケを考えてください。</p><div class="field"><label>持ってきた日用品</label><input id="object" data-keep="object" maxlength="40" placeholder="例：スマートフォン"></div><div class="field"><label>かぐや姫へのボケ・言い訳</label><textarea id="joke" data-keep="joke" maxlength="180" placeholder="例：この画面の中に玉が五つ、いつでも光ります！"></textarea><div class="counter"><span>短くてもOK。堂々と言い切ろう。</span><span id="joke-count">0 / 180</span></div></div><button class="btn primary btnblock" data-action="submit">これが本物です！</button></div>`}
- else if(s.phase==='confirm')content=`<div class="waiting"><span class="seal">📜</span>提出を締め切りました。<br>全員への一斉公開をお待ちください。</div>`;
- else if(s.phase==='reveal')content=`<div class="waiting"><span class="seal">🎭</span>全員のボケが公開されました。<br>かぐや姫が判定中です……</div>`;
- else if(s.phase==='result')content=`<div class="client-result"><div class="eyebrow">姫のご判定</div><strong>${s.submission?.points||0} 点</strong><div class="muted">${s.submission?.comment?esc(s.submission.comment):'姫のひと言はありません'}</div><div class="tag" style="display:inline-block;margin-top:10px">累計 ${s.total||0}点</div></div>`;
- const boardLabel=['reveal','result'].includes(s.phase)?'一斉公開されたボケ':'御前のようす';const stage=stageBlock(['reveal','result'].includes(s.phase)?`<div class="cards">${entries}</div>`:'',boardLabel,s.roster||[],s.entries||[],s.phase,s.spotlightIndex||0);const ranked=(s.roster||[]).slice().sort((a,b)=>b.total-a.total);const finalBoard=s.phase==='result'&&s.round===4?`<section class="panel"><h3>五つの難題・最終順位</h3><div class="plist">${ranked.map((p,i)=>`<div class="person"><div><div class="name">${i===0?'👑 ':''}${i+1}位 · ${esc(p.name)}</div></div><span class="tag">${p.total}点</span></div>`).join('')||'<div class="muted">順位はありません。</div>'}</div></section>`:'';const side=`<div class="right"><section class="panel"><div class="row" style="justify-content:space-between"><h3>${esc(PHASES[s.phase]||'参加受付')}</h3><span class="tag">難題 ${Math.min((s.round||0)+1,5)}/5</span></div><div class="muted">接続先のホストPCと直接通信しています。画面を閉じた場合は再表示後に自動で再接続します。</div><div id="client-content">${content}</div>${finalBoard}</section><section class="panel"><h3>求婚者たち</h3><div class="plist">${(s.roster||[]).map(p=>`<div class="person"><div><div class="name">${esc(p.name)}${p.id===participantId?'（あなた）':''}</div><div class="status">${p.recovering?'◌ 復帰待ち':p.online?'● 接続中':'○ 一時離席中'}</div></div><span class="tag">${p.total}点</span><div class="state">${p.submitted?'提出済み':p.ready?'準備OK':'待機中'}</div></div>`).join('')||'<div class="muted">接続しています…</div>'}</div></section></div>`;
- app.innerHTML=chrome(`${stage}${side}`,'',snapshot?'ホストと接続中':'接続を試みています');updateNet(snapshot?'ホストと接続中':'再接続中',Boolean(snapshot));
- const n=app.querySelector('#object'),j=app.querySelector('#joke');if(n)n.value=keepObject;if(j){j.value=keepJoke;const updateCount=()=>{const c=document.getElementById('joke-count');if(c)c.textContent=`${j.value.length} / 180`};updateCount();j.addEventListener('input',updateCount)}if(activeId){const field=app.querySelector(`#${activeId}`);if(field){field.focus({preventScroll:true});if(Number.isInteger(caret))field.setSelectionRange(caret,caret)}}
-}
-function enterPhase(next){phase=next;if(next==='reveal')spotlightIndex=0;broadcast();renderHost()}
-function validString(v,max){return typeof v==='string'&&v.trim().length>0&&v.trim().length<=max}
-function handleHostMessage(conn,msg){if(!msg||typeof msg!=='object'||typeof msg.type!=='string')return;
- if(msg.type==='join'){const id=String(msg.participantId||'');const name=String(msg.nickname||'').trim();if(!/^[a-zA-Z0-9]{12,80}$/.test(id)||!validString(name,12)){send(conn,{type:'reject',reason:'名前または参加情報を確認してください。'});return}
-  let p=players.get(id);if(!p){if(phase!=='lobby'){send(conn,{type:'reject',reason:'ゲーム開始後の新規参加はできません。ホストにQRの再発行を頼んでください。'});return}if(players.size>=5){send(conn,{type:'reject',reason:'参加人数は5人までです。'});return}p={id,name,ready:false,online:true,recovering:false,total:0,submissions:{},conn:null,disconnectTimer:null};players.set(id,p)}
-  if(p.disconnectTimer){clearTimeout(p.disconnectTimer);p.disconnectTimer=null}if(p.conn&&p.conn!==conn){try{p.conn.close()}catch{}}p.name=name;p.conn=conn;p.online=true;p.recovering=false;conn.__player=id;send(conn,{type:'joined',participantId:id,state:stateFor(p)});broadcast();renderHost();return}
- const id=conn.__player,p=players.get(id);if(!p||p.conn!==conn)return;
- if(msg.type==='ping'){send(conn,{type:'pong'});if(!p.online||p.recovering){p.online=true;p.recovering=false;broadcast();renderHost()}return}
- if(msg.type==='ready'&&phase==='prep'){p.ready=true;broadcast();renderHost();return}
- if(msg.type==='submit'&&phase==='operate'){if(p.submissions[round]){send(conn,{type:'notice',text:'この難題はすでに提出済みです。'});return}const object=String(msg.object||'').trim(),joke=String(msg.joke||'').trim();if(!validString(object,40)||!validString(joke,180)){send(conn,{type:'notice',text:'日用品とボケを入力してください（各文字数に上限があります）。'});return}p.submissions[round]={object,joke,points:0,comment:''};send(conn,{type:'notice',text:'提出を受け付けました。'});broadcast();renderHost()}
-}
-function startHost(){if(hostPeer&&!hostPeer.destroyed)return;if(!window.Peer){toast('PeerJSを読み込めません。ネット接続を確認してください。');return}hostPeer=new Peer(undefined,{debug:1});renderHost();updateNet('参加用QRを準備中…');hostPeer.on('open',id=>{joinUrl=new URL(location.href);joinUrl.search='';joinUrl.hash='';joinUrl.searchParams.set('room',id);joinUrl=joinUrl.toString();renderHost()});hostPeer.on('connection',conn=>{conn.on('open',()=>{});conn.on('data',d=>{let m=d;try{if(typeof d==='string')m=JSON.parse(d)}catch{return}handleHostMessage(conn,m)});conn.on('close',()=>{const p=players.get(conn.__player);if(p&&p.conn===conn){p.recovering=true;if(p.disconnectTimer)clearTimeout(p.disconnectTimer);p.disconnectTimer=setTimeout(()=>{if(p.conn===conn){p.online=false;p.recovering=false;p.ready=false;broadcast();renderHost()}},90000);broadcast();renderHost()}});conn.on('error',()=>{})});hostPeer.on('disconnected',()=>{updateNet('通信サーバー再接続中…');try{hostPeer.reconnect()}catch{}});hostPeer.on('error',e=>{toast('部屋を作成できませんでした：'+(e.type||'通信エラー'));if(!hostPeer?.open){try{hostPeer?.destroy()}catch{}hostPeer=null;joinUrl='';renderHost()}updateNet('接続エラー')})}
-function connectClient(){if(!roomId||!window.Peer)return;if(document.visibilityState==='hidden')return;if(clientPeer&&clientPeer.destroyed)clientPeer=null;if(!clientPeer){clientPeer=new Peer(undefined,{debug:1});clientPeer.on('open',()=>openRoomConnection());clientPeer.on('disconnected',()=>{updateNet('通信サーバー再接続中…');try{clientPeer.reconnect()}catch{}});clientPeer.on('error',()=>{updateNet('ホストへの再接続を試みています');if(clientPeer?.destroyed){clientPeer=null;setTimeout(connectClient,3000)}else scheduleClientRetry()})}else if(clientPeer.open)openRoomConnection()}
-function openRoomConnection(){if(!clientPeer||clientPeer.__rejected||!clientPeer.open||document.visibilityState==='hidden')return;if(clientPeer.__connecting||clientPeer.__conn?.open)return;clientPeer.__connecting=true;const c=clientPeer.connect(roomId,{reliable:true});clientPeer.__conn=c;c.on('open',()=>{clientPeer.__connecting=false;clientPeer.__lastPong=Date.now();if(clientName)send(c,{type:'join',participantId,nickname:clientName});updateNet(clientName?'ホストに接続中…':'ニックネームを入力してください',Boolean(clientName));if(clientPeer.__retry){clearInterval(clientPeer.__retry);clientPeer.__retry=null}});c.on('data',d=>{let m=d;try{if(typeof d==='string')m=JSON.parse(d)}catch{return}if(m.type==='joined'){localStorage.setItem(nameKey,clientName);snapshot=m.state;ready=Boolean(snapshot.roster?.find(x=>x.id===participantId)?.ready);renderClient()}else if(m.type==='state'){snapshot=m.state;ready=Boolean(snapshot.roster?.find(x=>x.id===participantId)?.ready);renderClient()}else if(m.type==='pong'){clientPeer.__lastPong=Date.now()}else if(m.type==='reject'){clientPeer.__rejected=true;toast(m.reason||'参加できません');updateNet('参加できません');try{c.close()}catch{}}else if(m.type==='notice')toast(m.text)});c.on('close',()=>{clientPeer.__connecting=false;if(!clientPeer.__rejected){updateNet('再接続中…');scheduleClientRetry()}});c.on('error',()=>{clientPeer.__connecting=false;if(!clientPeer.__rejected)scheduleClientRetry()})}
-function scheduleClientRetry(){if(!clientPeer||clientPeer.__retry)return;clientPeer.__retry=setInterval(()=>openRoomConnection(),3000)}
-if(!isClient){phase='lobby';renderHost();startHost()}else{if(clientName)clientName=localStorage.getItem(nameKey)||'';renderClient();connectClient();document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){setTimeout(connectClient,250);if(clientPeer?.__conn?.open){const before=clientPeer.__lastPong||0;send(clientPeer.__conn,{type:'ping'});setTimeout(()=>{if(clientPeer?.__conn?.open&&(clientPeer.__lastPong||0)<=before){try{clientPeer.__conn.close()}catch{}scheduleClientRetry()}},6000)}}});setInterval(()=>{if(document.visibilityState==='visible'&&clientPeer?.__conn?.open){if(Date.now()-(clientPeer.__lastPong||Date.now())>45000){try{clientPeer.__conn.close()}catch{}scheduleClientRetry()}else send(clientPeer.__conn,{type:'ping'})}},15000);setTimeout(scheduleClientRetry,4000)}
-document.addEventListener('click',e=>{const btn=e.target.closest('[data-action],[data-award],[data-kick],[data-focus-index]');if(!btn)return;const action=btn.dataset.action;
- if(btn.dataset.focusIndex!==undefined&&!isClient){const i=Number(btn.dataset.focusIndex),count=[...players.values()].filter(p=>p.submissions[round]).length;if(Number.isInteger(i)&&i>=0&&i<count){spotlightIndex=i;broadcast();renderHost()}return}
- if(btn.dataset.kick){const p=players.get(btn.dataset.kick);if(p){send(p.conn,{type:'reject',reason:'ホストが退出にしました。'});try{p.conn?.close()}catch{}players.delete(p.id);broadcast();renderHost()}return}
- if(btn.dataset.award){const p=players.get(btn.dataset.award),select=app.querySelector(`[data-score="${CSS.escape(btn.dataset.award)}"]`),input=app.querySelector(`[data-comment="${CSS.escape(btn.dataset.award)}"]`);if(p?.submissions[round]){const points=Math.max(0,Math.min(3,Number(select?.value)||0));p.submissions[round].points=points;p.submissions[round].comment=String(input?.value||'').trim().slice(0,60)||KAGUYA_COMMENTS[points];p.total=Object.values(p.submissions).reduce((a,x)=>a+(x.points||0),0);broadcast();renderHost()}return}
- if(action==='create'){startHost();return}if(action==='copy'){navigator.clipboard?.writeText(joinUrl).then(()=>toast('参加URLをコピーしました')).catch(()=>toast('URLを選択してコピーしてください'));return}
- if(action==='prep'){if(players.size===0){toast('参加者が1人以上必要です');return}round=0;spotlightIndex=0;phase='prep';players.forEach(p=>p.ready=false);broadcast();renderHost();return}
- if(action==='spotlight-next'){const count=[...players.values()].filter(p=>p.submissions[round]).length;if(count){spotlightIndex=(spotlightIndex+1)%count;broadcast();renderHost()}return}
- if(action==='operate'){enterPhase('operate');return}if(action==='confirm'){enterPhase('confirm');return}if(action==='reveal'){enterPhase('reveal');return}if(action==='result'){players.forEach(p=>{if(p.submissions[round]){const s=p.submissions[round];if(!s.comment)s.comment=KAGUYA_COMMENTS[s.points||0];p.total=Object.values(p.submissions).reduce((a,x)=>a+(x.points||0),0)}});enterPhase('result');return}
- if(action==='next'){round++;spotlightIndex=0;players.forEach(p=>p.ready=false);phase='prep';broadcast();renderHost();return}
- if(action==='join'){const field=document.getElementById('nickname');clientName=String(field?.value||'').trim();if(!clientName){toast('ニックネームを入力してください');return}if(clientName.length>12){toast('ニックネームは12文字以内です');return}localStorage.setItem(nameKey,clientName);if(clientPeer?.__conn?.open)send(clientPeer.__conn,{type:'join',participantId,nickname:clientName});else connectClient();return}
- if(action==='ready'){ready=true;if(clientPeer?.__conn?.open)send(clientPeer.__conn,{type:'ready'});renderClient();return}
- if(action==='submit'){const object=document.getElementById('object')?.value||'',joke=document.getElementById('joke')?.value||'';if(!object.trim()||!joke.trim()){toast('日用品とボケの両方を入力してください');return}send(clientPeer?.__conn,{type:'submit',object,joke});return}
-});
+(function () {
+  'use strict';
+
+  // ---------- 設定 ----------
+  const STORE_KEY = 'mochimochu_omikuji_bags';   // 出たおみくじの記録（バージョンが変わっても引き継ぐ）
+  const MIN_SHAKE_MS = 1600;                      // 筒をふる演出の最短時間
+  const AUTO_CLOSE_MS = 12000;                    // 「保存しました」を自動で閉じるまで
+  const DPI = 300;                                // 画像の画質（kanban_v7 の「高画質 300dpi」）
+  const A4 = { w: 210, h: 297 };                  // A4縦（mm）
+  const PX_PER_MM = 96 / 25.4;
+  const REMOVE_PUNCT = true;                      // 印刷する文字から「、」「。」を消す（false で残す）
+
+  const $ = id => document.getElementById(id);
+  const stage = $('stage'), tube = $('tube'), summary = $('summary'), drawBtn = $('drawBtn');
+  const sheet = $('sheet'), frame = $('frame'), otext = $('otext');
+
+  // ---------- CSV を読む ----------
+  function parseCSV(text) {
+    const rows = []; let row = [], cur = '', q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+        else cur += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') { row.push(cur); cur = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cur); cur = '';
+        if (row.some(v => v !== '')) rows.push(row);
+        row = [];
+      } else cur += c;
+    }
+    row.push(cur);
+    if (row.some(v => v !== '')) rows.push(row);
+    return rows;
+  }
+
+  const csvRows = parseCSV($('omikujiCsv').textContent.replace(/^﻿/, '').trim());
+  const head = csvRows.shift().map(s => s.trim());
+  const col = name => head.indexOf(name);
+  const C = { id: col('ID'), g: col('性別'), a: col('年代'), c: col('カテゴリ'), n: col('番号'), t: col('おみくじ文言') };
+
+  const BY_ID = new Map();      // ID → {id, g, a, c, n, t}
+  const GROUPS = new Map();     // "性別|年代|カテゴリ" → [ID…]
+  const GENDERS = [], AGES = [], CATS = [];
+  csvRows.forEach(r => {
+    const o = { id: String(r[C.id]).trim(), g: r[C.g].trim(), a: r[C.a].trim(), c: r[C.c].trim(), n: r[C.n], t: (r[C.t] || '').trim() };
+    if (!o.id || !o.t) return;
+    BY_ID.set(o.id, o);
+    const k = key(o.g, o.a, o.c);
+    if (!GROUPS.has(k)) GROUPS.set(k, []);
+    GROUPS.get(k).push(o.id);
+    if (!GENDERS.includes(o.g)) GENDERS.push(o.g);
+    if (!AGES.includes(o.a)) AGES.push(o.a);
+    if (!CATS.includes(o.c)) CATS.push(o.c);
+  });
+  function key(g, a, c) { return g + '|' + a + '|' + c; }
+
+  // ---------- 出たおみくじの記録（区分ごとに「まだ出ていない分」を持つ） ----------
+  let canStore = true;
+  let store = loadStore();
+  function loadStore() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
+      if (s && typeof s === 'object' && s.groups) return s;
+    } catch (e) { canStore = false; }
+    return { v: 1, groups: {} };
+  }
+  function saveStore() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); canStore = true; }
+    catch (e) { canStore = false; }
+  }
+  function randInt(n) {
+    if (window.crypto && crypto.getRandomValues) {
+      const lim = Math.floor(0x100000000 / n) * n, u = new Uint32Array(1);
+      do { crypto.getRandomValues(u); } while (u[0] >= lim);
+      return u[0] % n;
+    }
+    return Math.floor(Math.random() * n);
+  }
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) { const j = randInt(i + 1); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  // まだ出ていない分から1つ選ぶ（この時点では記録しない）
+  function peek(k) {
+    const all = GROUPS.get(k) || [];
+    const g = store.groups[k] || { rest: [], last: null };
+    let rest = Array.from(new Set((g.rest || []).filter(id => all.includes(id))));
+    if (!rest.length) {
+      rest = shuffle(all.slice());
+      // 1周目の最後と2周目の最初が同じにならないようにする
+      if (rest.length > 1 && rest[rest.length - 1] === g.last) {
+        const j = randInt(rest.length - 1);
+        [rest[j], rest[rest.length - 1]] = [rest[rest.length - 1], rest[j]];
+      }
+    }
+    return { k, id: rest[rest.length - 1], rest };
+  }
+  // 画像の保存ができたら記録する
+  function commit(p) {
+    const rest = p.rest.slice(0, -1);
+    store.groups[p.k] = { rest, last: p.id };
+    saveStore();
+  }
+  function remaining(k) {
+    const all = GROUPS.get(k) || [];
+    const g = store.groups[k];
+    if (!g) return all.length;
+    const n = (g.rest || []).filter(id => all.includes(id)).length;
+    return n || all.length;
+  }
+
+  // ---------- 選択肢 ----------
+  const sel = { g: null, a: null, c: null };
+  const ICONS = {
+    '健康': '<path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z"/><path d="M5 19l7-7"/>',
+    '恋愛': '<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>',
+    '友情': '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5a3 3 0 0 1 0 6"/><path d="M17 14a5 5 0 0 1 4 6"/>',
+    '学業&仕事': '<path d="M4 5h6a2 2 0 0 1 2 2v12a2 2 0 0 0-2-2H4z"/><path d="M20 5h-6a2 2 0 0 0-2 2v12a2 2 0 0 1 2-2h6z"/>'
+  };
+  const buttons = [];
+  function addOpt(box, group, value) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt'; b.setAttribute('aria-pressed', 'false');
+    if (group === 'a') {
+      // 「社会人（ルーキー）」→ 社会人／ルーキー の2段
+      const m = value.match(/^(.+?)[（(](.+)[）)]$/);
+      const main = document.createElement('span'); main.textContent = m ? m[1] : value; b.appendChild(main);
+      if (m) { const sub = document.createElement('small'); sub.textContent = m[2]; b.appendChild(sub); }
+    } else if (group === 'c') {
+      b.classList.add('row');
+      if (ICONS[value]) {
+        b.insertAdjacentHTML('beforeend', '<svg class="ico" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + ICONS[value] + '</svg>');
+      }
+      const s = document.createElement('span'); s.textContent = value.replace(/&/g, '＆'); b.appendChild(s);
+    } else {
+      b.textContent = value;
+    }
+    b.addEventListener('click', () => { if (busy) return; sel[group] = value; refresh(); });
+    box.appendChild(b);
+    buttons.push({ b, group, value });
+  }
+  GENDERS.forEach(v => addOpt($('optGender'), 'g', v));
+  AGES.forEach(v => addOpt($('optAge'), 'a', v));
+  CATS.forEach(v => addOpt($('optCat'), 'c', v));
+
+  let busy = false;
+  let phase = 'idle';   // idle / shaking
+  function refresh() {
+    buttons.forEach(o => o.b.setAttribute('aria-pressed', String(sel[o.group] === o.value)));
+    const missing = ['g', 'a', 'c'].filter(x => !sel[x]).length;
+    if (phase === 'shaking') {
+      summary.textContent = 'からん ころん…';
+      summary.classList.add('shaking');
+      drawBtn.disabled = true; drawBtn.textContent = 'ふっています…'; drawBtn.classList.remove('ready');
+      tube.className = 'tube shake';
+      return;
+    }
+    summary.classList.remove('shaking');
+    tube.className = 'tube bob';
+    summary.textContent = missing === 3 ? '1・2・3 を えらんでね'
+      : [sel.g, sel.a && sel.a.replace(/[（(].*[）)]$/, ''), sel.c].filter(Boolean).join(' ・ ').replace(/&/g, '＆');
+    drawBtn.disabled = missing > 0;
+    drawBtn.classList.toggle('ready', missing === 0);
+    drawBtn.textContent = missing === 0 ? 'おみくじを ひく' : missing === 3 ? '3つ えらんでね' : 'あと' + missing + 'つ えらんでね';
+  }
+
+  // ---------- おみくじ画像をつくる（kanban_v7 と同じしくみ） ----------
+  // 「、」「。」のあとで列を分ける（閉じかっこが続くときは、かっこのあとで分ける）
+  function splitColumns(s) {
+    const closers = '」』）)】〉》', out = [];
+    let cur = '';
+    for (let i = 0; i < s.length; i++) {
+      cur += s[i];
+      if (s[i] === '、' || s[i] === '。') {
+        while (i + 1 < s.length && closers.includes(s[i + 1])) cur += s[++i];
+        if (i < s.length - 1) { out.push(cur); cur = ''; }
+      }
+    }
+    if (cur) out.push(cur);
+    return out;
+  }
+  function printColumns(s) {
+    const cols = splitColumns(s);
+    return REMOVE_PUNCT ? cols.map(c => c.replace(/[、。]/g, '')).filter(c => c.length) : cols;
+  }
+  function setText(s) {
+    otext.textContent = '';
+    printColumns(s).forEach((line, i) => {
+      if (i) otext.appendChild(document.createTextNode('\n'));
+      const re = /[A-Za-z0-9%]+/g; let m, last = 0;
+      while ((m = re.exec(line))) {
+        if (m[0].length > 2) continue;           // 3文字以上は横に寝かせる（kanban_v7 と同じ）
+        if (m.index > last) otext.appendChild(document.createTextNode(line.slice(last, m.index)));
+        const sp = document.createElement('span'); sp.className = 'tcy'; sp.textContent = m[0];
+        otext.appendChild(sp);
+        last = m.index + m[0].length;
+      }
+      if (last < line.length) otext.appendChild(document.createTextNode(line.slice(last)));
+    });
+  }
+  // 天地いっぱい：いちばん長い列が上下いっぱいになる大きさを探す（左右もはみ出さないようにする）
+  function fitText() {
+    const cs = getComputedStyle(frame);
+    const aw = frame.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+    const ah = frame.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 2;
+    let lo = 4, hi = 3000;
+    while (hi - lo > 0.5) {
+      const mid = (lo + hi) / 2;
+      otext.style.fontSize = mid + 'px';
+      if (otext.offsetHeight <= ah && otext.offsetWidth <= aw) lo = mid; else hi = mid;
+    }
+    otext.style.fontSize = lo + 'px';
+    return { size: lo, w: otext.offsetWidth, h: otext.offsetHeight, aw, ah };
+  }
+  function makeImage(text) {
+    return new Promise((resolve, reject) => {
+      setText(text);
+      const fit = fitText();
+      const wpx = A4.w * PX_PER_MM, hpx = A4.h * PX_PER_MM;
+      const wrap = document.createElement('div');
+      wrap.setAttribute('lang', 'ja');
+      const st = document.createElement('style');
+      st.textContent = $('sheetStyle').textContent + ' body{margin:0}';
+      wrap.appendChild(st);
+      wrap.appendChild(sheet.cloneNode(true));
+      const xhtml = new XMLSerializer().serializeToString(wrap);
+      otext.textContent = '';                      // 画面の外の用紙からも消しておく
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + wpx + '" height="' + hpx + '">' +
+        '<foreignObject x="0" y="0" width="100%" height="100%">' + xhtml + '</foreignObject></svg>';
+      const img = new Image();
+      img.onload = () => {
+        try {
+          const cw = Math.round(A4.w / 25.4 * DPI), ch = Math.round(A4.h / 25.4 * DPI);
+          const cv = document.createElement('canvas');
+          cv.width = cw; cv.height = ch;
+          const ctx = cv.getContext('2d');
+          ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, ch);
+          ctx.drawImage(img, 0, 0, cw, ch);
+          cv.toBlob(b => b ? resolve({ blob: b, fit }) : reject(new Error('toBlob')), 'image/png');
+        } catch (e) { reject(e); }
+      };
+      img.onerror = () => reject(new Error('svg'));
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    });
+  }
+  function stamp() {
+    const d = new Date(), p = n => String(n).padStart(2, '0');
+    return d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '_' + p(d.getHours()) + p(d.getMinutes()) + p(d.getSeconds());
+  }
+  function download(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  // ---------- ひく ----------
+  let last = null, closeTimer = 0;
+  async function draw() {
+    if (busy || !sel.g || !sel.a || !sel.c) return;
+    busy = true; phase = 'shaking'; refresh();
+    const t0 = performance.now();
+    const p = peek(key(sel.g, sel.a, sel.c));
+    let ok = false;
+    try {
+      await new Promise(r => requestAnimationFrame(() => r()));
+      const res = await makeImage(BY_ID.get(p.id).t);
+      commit(p);                                   // 保存できたときだけ「出た」に数える
+      last = { blob: res.blob, name: 'omikuji_' + stamp() + '.png' };
+      download(last.blob, last.name);
+      ok = true;
+    } catch (e) {
+      console.error(e);
+    }
+    const wait = Math.max(0, MIN_SHAKE_MS - (performance.now() - t0));
+    setTimeout(() => { showResult(ok); }, wait);
+  }
+  function showResult(ok) {
+    $('ovTitle').textContent = ok ? 'おみくじ画像を保存しました' : '保存できませんでした';
+    $('ovMsg').textContent = ok ? 'タブレットの「ダウンロード」に入っています。' : 'もう一度「おみくじを ひく」をおしてください。';
+    $('resaveBtn').hidden = !ok;
+    $('overlay').hidden = false;
+    $('okBtn').focus();
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
+  }
+  function closeResult() {
+    clearTimeout(closeTimer);
+    $('overlay').hidden = true;
+    sel.g = sel.a = sel.c = null;                  // つぎの人のために選択をもどす
+    busy = false; phase = 'idle'; refresh();
+  }
+  drawBtn.addEventListener('click', draw);
+  $('okBtn').addEventListener('click', closeResult);
+  $('resaveBtn').addEventListener('click', () => {
+    if (last) download(last.blob, last.name);
+    clearTimeout(closeTimer); closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
+  });
+
+  // ---------- 管理メニュー ----------
+  function renderCounts() {
+    const t = document.createElement('table'); t.className = 'counts';
+    const hr = t.createTHead().insertRow();
+    hr.appendChild(document.createElement('th')).textContent = '性別・年代';
+    CATS.forEach(c => { hr.appendChild(document.createElement('th')).textContent = c.replace(/&/g, '＆'); });
+    const tb = t.createTBody();
+    GENDERS.forEach(g => AGES.forEach(a => {
+      const r = tb.insertRow();
+      r.insertCell().textContent = g + '・' + a;
+      CATS.forEach(c => {
+        const k = key(g, a, c), all = (GROUPS.get(k) || []).length, n = remaining(k);
+        const td = r.insertCell();
+        td.textContent = all ? n + ' / ' + all : '—';
+        if (all && n <= 3) td.className = 'low';
+      });
+    }));
+    $('countTable').replaceChildren(t);
+    $('storeWarn').hidden = canStore;
+    renderAppStatus();
+  }
+  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); $('admin').hidden = false; });
+  $('adCloseBtn').addEventListener('click', () => { $('admin').hidden = true; });
+  $('resetBtn').addEventListener('click', () => {
+    if (!confirm('出たおみくじの記録をすべて消します。\nすべての区分が最初から（20個ずつ）になります。よろしいですか？')) return;
+    store = { v: 1, groups: {} }; saveStore(); renderCounts();
+  });
+  $('sampleBtn').addEventListener('click', async () => {
+    const ids = Array.from(BY_ID.keys());
+    try {
+      const res = await makeImage(BY_ID.get(ids[randInt(ids.length)]).t);
+      download(res.blob, 'omikuji_mihon_' + stamp() + '.png');
+    } catch (e) { alert('見本画像を作れませんでした。'); }
+  });
+  $('fsBtn').addEventListener('click', () => {
+    const el = document.documentElement;
+    if (document.fullscreenElement) document.exitFullscreen && document.exitFullscreen();
+    else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+  });
+
+  // ---------- ホーム画面アプリ（PWA） ----------
+  // オフラインでも動くしくみ（sw.js）を登録。https（GitHub Pages）か localhost のときだけ動く
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(e => console.warn('sw', e));
+    });
+  }
+  // 「ホーム画面に追加」ボタン（参加者の画面にChromeの案内が出ないよう、管理メニューの中に出す）
+  let installEvent = null;
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvent = e; $('installBtn').hidden = false; });
+  window.addEventListener('appinstalled', () => { installEvent = null; $('installBtn').hidden = true; renderAppStatus(); });
+  $('installBtn').addEventListener('click', async () => {
+    if (!installEvent) return;
+    installEvent.prompt();
+    try { await installEvent.userChoice; } catch (e) {}
+    installEvent = null; $('installBtn').hidden = true;
+  });
+  function isAppMode() {
+    return ['fullscreen', 'standalone', 'minimal-ui'].some(m => window.matchMedia('(display-mode: ' + m + ')').matches);
+  }
+  function renderAppStatus() {
+    const a = isAppMode() ? '● ホーム画面のアプリで開いています' : '○ ブラウザで開いています（Chromeのメニュー「ホーム画面に追加」でアプリにできます）';
+    const ready = navigator.serviceWorker && navigator.serviceWorker.controller;
+    const b = ready ? '● ネットがなくても動く準備ができています' : '○ オフラインの準備はまだです（GitHub Pages などの https で一度開くと準備されます）';
+    $('appStatus').textContent = a + '\n' + b;
+  }
+
+  // ---------- 画面サイズに合わせて拡大・縮小 ----------
+  function fitStage() {
+    const s = Math.min(window.innerWidth / 1180, window.innerHeight / 820);
+    stage.style.transform = 'scale(' + s + ')';
+  }
+  window.addEventListener('resize', fitStage);
+  stage.addEventListener('contextmenu', e => e.preventDefault());
+  fitStage();
+  refresh();
+
+  // 動作確認用（画面には何も出しません）
+  window.__omikuji = {
+    splitColumns, printColumns, makeImage, peek, commit, remaining, GROUPS, BY_ID,
+    measure: t => { setText(t); const f = fitText(); otext.textContent = ''; return f; },
+    get store() { return store; }
+  };
 })();
 </script>
 </body>
