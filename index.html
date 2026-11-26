@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v11</title>
+<title>もちもちゅ おみくじ v12</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -258,7 +258,7 @@
   </section>
 
   <button id="drawBtn" type="button" disabled>3つ えらんでね</button>
-  <p class="note">けっかは画面には出ません ・ 画像で保存されます</p>
+  <p class="note">けっかは画面には出ません ・ プリンターで印刷されます</p>
   <p id="prnBadge" class="prnBadge" aria-live="polite"></p>
 
   <button id="adminBtn" type="button" aria-label="管理メニュー">
@@ -275,19 +275,17 @@
     <div class="hoStaff">
       <p>お店の人へ：<span id="hoPrn" class="prnState"></span><br>おみくじを わたしたら、右のボタンを長押しすると最初の画面にもどります。</p>
       <button id="hoReprint" type="button" class="hoBtnSub">もう一度印刷</button>
-      <button id="hoResave" type="button" class="hoBtnSub">もう一度保存</button>
       <button id="hoNext" type="button" class="hoBtnHold"><span class="fill"></span><span class="lbl">長押しで つぎの人へ</span></button>
     </div>
   </div>
 
-  <!-- 保存できなかったとき -->
+  <!-- うまくいかなかったとき -->
   <div id="overlay" class="overlay" hidden>
     <div class="card" role="dialog" aria-modal="true" aria-labelledby="ovTitle">
-      <svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#D2402F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
-      <h2 id="ovTitle">おみくじ画像を保存しました</h2>
-      <p id="ovMsg">タブレットの「ダウンロード」に入っています。</p>
+      <svg aria-hidden="true" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#D2402F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/></svg>
+      <h2 id="ovTitle">うまくいきませんでした</h2>
+      <p id="ovMsg">もう一度「おみくじを ひく」をおしてください。</p>
       <div class="row">
-        <button id="resaveBtn" type="button" class="btnSub">もう一度保存する</button>
         <button id="okBtn" type="button" class="btnMain">OK</button>
       </div>
     </div>
@@ -332,11 +330,10 @@
       <div class="row" style="justify-content:flex-start">
         <button id="installBtn" type="button" class="btnSub" hidden>ホーム画面に追加</button>
         <button id="fsBtn" type="button" class="btnSub">全画面にする</button>
-        <button id="sampleBtn" type="button" class="btnSub">見本画像を保存（記録しない）</button>
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v11</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v12</p>
     </div>
   </div>
 
@@ -1342,7 +1339,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   // ---------- 設定 ----------
   const STORE_KEY = 'mochimochu_omikuji_bags';   // 出たおみくじの記録（バージョンが変わっても引き継ぐ）
   const MIN_SHAKE_MS = 1600;                      // 筒をふる演出の最短時間
-  const AUTO_CLOSE_MS = 12000;                    // 「保存できませんでした」を自動で閉じるまで
+  const AUTO_CLOSE_MS = 12000;                    // 「うまくいきませんでした」を自動で閉じるまで
   const HOLD_MS = 1200;                           // 「つぎの人へ」の長押しの長さ
   const DPI = 300;                                // 画像の画質（kanban_v7 の「高画質 300dpi」）
   const A4 = { w: 210, h: 297 };                  // A4縦（mm）
@@ -1936,30 +1933,31 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     try {
       await new Promise(r => requestAnimationFrame(() => r()));
       const text = BY_ID.get(p.id).t;
-      const res = await makeImage(text);
-      commit(p);                                   // 保存できたときだけ「出た」に数える
-      last = { blob: res.blob, name: 'omikuji_' + stamp() + '.png', text };
-      download(last.blob, last.name);
+      last = { text, pending: p, committed: false };
+      printing = await printOmikuji(text);         // ミニプリンターで自動印刷（v12：画像の保存はしない）
+      if (printing.ok) commitLast();               // 印刷できたときだけ「出た」に数える
       ok = true;
-      printing = await printOmikuji(text);         // ミニプリンターで自動印刷（つながっていなければ印刷しない）
     } catch (e) {
       console.error(e);
     }
     const wait = Math.max(0, MIN_SHAKE_MS - (performance.now() - t0));
     setTimeout(() => { showResult(ok); }, wait);
   }
+  // 印刷できたおみくじを「出た」に数える（1回だけ）
+  function commitLast() {
+    if (last && last.pending && !last.committed) { commit(last.pending); last.committed = true; }
+  }
   function showResult(ok) {
     clearTimeout(closeTimer);
     if (ok) {
-      // 保存できた：「お店の人にわたしてね」画面へ（自動では閉じない）
+      // 「お店の人にわたしてね」画面へ（自動では閉じない）
       showPrintState();
       $('handoff').hidden = false;
       $('hoNext').focus();
       return;
     }
-    $('ovTitle').textContent = '保存できませんでした';
+    $('ovTitle').textContent = 'うまくいきませんでした';
     $('ovMsg').textContent = 'もう一度「おみくじを ひく」をおしてください。';
-    $('resaveBtn').hidden = true;
     $('overlay').hidden = false;
     $('okBtn').focus();
     closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
@@ -1973,10 +1971,6 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   }
   drawBtn.addEventListener('click', draw);
   $('okBtn').addEventListener('click', closeResult);
-  $('resaveBtn').addEventListener('click', () => {
-    if (last) download(last.blob, last.name);
-    clearTimeout(closeTimer); closeTimer = setTimeout(closeResult, AUTO_CLOSE_MS);
-  });
   // 「お店の人にわたしてね」画面
   $('hoChara').src = document.querySelector('.kb-chara').src;   // 看板と同じキャラクター
   document.querySelector('.rkb-chara').src = $('hoChara').src;  // レシートの看板も同じ
@@ -1995,9 +1989,9 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       if (!Printer.hasDevice) await Printer.connect(false);
     } catch (e) { /* 選ぶ画面を閉じたときなど */ }
     printing = await printOmikuji(last.text);
+    if (printing.ok) commitLast();                 // 印刷しなおして出たときに「出た」に数える
     showPrintState();
   });
-  $('hoResave').addEventListener('click', () => { if (last) download(last.blob, last.name); });
   const hold = $('hoNext');
   let holdTimer = 0;
   function holdStart(e) {
@@ -2062,7 +2056,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     await Printer.printRaster({ widthBytes: wb, height: h, data }, '線を1本');
   }));
   $('dgCopy').addEventListener('click', async () => {
-    const t = 'もちもちゅ おみくじ v11 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
+    const t = 'もちもちゅ おみくじ v12 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
     try { await navigator.clipboard.writeText(t); alert('記録をコピーしました。'); }
     catch (e) { const r = document.createRange(); r.selectNodeContents($('prnLog')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); alert('記録を選びました。長押しでコピーしてください。'); }
   });
@@ -2083,13 +2077,6 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   $('resetBtn').addEventListener('click', () => {
     if (!confirm('出たおみくじの記録をすべて消します。\nすべての区分が最初から（20個ずつ）になります。よろしいですか？')) return;
     store = { v: 1, groups: {} }; saveStore(); renderCounts();
-  });
-  $('sampleBtn').addEventListener('click', async () => {
-    const ids = Array.from(BY_ID.keys());
-    try {
-      const res = await makeImage(BY_ID.get(ids[randInt(ids.length)]).t);
-      download(res.blob, 'omikuji_mihon_' + stamp() + '.png');
-    } catch (e) { alert('見本画像を作れませんでした。'); }
   });
   // ---------- 全画面 ----------
   // ホーム画面のアプリから開いたときは、最初から全画面（manifest の設定）。
