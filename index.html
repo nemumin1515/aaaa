@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v8</title>
+<title>もちもちゅ おみくじ v9</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -90,11 +90,20 @@
   .btnMain { height: 56px; padding: 0 34px; border: none; border-radius: 999px; background: #121A3A; color: #F6E7C1; font-size: 20px; font-weight: 900; }
   .btnSub { height: 56px; padding: 0 22px; border: 2px solid #121A3A; border-radius: 999px; background: transparent; color: #121A3A; font-size: 18px; font-weight: 700; }
   .btnDanger { height: 56px; padding: 0 22px; border: 2px solid #A3201A; border-radius: 999px; background: transparent; color: #A3201A; font-size: 18px; font-weight: 700; }
-  .card.wide { width: 1000px; padding: 26px 30px; text-align: left; }
+  .card.wide { width: 1000px; max-height: 790px; overflow-y: auto; padding: 24px 30px; text-align: left; }
   .card.wide h2 { margin: 0 0 4px; }
   .small { font-size: 15px !important; color: #4A4F6E; }
   table.counts { width: 100%; margin-top: 12px; border-collapse: collapse; font-size: 16px; }
-  table.counts th, table.counts td { padding: 5px 8px; border-bottom: 1px solid #D9C9A0; text-align: center; }
+  table.counts th, table.counts td { padding: 3px 8px; border-bottom: 1px solid #D9C9A0; text-align: center; }
+  /* 管理メニュー：ミニプリンター */
+  .prnBox { margin-top: 16px; padding: 14px 16px; border: 2px solid #121A3A; border-radius: 16px; }
+  .prnBox h3 { margin: 0 0 4px; font-size: 20px; font-weight: 900; }
+  .prnBox .row { margin-top: 10px !important; }
+  .prnSet { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px 18px; }
+  .prnSet label { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
+  .prnSet select { height: 44px; padding: 0 10px; border: 2px solid #121A3A; border-radius: 10px; background: #fff; color: #121A3A; font-family: inherit; font-size: 16px; }
+  .prnBadge { position: absolute; left: 16px; bottom: 22px; margin: 0; font-size: 14px; font-weight: 700; color: #5A6194; }
+  .prnBadge.on { color: #F2C14E; }
   table.counts th:first-child, table.counts td:first-child { text-align: left; }
   table.counts td.low { color: #A3201A; font-weight: 900; }
 
@@ -112,6 +121,8 @@
   .hoStaff { position: absolute; left: 40px; right: 40px; bottom: 22px; display: flex; align-items: center; gap: 14px;
     padding-top: 14px; border-top: 1px dashed #4A5590; }
   .hoStaff p { flex: 1; margin: 0; font-size: 16px; line-height: 1.5; color: #C9CDE6; }
+  .hoStaff .prnState { font-weight: 900; color: #F6E7C1; }
+  .hoStaff .prnState.ng { color: #FF9B8F; }
   .hoBtnSub { height: 52px; padding: 0 20px; border: 2px solid #5A6194; border-radius: 999px; background: transparent; color: #C9CDE6; font-size: 16px; font-weight: 700; }
   .hoBtnHold { position: relative; overflow: hidden; height: 52px; padding: 0 24px; border: 2px solid #F2C14E; border-radius: 999px;
     background: transparent; color: #F2C14E; font-size: 17px; font-weight: 900; touch-action: none; -webkit-touch-callout: none; }
@@ -167,6 +178,22 @@
     white-space: pre; overflow-wrap: normal; line-height: 1.3; font-weight: 700; text-align: start; color: #000; }
   /* 1〜2けたの数字・英字は縦中横（たて向きにそろえる） */
   #otext .tcy { text-combine-upright: all; -webkit-text-combine: horizontal; }
+
+  /* ===== ミニプリンター用（レシート形）：幅384ドット＝48mm。1px＝1ドット ===== */
+  #rsheet { width: 384px; height: 760px; margin: 0; padding: 8px 10px; box-sizing: border-box; overflow: hidden;
+    display: flex; flex-direction: column; gap: 10px; background: #fff; color: #000; line-height: 1.2;
+    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif; }
+  #rsheet * { box-sizing: border-box; }
+  .rkb { flex: none; height: 128px; border: 4px solid #000; border-radius: 14px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .rkb-chara { flex: none; width: 82px; height: 102px; object-fit: contain; display: block; }
+  .rkb-text { display: flex; flex-direction: column; align-items: center; line-height: 1; }
+  .rkb-brand { font-size: 24px; font-weight: 700; letter-spacing: 4px; padding-left: 4px; }
+  .rkb-main { margin-top: 8px; font-size: 52px; font-weight: 900; letter-spacing: 6px; padding-left: 6px; }
+  #rframe { flex: 1; min-height: 0; border: 5px solid #000; padding: 12px; overflow: hidden;
+    display: flex; align-items: flex-start; justify-content: center; }
+  #rtext { writing-mode: vertical-rl; -webkit-writing-mode: vertical-rl; width: auto; height: max-content; flex: none;
+    white-space: pre; overflow-wrap: normal; line-height: 1.3; font-weight: 700; text-align: start; color: #000; }
+  #rtext .tcy { text-combine-upright: all; -webkit-text-combine: horizontal; }
 </style>
 </head>
 <body>
@@ -228,6 +255,7 @@
 
   <button id="drawBtn" type="button" disabled>3つ えらんでね</button>
   <p class="note">けっかは画面には出ません ・ 画像で保存されます</p>
+  <p id="prnBadge" class="prnBadge" aria-live="polite"></p>
 
   <button id="adminBtn" type="button" aria-label="管理メニュー">
     <svg aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
@@ -241,7 +269,8 @@
       <h2 id="hoTitle" class="hoTitle">お店の人にわたしてね</h2>
     </div>
     <div class="hoStaff">
-      <p>お店の人へ：おみくじ画像はタブレットの「ダウンロード」に保存されています。<br>印刷がすんだら、右のボタンを長押しすると最初の画面にもどります。</p>
+      <p>お店の人へ：<span id="hoPrn" class="prnState"></span><br>おみくじを わたしたら、右のボタンを長押しすると最初の画面にもどります。</p>
+      <button id="hoReprint" type="button" class="hoBtnSub">もう一度印刷</button>
       <button id="hoResave" type="button" class="hoBtnSub">もう一度保存</button>
       <button id="hoNext" type="button" class="hoBtnHold"><span class="fill"></span><span class="lbl">長押しで つぎの人へ</span></button>
     </div>
@@ -266,6 +295,22 @@
       <h2 id="adTitle">管理メニュー</h2>
       <p class="small">区分ごとの「まだ出ていないおみくじ」の数です。0になると、その区分は次の1周が始まります。</p>
       <div id="countTable"></div>
+      <div class="prnBox">
+        <h3>ミニプリンター</h3>
+        <p id="prnStatus" class="small" style="white-space:pre-line"></p>
+        <div class="row" style="justify-content:flex-start">
+          <button id="prnConnect" type="button" class="btnSub">プリンターに接続</button>
+          <button id="prnConnectAll" type="button" class="btnSub">一覧に出ないとき</button>
+          <button id="prnTest" type="button" class="btnSub">テスト印刷（記録しない）</button>
+          <button id="prnDisconnect" type="button" class="btnSub">切断</button>
+        </div>
+        <div class="prnSet">
+          <label>用紙 <select id="setPaper"><option value="plain">ロール（すき間なし）</option><option value="label">ラベル（すき間あり）</option></select></label>
+          <label>濃さ <select id="setDensity"><option value="0">うすい</option><option value="1">ふつう</option><option value="2">こい</option></select></label>
+          <label>印字幅 <select id="setWidth"><option value="auto">自動</option><option value="384">384ドット（203dpi）</option><option value="576">576ドット（300dpi）</option></select></label>
+          <label>送り方 <select id="setChunk"><option value="auto">自動</option><option value="fast">速い</option><option value="safe">ゆっくり（安全）</option></select></label>
+        </div>
+      </div>
       <p id="appStatus" class="small" style="margin-top:10px;white-space:pre-line"></p>
       <p id="storeWarn" class="small" style="color:#A3201A" hidden>⚠ このブラウザでは記録を保存できません（ページを閉じると記録が消えます）。</p>
       <div class="row" style="justify-content:flex-start">
@@ -275,7 +320,7 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v8</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v9</p>
     </div>
   </div>
 
@@ -296,6 +341,14 @@
     </div>
     <!-- ▲ 看板 -->
     <div id="frame"><div id="otext"></div></div>
+  </div>
+  <!-- ミニプリンター用（レシート形）。看板はキャラクター1人＋もちもちゅ おみくじ -->
+  <div id="rsheet">
+    <div class="rkb">
+      <img class="rkb-chara" alt="">
+      <div class="rkb-text"><div class="rkb-brand">もちもちゅ</div><div class="rkb-main">おみくじ</div></div>
+    </div>
+    <div id="rframe"><div id="rtext"></div></div>
   </div>
 </div>
 
@@ -1456,65 +1509,95 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     const cols = splitColumns(s);
     return REMOVE_PUNCT ? cols.map(c => c.replace(/[、。]/g, '')).filter(c => c.length) : cols;
   }
-  function setText(s) {
-    otext.textContent = '';
+  function setText(s, el) {
+    el = el || otext;
+    el.textContent = '';
     printColumns(s).forEach((line, i) => {
-      if (i) otext.appendChild(document.createTextNode('\n'));
+      if (i) el.appendChild(document.createTextNode('\n'));
       const re = /[A-Za-z0-9%]+/g; let m, last = 0;
       while ((m = re.exec(line))) {
         if (m[0].length > 2) continue;           // 3文字以上は横に寝かせる（kanban_v7 と同じ）
-        if (m.index > last) otext.appendChild(document.createTextNode(line.slice(last, m.index)));
+        if (m.index > last) el.appendChild(document.createTextNode(line.slice(last, m.index)));
         const sp = document.createElement('span'); sp.className = 'tcy'; sp.textContent = m[0];
-        otext.appendChild(sp);
+        el.appendChild(sp);
         last = m.index + m[0].length;
       }
-      if (last < line.length) otext.appendChild(document.createTextNode(line.slice(last)));
+      if (last < line.length) el.appendChild(document.createTextNode(line.slice(last)));
     });
   }
   // 天地いっぱい：いちばん長い列が上下いっぱいになる大きさを探す（左右もはみ出さないようにする）
-  function fitText() {
-    const cs = getComputedStyle(frame);
-    const aw = frame.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
-    const ah = frame.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 2;
+  function fitText(fr, el) {
+    fr = fr || frame; el = el || otext;
+    const cs = getComputedStyle(fr);
+    const aw = fr.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 2;
+    const ah = fr.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 2;
     let lo = 4, hi = 3000;
     while (hi - lo > 0.5) {
       const mid = (lo + hi) / 2;
-      otext.style.fontSize = mid + 'px';
-      if (otext.offsetHeight <= ah && otext.offsetWidth <= aw) lo = mid; else hi = mid;
+      el.style.fontSize = mid + 'px';
+      if (el.offsetHeight <= ah && el.offsetWidth <= aw) lo = mid; else hi = mid;
     }
-    otext.style.fontSize = lo + 'px';
-    return { size: lo, w: otext.offsetWidth, h: otext.offsetHeight, aw, ah };
+    el.style.fontSize = lo + 'px';
+    return { size: lo, w: el.offsetWidth, h: el.offsetHeight, aw, ah };
   }
-  function makeImage(text) {
+  // 用紙（HTML）をそのまま絵にして canvas に描く（kanban_v7 と同じしくみ）
+  function renderToCanvas(sheetEl, cssW, cssH, outW, outH) {
     return new Promise((resolve, reject) => {
-      setText(text);
-      const fit = fitText();
-      const wpx = A4.w * PX_PER_MM, hpx = A4.h * PX_PER_MM;
       const wrap = document.createElement('div');
       wrap.setAttribute('lang', 'ja');
       const st = document.createElement('style');
       st.textContent = $('sheetStyle').textContent + ' body{margin:0}';
       wrap.appendChild(st);
-      wrap.appendChild(sheet.cloneNode(true));
+      wrap.appendChild(sheetEl.cloneNode(true));
       const xhtml = new XMLSerializer().serializeToString(wrap);
-      otext.textContent = '';                      // 画面の外の用紙からも消しておく
-      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + wpx + '" height="' + hpx + '">' +
+      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + cssW + '" height="' + cssH + '">' +
         '<foreignObject x="0" y="0" width="100%" height="100%">' + xhtml + '</foreignObject></svg>';
       const img = new Image();
       img.onload = () => {
         try {
-          const cw = Math.round(A4.w / 25.4 * DPI), ch = Math.round(A4.h / 25.4 * DPI);
           const cv = document.createElement('canvas');
-          cv.width = cw; cv.height = ch;
-          const ctx = cv.getContext('2d');
-          ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, ch);
-          ctx.drawImage(img, 0, 0, cw, ch);
-          cv.toBlob(b => b ? resolve({ blob: b, fit }) : reject(new Error('toBlob')), 'image/png');
+          cv.width = outW; cv.height = outH;
+          const ctx = cv.getContext('2d', { willReadFrequently: true });
+          ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, outW, outH);
+          ctx.drawImage(img, 0, 0, outW, outH);
+          resolve(cv);
         } catch (e) { reject(e); }
       };
       img.onerror = () => reject(new Error('svg'));
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     });
+  }
+  // A4の画像（PNG）
+  async function makeImage(text) {
+    setText(text, otext);
+    const fit = fitText(frame, otext);
+    const p = renderToCanvas(sheet, A4.w * PX_PER_MM, A4.h * PX_PER_MM,
+      Math.round(A4.w / 25.4 * DPI), Math.round(A4.h / 25.4 * DPI));
+    otext.textContent = '';                        // 画面の外の用紙からも消しておく
+    const cv = await p;
+    const blob = await new Promise((res, rej) => cv.toBlob(b => b ? res(b) : rej(new Error('toBlob')), 'image/png'));
+    return { blob, fit };
+  }
+  // ミニプリンター用（レシート形）：白黒2値のラスター（1ドット＝1ビット、左が上位ビット、1＝黒）
+  const RECEIPT = { w: 384, h: 760 };
+  async function makeReceipt(text, dots) {
+    const rtext = $('rtext');
+    setText(text, rtext);
+    const fit = fitText($('rframe'), rtext);
+    const outW = dots, outH = Math.round(RECEIPT.h * dots / RECEIPT.w);
+    const p = renderToCanvas($('rsheet'), RECEIPT.w, RECEIPT.h, outW, outH);
+    rtext.textContent = '';
+    const cv = await p;
+    const px = cv.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, outW, outH).data;
+    const bpr = Math.ceil(outW / 8), data = new Uint8Array(bpr * outH);
+    for (let y = 0; y < outH; y++) {
+      for (let x = 0; x < outW; x++) {
+        const i = (y * outW + x) * 4;
+        const lum = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+        if (lum < 140) data[y * bpr + (x >> 3)] |= 0x80 >> (x & 7);
+      }
+    }
+    return { widthBytes: bpr, height: outH, data, canvas: cv, fit };
   }
   function stamp() {
     const d = new Date(), p = n => String(n).padStart(2, '0');
@@ -1528,21 +1611,229 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     setTimeout(() => URL.revokeObjectURL(url), 60000);
   }
 
+
+  // ---------- ミニプリンター（Bluetooth・専用アプリなし） ----------
+  // Luck Jingle 系（Lujiang）のミニプリンター（例：PPS1_xxxx）に、Chrome の Web Bluetooth で直接送る。
+  // 送る手順は、公開されている解析資料（LuckPrinter SDK の Lujiang 方式）に合わせています：
+  //   濃さ → 状態確認 → 印刷開始(10 FF F1 03) → 起こす(00×12) → 画像(GS v 0) → 紙送り → 最後の印(1B BB BB) → 終了(10 FF F1 45)
+  // 参考：fichero-printer（MIT）docs/PROTOCOL.md、TiMini Print（Apache-2.0）luck/core.py
+  const PRN_KEY = 'mochimochu_omikuji_printer';
+  const PRN_SERVICES = [
+    '000018f0-0000-1000-8000-00805f9b34fb',
+    '0000ff00-0000-1000-8000-00805f9b34fb',
+    'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
+    '49535343-fe7d-4ae5-8fa9-9fafd205e455'
+  ];
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const prnSet = Object.assign({ paper: 'plain', density: 1, width: 'auto', chunk: 'auto', name: '' }, (() => {
+    try { return JSON.parse(localStorage.getItem(PRN_KEY) || '{}'); } catch (e) { return {}; }
+  })());
+  function savePrnSet() { try { localStorage.setItem(PRN_KEY, JSON.stringify(prnSet)); } catch (e) {} }
+
+  const Printer = (() => {
+    let device = null, wch = null, nch = null, model = '', rx = [], waiters = [], connecting = null, autoChunk = 180;
+    const st = { state: 'none', msg: '' };   // none / connecting / ready / lost / error
+
+    // 送り方「自動」：Android 14 以上は大きめ（180バイト）、それより前は小さく（20バイト）送る
+    (async () => {
+      try {
+        const ua = navigator.userAgentData;
+        if (ua && ua.getHighEntropyValues) {
+          const v = await ua.getHighEntropyValues(['platform', 'platformVersion']);
+          if (v.platform === 'Android') autoChunk = parseInt(v.platformVersion, 10) >= 14 ? 180 : 20;
+        } else if (/Android/.test(navigator.userAgent)) autoChunk = 20;
+      } catch (e) {}
+    })();
+    function chunkSize() { return prnSet.chunk === 'fast' ? 180 : prnSet.chunk === 'safe' ? 20 : autoChunk; }
+    function dots() {
+      if (prnSet.width === '384' || prnSet.width === '576') return +prnSet.width;
+      return /H(_|$)/i.test(model) ? 576 : 384;          // 型番が …H のものは 300dpi
+    }
+    function supported() { return !!(navigator.bluetooth && navigator.bluetooth.requestDevice); }
+    function set(state, msg) { st.state = state; st.msg = msg || ''; updatePrnUI(); }
+
+    function onNotify(e) {
+      const v = e.target.value;
+      const b = new Uint8Array(v.buffer.slice(v.byteOffset, v.byteOffset + v.byteLength));
+      if (waiters.length) waiters.shift()(b); else rx.push(b);
+    }
+    function nextReply(ms) {
+      if (rx.length) return Promise.resolve(rx.shift());
+      return new Promise(res => {
+        const w = b => { clearTimeout(t); res(b); };
+        const t = setTimeout(() => { waiters = waiters.filter(x => x !== w); res(null); }, ms);
+        waiters.push(w);
+      });
+    }
+    async function writeRaw(bytes) {
+      const size = chunkSize(), gap = size > 40 ? 12 : 4;
+      for (let i = 0; i < bytes.length; i += size) {
+        const part = bytes.subarray(i, i + size);
+        for (let tries = 0; ; tries++) {
+          try {
+            if (wch.properties.writeWithoutResponse) await wch.writeValueWithoutResponse(part);
+            else await wch.writeValueWithResponse(part);
+            break;
+          } catch (e) { if (tries >= 5) throw e; await sleep(40); }
+        }
+        await sleep(gap);
+      }
+    }
+    async function send(arr) { await writeRaw(arr instanceof Uint8Array ? arr : new Uint8Array(arr)); }
+    async function query(arr, ms) { rx = []; await send(arr); return nextReply(ms); }
+    function text(b) {
+      if (!b) return '';
+      try { return new TextDecoder('gbk').decode(b).replace(/[\x00-\x20]/g, '').trim(); }
+      catch (e) { return String.fromCharCode.apply(null, b).replace(/[\x00-\x20]/g, ''); }
+    }
+
+    async function open() {
+      set('connecting', '接続しています…');
+      const server = await device.gatt.connect();
+      wch = nch = null;
+      for (const uuid of PRN_SERVICES) {
+        let svc;
+        try { svc = await server.getPrimaryService(uuid); } catch (e) { continue; }
+        const chars = await svc.getCharacteristics();
+        const w = chars.find(c => c.properties.writeWithoutResponse) || chars.find(c => c.properties.write);
+        if (!w) continue;
+        wch = w;
+        nch = chars.find(c => c.properties.notify) || chars.find(c => c.properties.indicate) || null;
+        break;
+      }
+      if (!wch) throw new Error('nochar');
+      if (nch) { await nch.startNotifications(); nch.addEventListener('characteristicvaluechanged', onNotify); }
+      model = text(await query([0x10, 0xFF, 0x20, 0xF0], 1500));     // 型番を聞く（返事がなくても続ける）
+      prnSet.name = device.name || prnSet.name; savePrnSet();
+      set('ready');
+    }
+    function onDisconnected() {
+      wch = nch = null;
+      if (st.state === 'ready') set('lost', 'プリンターとの接続が切れました');
+    }
+    async function connect(all) {
+      if (!supported()) throw new Error('unsupported');
+      const opts = all
+        ? { acceptAllDevices: true, optionalServices: PRN_SERVICES }
+        : { filters: [{ namePrefix: 'PPS1' }, { namePrefix: 'PP' }, { namePrefix: 'S1' }, { namePrefix: 'LuckP' },
+                      { services: [PRN_SERVICES[0]] }, { services: [PRN_SERVICES[1]] }],
+            optionalServices: PRN_SERVICES };
+      const d = await navigator.bluetooth.requestDevice(opts);   // Chrome の「機器を選ぶ」画面が出る
+      if (device && device !== d) { try { device.gatt.disconnect(); } catch (e) {} }
+      device = d;
+      device.addEventListener('gattserverdisconnected', onDisconnected);
+      await open();
+    }
+    // 一度つないだ機器なら、選ぶ画面なしでつなぎ直す
+    async function ensure() {
+      if (wch && device && device.gatt.connected) return true;
+      if (!device) {
+        if (navigator.bluetooth && navigator.bluetooth.getDevices && prnSet.name) {
+          try {
+            const list = await navigator.bluetooth.getDevices();
+            const d = list.find(x => x.name === prnSet.name);
+            if (d) { device = d; device.addEventListener('gattserverdisconnected', onDisconnected); }
+          } catch (e) {}
+        }
+        if (!device) return false;
+      }
+      if (!connecting) connecting = open().catch(e => { set('lost', 'プリンターにつながりません'); throw e; }).finally(() => { connecting = null; });
+      try { await connecting; return true; } catch (e) { return false; }
+    }
+    function disconnect() {
+      if (device) { try { device.gatt.disconnect(); } catch (e) {} }
+      device = null; wch = nch = null; set('none');
+    }
+    // 状態（10 FF 40 の返事）を言葉に
+    function statusError(b) {
+      if (!b || !b.length) return '';
+      const v = b[b.length - 1] & ~0xA0 & 0xFF;          // 0x20(充電中)・0x80 は無視
+      if (v & 0x04) return '用紙がありません';
+      if (v & 0x02) return 'ふたが開いています';
+      if (v & 0x50) return 'プリンターが熱くなっています（少し休ませてください）';
+      return '';
+    }
+    async function printRaster(r) {
+      if (!(await ensure())) throw new Error('notconnected');
+      rx = [];
+      const label = prnSet.paper === 'label';
+      await send([0x10, 0xFF, 0x10, 0x00, prnSet.density & 0xFF]);     // 濃さ
+      await nextReply(600);
+      let stt = await query([0x10, 0xFF, 0x40], 1500);                 // 状態の確認
+      if (stt && (stt[stt.length - 1] & 0x01)) { await sleep(1500); stt = await query([0x10, 0xFF, 0x40], 1500); }   // 印刷中なら少し待つ
+      const err = statusError(stt);
+      if (err) throw new Error(err);
+      rx = [];
+      await send([0x10, 0xFF, 0xF1, 0x03]);                            // 印刷開始
+      await send(new Uint8Array(12));                                  // 起こす
+      if (label) { await send([0x1F, 0x80, 0x01, 0x20]); await nextReply(800); }   // ラベル紙（すき間あり）
+      const head = [0x1D, 0x76, 0x30, 0x00, r.widthBytes & 0xFF, r.widthBytes >> 8, r.height & 0xFF, r.height >> 8];
+      const all = new Uint8Array(head.length + r.data.length);
+      all.set(head, 0); all.set(r.data, head.length);
+      await send(all);                                                 // 画像
+      if (label) await send([0x1D, 0x0C]);                             // 次のラベルの位置まで
+      else await send([0x1B, 0x4A, dots() >= 576 ? 120 : 80]);         // 紙送り
+      await send([0x1B, 0xBB, 0xBB]);                                  // 最後の1枚の印
+      rx = [];
+      await send([0x10, 0xFF, 0xF1, 0x45]);                            // 終了（「OK」か 0xAA が返る）
+      const done = nch ? await nextReply(20000) : null;
+      return { confirmed: !!done };
+    }
+    return {
+      supported, connect, ensure, disconnect, printRaster, dots,
+      get state() { return st.state; }, get msg() { return st.msg; },
+      get name() { return device ? device.name : ''; }, get model() { return model; },
+      get hasDevice() { return !!device; }
+    };
+  })();
+
+  let printing = null;     // 印刷の結果 { ok, msg }
+  async function printOmikuji(text) {
+    if (!Printer.supported()) return { ok: false, msg: 'このブラウザは Bluetooth 印刷に対応していません' };
+    try {
+      const r = await makeReceipt(text, Printer.dots());
+      const res = await Printer.printRaster(r);
+      return { ok: true, msg: res.confirmed ? '印刷しました' : '印刷データを送りました' };
+    } catch (e) {
+      console.error(e);
+      if (e.message === 'notconnected') return { ok: false, msg: 'プリンターにつながっていないため、印刷していません', none: true };
+      return { ok: false, msg: '印刷できませんでした（' + (/[ぁ-ん]/.test(e.message) ? e.message : '送信に失敗しました') + '）' };
+    }
+  }
+  function updatePrnUI() {
+    const b = $('prnBadge');
+    const on = Printer.state === 'ready';
+    b.className = 'prnBadge' + (on ? ' on' : '');
+    b.textContent = !Printer.supported() ? '' : on ? '● プリンター接続中' : Printer.state === 'connecting' ? '… プリンターに接続中' : '○ プリンター未接続';
+    const lines = [];
+    if (!Printer.supported()) lines.push('このブラウザは Bluetooth 印刷に対応していません（Android の Chrome で開いてください）。');
+    else if (on) lines.push('● 接続中：' + (Printer.name || 'プリンター') + (Printer.model ? '（型番 ' + Printer.model + '）' : '') + '　印字幅 ' + Printer.dots() + 'ドット');
+    else if (Printer.state === 'connecting') lines.push('… 接続しています');
+    else lines.push('○ 未接続' + (Printer.msg ? '：' + Printer.msg : '') + (prnSet.name ? '（前回：' + prnSet.name + '）' : ''));
+    lines.push('プリンターの電源を入れ、Luck Jingle などの専用アプリやパソコンとはつないでいない状態で「プリンターに接続」を押してください。');
+    $('prnStatus').textContent = lines.join('\n');
+    $('prnTest').disabled = !on; $('prnDisconnect').disabled = !Printer.hasDevice;
+    $('prnConnect').disabled = $('prnConnectAll').disabled = !Printer.supported();
+  }
+
   // ---------- ひく ----------
   let last = null, closeTimer = 0;
   async function draw() {
     if (busy || !sel.g || !sel.a || !sel.c) return;
     busy = true; phase = 'shaking'; refresh();
+    printing = null;
     const t0 = performance.now();
     const p = peek(key(sel.g, sel.a, sel.c));
     let ok = false;
     try {
       await new Promise(r => requestAnimationFrame(() => r()));
-      const res = await makeImage(BY_ID.get(p.id).t);
+      const text = BY_ID.get(p.id).t;
+      const res = await makeImage(text);
       commit(p);                                   // 保存できたときだけ「出た」に数える
-      last = { blob: res.blob, name: 'omikuji_' + stamp() + '.png' };
+      last = { blob: res.blob, name: 'omikuji_' + stamp() + '.png', text };
       download(last.blob, last.name);
       ok = true;
+      printing = await printOmikuji(text);         // ミニプリンターで自動印刷（つながっていなければ印刷しない）
     } catch (e) {
       console.error(e);
     }
@@ -1553,6 +1844,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     clearTimeout(closeTimer);
     if (ok) {
       // 保存できた：「お店の人にわたしてね」画面へ（自動では閉じない）
+      showPrintState();
       $('handoff').hidden = false;
       $('hoNext').focus();
       return;
@@ -1579,6 +1871,24 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   });
   // 「お店の人にわたしてね」画面
   $('hoChara').src = document.querySelector('.kb-chara').src;   // 看板と同じキャラクター
+  document.querySelector('.rkb-chara').src = $('hoChara').src;  // レシートの看板も同じ
+  function showPrintState() {
+    const el = $('hoPrn'), r = printing;
+    el.className = 'prnState' + (r && !r.ok ? ' ng' : '');
+    el.textContent = !r ? '' : (r.ok ? '● ' : r.none ? '－ ' : '✕ ') + r.msg;
+    $('hoReprint').textContent = (r && r.none && !Printer.hasDevice) ? 'プリンターに接続して印刷' : 'もう一度印刷';
+    $('hoReprint').disabled = !Printer.supported();
+  }
+  $('hoReprint').addEventListener('click', async () => {
+    if (!last || !last.text) return;
+    const btn = $('hoReprint');
+    btn.disabled = true; $('hoPrn').className = 'prnState'; $('hoPrn').textContent = '… 印刷しています';
+    try {
+      if (!Printer.hasDevice) await Printer.connect(false);
+    } catch (e) { /* 選ぶ画面を閉じたときなど */ }
+    printing = await printOmikuji(last.text);
+    showPrintState();
+  });
   $('hoResave').addEventListener('click', () => { if (last) download(last.blob, last.name); });
   const hold = $('hoNext');
   let holdTimer = 0;
@@ -1614,7 +1924,30 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     $('storeWarn').hidden = canStore;
     renderAppStatus();
   }
-  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); updateFsBtn(); $('admin').hidden = false; });
+  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); updateFsBtn(); updatePrnUI(); $('admin').hidden = false; });
+  async function doConnect(all) {
+    try { await Printer.connect(all); }
+    catch (e) {
+      if (e && e.name === 'NotFoundError') { updatePrnUI(); return; }      // 選ぶ画面を閉じた
+      console.error(e);
+      alert('プリンターにつなげませんでした。\n・プリンターの電源が入っているか\n・専用アプリやパソコンとつながっていないか\nを確かめて、もう一度おしてください。');
+      updatePrnUI();
+    }
+  }
+  $('prnConnect').addEventListener('click', () => doConnect(false));
+  $('prnConnectAll').addEventListener('click', () => doConnect(true));
+  $('prnDisconnect').addEventListener('click', () => Printer.disconnect());
+  $('prnTest').addEventListener('click', async () => {
+    const ids = Array.from(BY_ID.keys());
+    $('prnTest').disabled = true;
+    const r = await printOmikuji(BY_ID.get(ids[randInt(ids.length)]).t);
+    alert(r.msg);
+    updatePrnUI();
+  });
+  [['setPaper', 'paper', String], ['setDensity', 'density', Number], ['setWidth', 'width', String], ['setChunk', 'chunk', String]].forEach(([id, k, conv]) => {
+    $(id).value = String(prnSet[k]);
+    $(id).addEventListener('change', () => { prnSet[k] = conv($(id).value); savePrnSet(); updatePrnUI(); });
+  });
   $('adCloseBtn').addEventListener('click', () => { $('admin').hidden = true; });
   $('resetBtn').addEventListener('click', () => {
     if (!confirm('出たおみくじの記録をすべて消します。\nすべての区分が最初から（20個ずつ）になります。よろしいですか？')) return;
@@ -1695,12 +2028,15 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   stage.addEventListener('contextmenu', e => e.preventDefault());
   fitStage();
   refresh();
+  updatePrnUI();
+  Printer.ensure().catch(() => {});
 
   // 動作確認用（画面には何も出しません）
   window.__omikuji = {
     splitColumns, printColumns, makeImage, peek, commit, remaining, GROUPS, BY_ID,
     measure: t => { setText(t); const f = fitText(); otext.textContent = ''; return f; },
     get autoFullscreen() { return autoFullscreen; },
+    makeReceipt, printOmikuji, Printer,
     get store() { return store; }
   };
 })();
