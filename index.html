@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v10</title>
+<title>もちもちゅ おみくじ v11</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -336,7 +336,7 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v10</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v11</p>
     </div>
   </div>
 
@@ -1670,6 +1670,9 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
 
   const Printer = (() => {
     let device = null, wch = null, notifs = [], model = '', rx = [], waiters = [], connecting = null, autoChunk = 180;
+    // 流量の合図（ff03）：プリンターが「あと何回送ってよいか（01 n）」「1回に何バイトまでか（02 n）」を知らせてくる。
+    // この合図を守らずに送り続けると、プリンターの受け取りがあふれて止まる（電源が切れる）。v11 から守って送る。
+    const flow = { on: false, credits: 0, limit: 182, waiters: [], grants: 0, quiet: false };
     const st = { state: 'none', msg: '' };   // none / connecting / ready / lost
 
     // 送り方「自動」：Android 14 以上は 180バイトずつ、それより前は 20バイトずつ
@@ -1690,9 +1693,35 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     function supported() { return !!(navigator.bluetooth && navigator.bluetooth.requestDevice); }
     function set(state, msg) { st.state = state; st.msg = msg || ''; updatePrnUI(); }
 
+    function isFlowChar(c) { return /^0000ff03-/.test(c.uuid || ''); }
+    function onFlow(b) {
+      for (let i = 0; i < b.length;) {
+        if (b[i] === 0x01 && i + 1 < b.length) {                 // 01 n：あと n 回送ってよい
+          flow.credits += b[i + 1]; flow.grants++;
+          if (!flow.on) { flow.on = true; plog('流量の合図あり：合図を守って送ります'); }
+          if (!flow.quiet) plog('合図：送ってよい回数 +' + b[i + 1] + '（いま ' + flow.credits + '）');
+          i += 2;
+        } else if (b[i] === 0x02 && i + 1 < b.length) {          // 02 n (00)：1回に n バイトまで
+          const n = b[i + 1] | ((i + 2 < b.length ? b[i + 2] : 0) << 8);
+          if (n > 0) flow.limit = n;
+          plog('合図：1回に送れる大きさ ' + flow.limit + 'バイト');
+          i += 3;
+        } else { plog('合図（不明）：' + hex(b.slice(i))); break; }
+      }
+      while (flow.credits > 0 && flow.waiters.length) { flow.credits--; flow.waiters.shift()(true); }
+    }
+    function takeCredit(ms) {
+      if (flow.credits > 0) { flow.credits--; return Promise.resolve(true); }
+      return new Promise(res => {
+        const w = ok => { clearTimeout(t); res(ok); };
+        const t = setTimeout(() => { flow.waiters = flow.waiters.filter(x => x !== w); res(false); }, ms);
+        flow.waiters.push(w);
+      });
+    }
     function onNotify(e) {
       const c = e.target, v = c.value;
       const b = new Uint8Array(v.buffer.slice(v.byteOffset, v.byteOffset + v.byteLength));
+      if (isFlowChar(c)) { onFlow(b); return; }                  // 流量の合図は「返事」とは別にあつかう
       const asc = String.fromCharCode.apply(null, b).replace(/[^\x20-\x7e]/g, '.');
       plog('受け取り(' + shortId(c.uuid || '') + ')：' + hex(b) + '  「' + asc + '」');
       if (waiters.length) waiters.shift()(b); else rx.push(b);
@@ -1705,10 +1734,13 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
         waiters.push(w);
       });
     }
-    // 少しずつ、間をあけて送る（プリンターの受け取りが追いつくように）
+    // 少しずつ送る。流量の合図があるプリンターでは、1回送るごとに「送ってよい回数」を1つ使い、0なら合図を待つ
     async function writeRaw(bytes) {
-      const size = chunkSize(), gap = size > 40 ? 20 : 8;
+      const size = flow.on ? Math.max(1, Math.min(chunkSize(), flow.limit)) : chunkSize();
+      const gap = flow.on ? 2 : (size > 40 ? 20 : 8);
       for (let i = 0; i < bytes.length; i += size) {
+        if (!wch) throw new Error('lost');
+        if (flow.on && !(await takeCredit(30000))) throw new Error('プリンターから「送ってよい」の合図が来ませんでした');
         if (!wch) throw new Error('lost');
         const part = bytes.subarray(i, i + size);
         for (let tries = 0; ; tries++) {
@@ -1734,6 +1766,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       const server = await device.gatt.connect();
       plog('接続しました。サービスを調べます');
       wch = null; notifs = [];
+      flow.on = false; flow.credits = 0; flow.limit = 182; flow.waiters = []; flow.grants = 0; flow.quiet = false;
       for (const uuid of PRN_SERVICES) {
         let svc;
         try { svc = await server.getPrimaryService(uuid); } catch (e) { plog('サービス ' + shortId(uuid) + '：なし'); continue; }
@@ -1757,11 +1790,20 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
         try { await c.startNotifications(); c.addEventListener('characteristicvaluechanged', onNotify); }
         catch (e) { plog('通知を受け取れません：' + shortId(c.uuid)); }
       }
+      // 流量の合図（つないだ直後に「01 05」などが来る）を少しだけ待つ
+      if (notifs.some(isFlowChar)) {
+        for (let i = 0; i < 15 && !flow.on; i++) await sleep(100);
+        if (!flow.on) {                                   // 最初の合図を取りこぼしたとき：1回ずつ様子を見ながら送る
+          flow.on = true; flow.credits = 1;
+          plog('最初の合図が来ないため、1回ずつ合図を待ちながら送ります');
+        }
+      } else plog('流量の合図なし：間をあけて送ります');
       prnSet.name = device.name || prnSet.name; savePrnSet();
       set('ready');
     }
     function onDisconnected() {
       wch = null; notifs = [];
+      flow.waiters.splice(0).forEach(w => w(false));
       plog('★ 接続が切れました（プリンターの電源が切れた・離れた など）');
       if (st.state !== 'none') set('lost', 'プリンターとの接続が切れました');
     }
@@ -1824,7 +1866,9 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       const head = [0x1D, 0x76, 0x30, 0x00, r.widthBytes & 0xFF, r.widthBytes >> 8, r.height & 0xFF, r.height >> 8];
       const all = new Uint8Array(head.length + r.data.length);
       all.set(head, 0); all.set(r.data, head.length);
-      await send(all, '画像');
+      flow.quiet = true; const g0 = flow.grants;
+      try { await send(all, '画像'); } finally { flow.quiet = false; }
+      if (flow.on) plog('画像を送りました（合図 ' + (flow.grants - g0) + ' 回・1回 ' + Math.min(chunkSize(), flow.limit) + 'バイトまで）');
       if (prnSet.paper === 'label') await send([0x1D, 0x0C], '次のラベルへ');
       else await send([0x1B, 0x4A, 100], '紙送り');
       rx = [];
@@ -2000,9 +2044,13 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   }
   $('prnConnect').addEventListener('click', () => doConnect(false));
   // しらべる
+  let diagBusy = false;
   async function diag(fn) {
+    if (diagBusy) { plog('（前の操作が終わるまで待ってください）'); return; }
+    diagBusy = true;
     try { await fn(); }
     catch (e) { plog('× ' + (e.message === 'notconnected' ? 'つながっていません（① を先に押してください）' : e.message)); }
+    finally { diagBusy = false; }
     updatePrnUI();
   }
   $('dgConnect').addEventListener('click', () => diag(async () => { if (Printer.hasDevice) Printer.disconnect(); await Printer.connect(false); }));
@@ -2014,7 +2062,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     await Printer.printRaster({ widthBytes: wb, height: h, data }, '線を1本');
   }));
   $('dgCopy').addEventListener('click', async () => {
-    const t = 'もちもちゅ おみくじ v10 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
+    const t = 'もちもちゅ おみくじ v11 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
     try { await navigator.clipboard.writeText(t); alert('記録をコピーしました。'); }
     catch (e) { const r = document.createRange(); r.selectNodeContents($('prnLog')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); alert('記録を選びました。長押しでコピーしてください。'); }
   });
