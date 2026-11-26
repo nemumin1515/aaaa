@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v9</title>
+<title>もちもちゅ おみくじ v10</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -102,6 +102,10 @@
   .prnSet { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px 18px; }
   .prnSet label { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
   .prnSet select { height: 44px; padding: 0 10px; border: 2px solid #121A3A; border-radius: 10px; background: #fff; color: #121A3A; font-family: inherit; font-size: 16px; }
+  .prnDiag { margin-top: 12px; }
+  .prnDiag summary { font-size: 16px; font-weight: 900; cursor: pointer; }
+  .prnLog { margin: 10px 0 0; max-height: 200px; overflow: auto; padding: 8px 10px; background: #fff; border: 1px solid #121A3A; border-radius: 8px;
+    font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; word-break: break-all; -webkit-user-select: text; user-select: text; }
   .prnBadge { position: absolute; left: 16px; bottom: 22px; margin: 0; font-size: 14px; font-weight: 700; color: #5A6194; }
   .prnBadge.on { color: #F2C14E; }
   table.counts th:first-child, table.counts td:first-child { text-align: left; }
@@ -310,6 +314,18 @@
           <label>印字幅 <select id="setWidth"><option value="auto">自動</option><option value="384">384ドット（203dpi）</option><option value="576">576ドット（300dpi）</option></select></label>
           <label>送り方 <select id="setChunk"><option value="auto">自動</option><option value="fast">速い</option><option value="safe">ゆっくり（安全）</option></select></label>
         </div>
+        <details class="prnDiag">
+          <summary>うまく印刷できないとき（しらべる）</summary>
+          <p class="small">上から1つずつ押して、どこでプリンターの電源が切れるかを確かめます。下の記録は「記録をコピー」で貼り付けられます。</p>
+          <div class="row" style="justify-content:flex-start">
+            <button id="dgConnect" type="button" class="btnSub">① つなぐだけ</button>
+            <button id="dgStatus" type="button" class="btnSub">② 状態を聞く</button>
+            <button id="dgModel" type="button" class="btnSub">③ 型番を聞く</button>
+            <button id="dgLine" type="button" class="btnSub">④ 線を1本だけ印刷</button>
+            <button id="dgCopy" type="button" class="btnSub">記録をコピー</button>
+          </div>
+          <pre id="prnLog" class="prnLog"></pre>
+        </details>
       </div>
       <p id="appStatus" class="small" style="margin-top:10px;white-space:pre-line"></p>
       <p id="storeWarn" class="small" style="color:#A3201A" hidden>⚠ このブラウザでは記録を保存できません（ページを閉じると記録が消えます）。</p>
@@ -320,7 +336,7 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v9</p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v10</p>
     </div>
   </div>
 
@@ -1614,27 +1630,49 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
 
   // ---------- ミニプリンター（Bluetooth・専用アプリなし） ----------
   // Luck Jingle 系（Lujiang）のミニプリンター（例：PPS1_xxxx）に、Chrome の Web Bluetooth で直接送る。
-  // 送る手順は、公開されている解析資料（LuckPrinter SDK の Lujiang 方式）に合わせています：
-  //   濃さ → 状態確認 → 印刷開始(10 FF F1 03) → 起こす(00×12) → 画像(GS v 0) → 紙送り → 最後の印(1B BB BB) → 終了(10 FF F1 45)
-  // 参考：fichero-printer（MIT）docs/PROTOCOL.md、TiMini Print（Apache-2.0）luck/core.py
+  // 送る手順は、公開されている解析例に合わせています（v10：Luck Jingle D1 を BLE で動かしている例の順番）：
+  //   状態確認(10 FF 40) → 印刷開始(10 FF F1 03) → 濃さ(10 FF 10 00 nn)＋起こす(00) → 画像(GS v 0) → 紙送り → 終了(10 FF F1 45)
+  // 参考：luckjingle-d1-printer、fichero-printer（MIT）docs/PROTOCOL.md、TiMini Print（Apache-2.0）luck/core.py
   const PRN_KEY = 'mochimochu_omikuji_printer';
+  // 書き込み先の候補（Luck Jingle のミニプリンターは ff00 サービスの ff02 に書く例が多い）
   const PRN_SERVICES = [
-    '000018f0-0000-1000-8000-00805f9b34fb',
     '0000ff00-0000-1000-8000-00805f9b34fb',
+    '000018f0-0000-1000-8000-00805f9b34fb',
     'e7810a71-73ae-499d-8c15-faa9aef0c3f2',
     '49535343-fe7d-4ae5-8fa9-9fafd205e455'
   ];
+  const PRN_WRITE = {
+    '0000ff00-0000-1000-8000-00805f9b34fb': '0000ff02-0000-1000-8000-00805f9b34fb',
+    '000018f0-0000-1000-8000-00805f9b34fb': '00002af1-0000-1000-8000-00805f9b34fb',
+    'e7810a71-73ae-499d-8c15-faa9aef0c3f2': 'bef8d6c9-9c21-4c9e-b632-bd58c1009f9f',
+    '49535343-fe7d-4ae5-8fa9-9fafd205e455': '49535343-8841-43f4-a8d4-ecbe34729bb3'
+  };
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const prnSet = Object.assign({ paper: 'plain', density: 1, width: 'auto', chunk: 'auto', name: '' }, (() => {
     try { return JSON.parse(localStorage.getItem(PRN_KEY) || '{}'); } catch (e) { return {}; }
   })());
   function savePrnSet() { try { localStorage.setItem(PRN_KEY, JSON.stringify(prnSet)); } catch (e) {} }
 
-  const Printer = (() => {
-    let device = null, wch = null, nch = null, model = '', rx = [], waiters = [], connecting = null, autoChunk = 180;
-    const st = { state: 'none', msg: '' };   // none / connecting / ready / lost / error
+  // 通信の記録（管理メニューの「しらべる」に表示。コピーして送ってもらう用）
+  const prnLog = [];
+  function plog(msg) {
+    const t = new Date(), p2 = n => String(n).padStart(2, '0');
+    prnLog.push(p2(t.getHours()) + ':' + p2(t.getMinutes()) + ':' + p2(t.getSeconds()) + '.' + String(t.getMilliseconds()).padStart(3, '0') + ' ' + msg);
+    if (prnLog.length > 400) prnLog.shift();
+    const el = $('prnLog');
+    if (el) { el.textContent = prnLog.join('\n'); el.scrollTop = el.scrollHeight; }
+  }
+  function hex(b, max) {
+    max = max || 24;
+    return Array.from(b.slice(0, max)).map(x => x.toString(16).padStart(2, '0')).join(' ') + (b.length > max ? ' …（全' + b.length + 'バイト）' : '');
+  }
+  function shortId(u) { return /^0000[0-9a-f]{4}-0000-1000-8000-00805f9b34fb$/.test(u) ? u.slice(4, 8) : u.slice(0, 8); }
 
-    // 送り方「自動」：Android 14 以上は大きめ（180バイト）、それより前は小さく（20バイト）送る
+  const Printer = (() => {
+    let device = null, wch = null, notifs = [], model = '', rx = [], waiters = [], connecting = null, autoChunk = 180;
+    const st = { state: 'none', msg: '' };   // none / connecting / ready / lost
+
+    // 送り方「自動」：Android 14 以上は 180バイトずつ、それより前は 20バイトずつ
     (async () => {
       try {
         const ua = navigator.userAgentData;
@@ -1647,14 +1685,16 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     function chunkSize() { return prnSet.chunk === 'fast' ? 180 : prnSet.chunk === 'safe' ? 20 : autoChunk; }
     function dots() {
       if (prnSet.width === '384' || prnSet.width === '576') return +prnSet.width;
-      return /H(_|$)/i.test(model) ? 576 : 384;          // 型番が …H のものは 300dpi
+      return /H(_|$)/i.test(model) ? 576 : 384;
     }
     function supported() { return !!(navigator.bluetooth && navigator.bluetooth.requestDevice); }
     function set(state, msg) { st.state = state; st.msg = msg || ''; updatePrnUI(); }
 
     function onNotify(e) {
-      const v = e.target.value;
+      const c = e.target, v = c.value;
       const b = new Uint8Array(v.buffer.slice(v.byteOffset, v.byteOffset + v.byteLength));
+      const asc = String.fromCharCode.apply(null, b).replace(/[^\x20-\x7e]/g, '.');
+      plog('受け取り(' + shortId(c.uuid || '') + ')：' + hex(b) + '  「' + asc + '」');
       if (waiters.length) waiters.shift()(b); else rx.push(b);
     }
     function nextReply(ms) {
@@ -1665,51 +1705,65 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
         waiters.push(w);
       });
     }
+    // 少しずつ、間をあけて送る（プリンターの受け取りが追いつくように）
     async function writeRaw(bytes) {
-      const size = chunkSize(), gap = size > 40 ? 12 : 4;
+      const size = chunkSize(), gap = size > 40 ? 20 : 8;
       for (let i = 0; i < bytes.length; i += size) {
+        if (!wch) throw new Error('lost');
         const part = bytes.subarray(i, i + size);
         for (let tries = 0; ; tries++) {
           try {
             if (wch.properties.writeWithoutResponse) await wch.writeValueWithoutResponse(part);
             else await wch.writeValueWithResponse(part);
             break;
-          } catch (e) { if (tries >= 5) throw e; await sleep(40); }
+          } catch (e) { if (tries >= 5 || !wch) throw e; await sleep(50); }
         }
         await sleep(gap);
       }
     }
-    async function send(arr) { await writeRaw(arr instanceof Uint8Array ? arr : new Uint8Array(arr)); }
-    async function query(arr, ms) { rx = []; await send(arr); return nextReply(ms); }
-    function text(b) {
-      if (!b) return '';
-      try { return new TextDecoder('gbk').decode(b).replace(/[\x00-\x20]/g, '').trim(); }
-      catch (e) { return String.fromCharCode.apply(null, b).replace(/[\x00-\x20]/g, ''); }
+    async function send(arr, label) {
+      const b = arr instanceof Uint8Array ? arr : new Uint8Array(arr);
+      plog('送る：' + label + '　' + hex(b));
+      await writeRaw(b);
     }
+    async function query(arr, label, ms) { rx = []; await send(arr, label); const r = await nextReply(ms); if (!r) plog('（返事なし）'); return r; }
 
     async function open() {
       set('connecting', '接続しています…');
+      plog('接続を始めます：' + (device.name || '(名前なし)'));
       const server = await device.gatt.connect();
-      wch = nch = null;
+      plog('接続しました。サービスを調べます');
+      wch = null; notifs = [];
       for (const uuid of PRN_SERVICES) {
         let svc;
-        try { svc = await server.getPrimaryService(uuid); } catch (e) { continue; }
+        try { svc = await server.getPrimaryService(uuid); } catch (e) { plog('サービス ' + shortId(uuid) + '：なし'); continue; }
         const chars = await svc.getCharacteristics();
-        const w = chars.find(c => c.properties.writeWithoutResponse) || chars.find(c => c.properties.write);
+        plog('サービス ' + shortId(uuid) + '：' + chars.map(c => {
+          const pr = c.properties;
+          return shortId(c.uuid) + '[' + [pr.write && '書', pr.writeWithoutResponse && '書(返事なし)', pr.notify && '通知', pr.indicate && '表示', pr.read && '読'].filter(Boolean).join('・') + ']';
+        }).join(' '));
+        if (wch) continue;                                  // 書き込み先が決まったあとは一覧の記録だけ
+        const writable = c => c.properties.writeWithoutResponse || c.properties.write;
+        const w = chars.find(c => c.uuid === PRN_WRITE[uuid] && writable(c)) ||
+                  chars.find(c => writable(c) && !/aca3/.test(c.uuid) && !(c.properties.notify || c.properties.indicate)) ||
+                  null;
         if (!w) continue;
         wch = w;
-        nch = chars.find(c => c.properties.notify) || chars.find(c => c.properties.indicate) || null;
-        break;
+        notifs = chars.filter(c => c !== w && (c.properties.notify || c.properties.indicate));
       }
       if (!wch) throw new Error('nochar');
-      if (nch) { await nch.startNotifications(); nch.addEventListener('characteristicvaluechanged', onNotify); }
-      model = text(await query([0x10, 0xFF, 0x20, 0xF0], 1500));     // 型番を聞く（返事がなくても続ける）
+      plog('書き込み先：' + shortId(wch.uuid) + '　通知：' + (notifs.map(c => shortId(c.uuid)).join('・') || 'なし'));
+      for (const c of notifs) {
+        try { await c.startNotifications(); c.addEventListener('characteristicvaluechanged', onNotify); }
+        catch (e) { plog('通知を受け取れません：' + shortId(c.uuid)); }
+      }
       prnSet.name = device.name || prnSet.name; savePrnSet();
       set('ready');
     }
     function onDisconnected() {
-      wch = nch = null;
-      if (st.state === 'ready') set('lost', 'プリンターとの接続が切れました');
+      wch = null; notifs = [];
+      plog('★ 接続が切れました（プリンターの電源が切れた・離れた など）');
+      if (st.state !== 'none') set('lost', 'プリンターとの接続が切れました');
     }
     async function connect(all) {
       if (!supported()) throw new Error('unsupported');
@@ -1718,13 +1772,12 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
         : { filters: [{ namePrefix: 'PPS1' }, { namePrefix: 'PP' }, { namePrefix: 'S1' }, { namePrefix: 'LuckP' },
                       { services: [PRN_SERVICES[0]] }, { services: [PRN_SERVICES[1]] }],
             optionalServices: PRN_SERVICES };
-      const d = await navigator.bluetooth.requestDevice(opts);   // Chrome の「機器を選ぶ」画面が出る
+      const d = await navigator.bluetooth.requestDevice(opts);   // Chrome の「機器を選ぶ」画面
       if (device && device !== d) { try { device.gatt.disconnect(); } catch (e) {} }
       device = d;
       device.addEventListener('gattserverdisconnected', onDisconnected);
       await open();
     }
-    // 一度つないだ機器なら、選ぶ画面なしでつなぎ直す
     async function ensure() {
       if (wch && device && device.gatt.connected) return true;
       if (!device) {
@@ -1737,14 +1790,15 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
         }
         if (!device) return false;
       }
-      if (!connecting) connecting = open().catch(e => { set('lost', 'プリンターにつながりません'); throw e; }).finally(() => { connecting = null; });
+      if (!connecting) connecting = open().catch(e => { plog('接続できませんでした：' + e.message); set('lost', 'プリンターにつながりません'); throw e; }).finally(() => { connecting = null; });
       try { await connecting; return true; } catch (e) { return false; }
     }
     function disconnect() {
+      set('none');
       if (device) { try { device.gatt.disconnect(); } catch (e) {} }
-      device = null; wch = nch = null; set('none');
+      device = null; wch = null; notifs = [];
+      plog('切断しました');
     }
-    // 状態（10 FF 40 の返事）を言葉に
     function statusError(b) {
       if (!b || !b.length) return '';
       const v = b[b.length - 1] & ~0xA0 & 0xFF;          // 0x20(充電中)・0x80 は無視
@@ -1753,34 +1807,42 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       if (v & 0x50) return 'プリンターが熱くなっています（少し休ませてください）';
       return '';
     }
-    async function printRaster(r) {
+    // 印刷（Luck Jingle D1 を BLE で動かしている公開例と同じ順番）
+    //   状態確認 10 FF 40 → 印刷開始 10 FF F1 03 → 濃さ 10 FF 10 00 nn＋00(起こす) → 画像 GS v 0 → 紙送り → 終了 10 FF F1 45
+    async function printRaster(r, label) {
       if (!(await ensure())) throw new Error('notconnected');
+      plog('―― 印刷：' + (label || '') + '（幅' + r.widthBytes * 8 + 'ドット×' + r.height + '行・' + chunkSize() + 'バイトずつ）');
       rx = [];
-      const label = prnSet.paper === 'label';
-      await send([0x10, 0xFF, 0x10, 0x00, prnSet.density & 0xFF]);     // 濃さ
-      await nextReply(600);
-      let stt = await query([0x10, 0xFF, 0x40], 1500);                 // 状態の確認
-      if (stt && (stt[stt.length - 1] & 0x01)) { await sleep(1500); stt = await query([0x10, 0xFF, 0x40], 1500); }   // 印刷中なら少し待つ
+      let stt = await query([0x10, 0xFF, 0x40], '状態を聞く', 1500);
+      if (stt && (stt[stt.length - 1] & 0x01)) { await sleep(1500); stt = await query([0x10, 0xFF, 0x40], '状態を聞く（再）', 1500); }
       const err = statusError(stt);
-      if (err) throw new Error(err);
-      rx = [];
-      await send([0x10, 0xFF, 0xF1, 0x03]);                            // 印刷開始
-      await send(new Uint8Array(12));                                  // 起こす
-      if (label) { await send([0x1F, 0x80, 0x01, 0x20]); await nextReply(800); }   // ラベル紙（すき間あり）
+      if (err) { plog('止めました：' + err); throw new Error(err); }
+      await send([0x10, 0xFF, 0xF1, 0x03], '印刷開始');
+      const dz = new Uint8Array(5 + 12); dz.set([0x10, 0xFF, 0x10, 0x00, prnSet.density & 0xFF], 0);
+      await send(dz, '濃さ＋起こす');
+      if (prnSet.paper === 'label') { await send([0x1F, 0x80, 0x01, 0x20], '用紙：ラベル'); await nextReply(800); }
       const head = [0x1D, 0x76, 0x30, 0x00, r.widthBytes & 0xFF, r.widthBytes >> 8, r.height & 0xFF, r.height >> 8];
       const all = new Uint8Array(head.length + r.data.length);
       all.set(head, 0); all.set(r.data, head.length);
-      await send(all);                                                 // 画像
-      if (label) await send([0x1D, 0x0C]);                             // 次のラベルの位置まで
-      else await send([0x1B, 0x4A, dots() >= 576 ? 120 : 80]);         // 紙送り
-      await send([0x1B, 0xBB, 0xBB]);                                  // 最後の1枚の印
+      await send(all, '画像');
+      if (prnSet.paper === 'label') await send([0x1D, 0x0C], '次のラベルへ');
+      else await send([0x1B, 0x4A, 100], '紙送り');
       rx = [];
-      await send([0x10, 0xFF, 0xF1, 0x45]);                            // 終了（「OK」か 0xAA が返る）
-      const done = nch ? await nextReply(20000) : null;
+      await send([0x10, 0xFF, 0xF1, 0x45], '終了');
+      const done = notifs.length ? await nextReply(20000) : null;
+      plog(done ? '印刷が終わりました' : '終了の返事はありませんでした');
       return { confirmed: !!done };
     }
+    // 「しらべる」用：1つの命令だけ送って返事を見る
+    async function diagQuery(arr, label) {
+      if (!(await ensure())) throw new Error('notconnected');
+      const r = await query(arr, label, 2000);
+      if (r && arr[2] === 0x20) model = String.fromCharCode.apply(null, r).replace(/[^\x21-\x7e]/g, '');
+      updatePrnUI();
+      return r;
+    }
     return {
-      supported, connect, ensure, disconnect, printRaster, dots,
+      supported, connect, ensure, disconnect, printRaster, diagQuery, dots,
       get state() { return st.state; }, get msg() { return st.msg; },
       get name() { return device ? device.name : ''; }, get model() { return model; },
       get hasDevice() { return !!device; }
@@ -1792,7 +1854,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     if (!Printer.supported()) return { ok: false, msg: 'このブラウザは Bluetooth 印刷に対応していません' };
     try {
       const r = await makeReceipt(text, Printer.dots());
-      const res = await Printer.printRaster(r);
+      const res = await Printer.printRaster(r, 'おみくじ');
       return { ok: true, msg: res.confirmed ? '印刷しました' : '印刷データを送りました' };
     } catch (e) {
       console.error(e);
@@ -1813,6 +1875,8 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     lines.push('プリンターの電源を入れ、Luck Jingle などの専用アプリやパソコンとはつないでいない状態で「プリンターに接続」を押してください。');
     $('prnStatus').textContent = lines.join('\n');
     $('prnTest').disabled = !on; $('prnDisconnect').disabled = !Printer.hasDevice;
+    ['dgStatus', 'dgModel', 'dgLine'].forEach(id => { $(id).disabled = !Printer.hasDevice; });
+    $('dgConnect').disabled = !Printer.supported();
     $('prnConnect').disabled = $('prnConnectAll').disabled = !Printer.supported();
   }
 
@@ -1935,6 +1999,25 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     }
   }
   $('prnConnect').addEventListener('click', () => doConnect(false));
+  // しらべる
+  async function diag(fn) {
+    try { await fn(); }
+    catch (e) { plog('× ' + (e.message === 'notconnected' ? 'つながっていません（① を先に押してください）' : e.message)); }
+    updatePrnUI();
+  }
+  $('dgConnect').addEventListener('click', () => diag(async () => { if (Printer.hasDevice) Printer.disconnect(); await Printer.connect(false); }));
+  $('dgStatus').addEventListener('click', () => diag(() => Printer.diagQuery([0x10, 0xFF, 0x40], '状態を聞く')));
+  $('dgModel').addEventListener('click', () => diag(() => Printer.diagQuery([0x10, 0xFF, 0x20, 0xF0], '型番を聞く')));
+  $('dgLine').addEventListener('click', () => diag(async () => {
+    const wb = Printer.dots() / 8, h = 40, data = new Uint8Array(wb * h);
+    for (let y = 18; y < 22; y++) for (let x = 0; x < wb; x++) data[y * wb + x] = 0xFF;   // 細い横線1本（電気をあまり使わない）
+    await Printer.printRaster({ widthBytes: wb, height: h, data }, '線を1本');
+  }));
+  $('dgCopy').addEventListener('click', async () => {
+    const t = 'もちもちゅ おみくじ v10 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
+    try { await navigator.clipboard.writeText(t); alert('記録をコピーしました。'); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($('prnLog')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); alert('記録を選びました。長押しでコピーしてください。'); }
+  });
   $('prnConnectAll').addEventListener('click', () => doConnect(true));
   $('prnDisconnect').addEventListener('click', () => Printer.disconnect());
   $('prnTest').addEventListener('click', async () => {
@@ -1962,9 +2045,9 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   });
   // ---------- 全画面 ----------
   // ホーム画面のアプリから開いたときは、最初から全画面（manifest の設定）。
-  // ブラウザやショートカットで開いたときも、最初に画面をタップしたところで全画面にする。
-  // （ブラウザの決まりで、タップなどの操作がないと全画面にはできません）
-  let autoFullscreen = true;
+  // v10：ブラウザで開いたときに自動で全画面にするのはやめました（Chrome の「全画面表示を終了するには…」が出るため）。
+  // 管理メニューの「全画面にする」を押したときだけ全画面にします（このときは Chrome の案内が出ます）。
+  let autoFullscreen = false;
   function isAppFullscreen() { return window.matchMedia('(display-mode: fullscreen)').matches; }
   function enterFullscreen() {
     const el = document.documentElement;
@@ -1973,10 +2056,6 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
       .then(() => { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); })
       .catch(() => {});
   }
-  document.addEventListener('click', e => {
-    if (!autoFullscreen || e.target.closest('#admin')) return;   // 管理メニューの操作では切り替えない
-    enterFullscreen();
-  }, true);
   function updateFsBtn() {
     $('fsBtn').textContent = (document.fullscreenElement || isAppFullscreen()) ? '全画面をやめる' : '全画面にする';
     $('fsBtn').hidden = isAppFullscreen();                       // アプリで開いているときは常に全画面なので出さない
@@ -2036,7 +2115,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     splitColumns, printColumns, makeImage, peek, commit, remaining, GROUPS, BY_ID,
     measure: t => { setText(t); const f = fitText(); otext.textContent = ''; return f; },
     get autoFullscreen() { return autoFullscreen; },
-    makeReceipt, printOmikuji, Printer,
+    makeReceipt, printOmikuji, Printer, prnLog,
     get store() { return store; }
   };
 })();
