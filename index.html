@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>もちもちゅ おみくじ v12</title>
+<title>もちもちゅ おみくじ v13</title>
 <!-- ホーム画面アプリ（PWA）用 -->
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#121A3A">
@@ -102,6 +102,9 @@
   .prnSet { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 10px 18px; }
   .prnSet label { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
   .prnSet select { height: 44px; padding: 0 10px; border: 2px solid #121A3A; border-radius: 10px; background: #fff; color: #121A3A; font-family: inherit; font-size: 16px; }
+  .adMsg { margin: 10px 0 0; min-height: 1.5em; font-size: 16px; font-weight: 900; color: #1F6B3A; }
+  .adMsg.ng { color: #A3201A; }
+  .btnDanger.armed { background: #A3201A; color: #fff; }
   .prnDiag { margin-top: 12px; }
   .prnDiag summary { font-size: 16px; font-weight: 900; cursor: pointer; }
   .prnLog { margin: 10px 0 0; max-height: 200px; overflow: auto; padding: 8px 10px; background: #fff; border: 1px solid #121A3A; border-radius: 8px;
@@ -306,7 +309,9 @@
           <button id="prnTest" type="button" class="btnSub">テスト印刷（記録しない）</button>
           <button id="prnDisconnect" type="button" class="btnSub">切断</button>
         </div>
+        <p id="prnMsg" class="adMsg" role="status" aria-live="polite"></p>
         <div class="prnSet">
+          <label>印刷の形 <select id="setLayout"><option value="a4">前のタイプ（もちもちゅ2人の看板）</option><option value="receipt">レシート形（細長い）</option></select></label>
           <label>用紙 <select id="setPaper"><option value="plain">ロール（すき間なし）</option><option value="label">ラベル（すき間あり）</option></select></label>
           <label>濃さ <select id="setDensity"><option value="0">うすい</option><option value="1">ふつう</option><option value="2">こい</option></select></label>
           <label>印字幅 <select id="setWidth"><option value="auto">自動</option><option value="384">384ドット（203dpi）</option><option value="576">576ドット（300dpi）</option></select></label>
@@ -333,7 +338,8 @@
         <button id="resetBtn" type="button" class="btnDanger">記録をすべてリセット</button>
         <button id="adCloseBtn" type="button" class="btnMain" style="margin-left:auto">とじる</button>
       </div>
-      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v12</p>
+      <p id="adMsg" class="adMsg" role="status" aria-live="polite"></p>
+      <p class="small" style="margin-top:10px">もちもちゅ おみくじ v13</p>
     </div>
   </div>
 
@@ -1592,6 +1598,29 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     return { blob, fit };
   }
   // ミニプリンター用（レシート形）：白黒2値のラスター（1ドット＝1ビット、左が上位ビット、1＝黒）
+  // canvas を白黒2値のラスターに（1ドット＝1ビット、左が上位ビット、1＝黒）
+  function toRaster(cv, threshold) {
+    const w = cv.width, h = cv.height;
+    const px = cv.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, w, h).data;
+    const bpr = Math.ceil(w / 8), data = new Uint8Array(bpr * h);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+        if (0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2] < threshold) data[y * bpr + (x >> 3)] |= 0x80 >> (x & 7);
+      }
+    }
+    return { widthBytes: bpr, height: h, data };
+  }
+  // 前のタイプ：A4のおみくじ（看板にもちもちゅ2人）を、そのままプリンターの幅に縮めて印刷する
+  async function makeA4Print(text, dots) {
+    setText(text, otext);
+    const fit = fitText(frame, otext);
+    const outW = dots, outH = Math.round(dots * A4.h / A4.w);
+    const p = renderToCanvas(sheet, A4.w * PX_PER_MM, A4.h * PX_PER_MM, outW, outH);
+    otext.textContent = '';
+    const cv = await p;
+    return Object.assign(toRaster(cv, 170), { canvas: cv, fit });   // 細い線が消えないよう少し濃いめに
+  }
   const RECEIPT = { w: 384, h: 760 };
   async function makeReceipt(text, dots) {
     const rtext = $('rtext');
@@ -1645,7 +1674,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     '49535343-fe7d-4ae5-8fa9-9fafd205e455': '49535343-8841-43f4-a8d4-ecbe34729bb3'
   };
   const sleep = ms => new Promise(r => setTimeout(r, ms));
-  const prnSet = Object.assign({ paper: 'plain', density: 1, width: 'auto', chunk: 'auto', name: '' }, (() => {
+  const prnSet = Object.assign({ layout: 'a4', paper: 'plain', density: 1, width: 'auto', chunk: 'auto', name: '' }, (() => {
     try { return JSON.parse(localStorage.getItem(PRN_KEY) || '{}'); } catch (e) { return {}; }
   })());
   function savePrnSet() { try { localStorage.setItem(PRN_KEY, JSON.stringify(prnSet)); } catch (e) {} }
@@ -1894,7 +1923,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
   async function printOmikuji(text) {
     if (!Printer.supported()) return { ok: false, msg: 'このブラウザは Bluetooth 印刷に対応していません' };
     try {
-      const r = await makeReceipt(text, Printer.dots());
+      const r = prnSet.layout === 'receipt' ? await makeReceipt(text, Printer.dots()) : await makeA4Print(text, Printer.dots());
       const res = await Printer.printRaster(r, 'おみくじ');
       return { ok: true, msg: res.confirmed ? '印刷しました' : '印刷データを送りました' };
     } catch (e) {
@@ -2026,13 +2055,22 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     $('storeWarn').hidden = canStore;
     renderAppStatus();
   }
-  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); updateFsBtn(); updatePrnUI(); $('admin').hidden = false; });
+  $('adminBtn').addEventListener('click', () => { if (busy) return; renderCounts(); updateFsBtn(); updatePrnUI(); showMsg('adMsg', ''); showMsg('prnMsg', ''); $('admin').hidden = false; });
+  // アプリの中にお知らせを出す（v13：Chrome の確認窓は「これ以上表示しない」で止まることがあるため使わない）
+  const msgTimers = {};
+  function showMsg(id, text, ng) {
+    const el = $(id);
+    el.textContent = text || '';
+    el.className = 'adMsg' + (ng ? ' ng' : '');
+    clearTimeout(msgTimers[id]);
+    if (text) msgTimers[id] = setTimeout(() => { el.textContent = ''; }, 10000);
+  }
   async function doConnect(all) {
     try { await Printer.connect(all); }
     catch (e) {
       if (e && e.name === 'NotFoundError') { updatePrnUI(); return; }      // 選ぶ画面を閉じた
       console.error(e);
-      alert('プリンターにつなげませんでした。\n・プリンターの電源が入っているか\n・専用アプリやパソコンとつながっていないか\nを確かめて、もう一度おしてください。');
+      showMsg('prnMsg', 'プリンターにつなげませんでした。電源が入っているか、専用アプリやパソコンとつながっていないかを確かめて、もう一度おしてください。', true);
       updatePrnUI();
     }
   }
@@ -2056,27 +2094,41 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     await Printer.printRaster({ widthBytes: wb, height: h, data }, '線を1本');
   }));
   $('dgCopy').addEventListener('click', async () => {
-    const t = 'もちもちゅ おみくじ v12 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
-    try { await navigator.clipboard.writeText(t); alert('記録をコピーしました。'); }
-    catch (e) { const r = document.createRange(); r.selectNodeContents($('prnLog')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); alert('記録を選びました。長押しでコピーしてください。'); }
+    const t = 'もちもちゅ おみくじ v13 / ' + navigator.userAgent + '\n' + prnLog.join('\n');
+    try { await navigator.clipboard.writeText(t); showMsg('prnMsg', '記録をコピーしました。'); }
+    catch (e) { const r = document.createRange(); r.selectNodeContents($('prnLog')); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); showMsg('prnMsg', '記録を選びました。長押しでコピーしてください。'); }
   });
   $('prnConnectAll').addEventListener('click', () => doConnect(true));
   $('prnDisconnect').addEventListener('click', () => Printer.disconnect());
   $('prnTest').addEventListener('click', async () => {
     const ids = Array.from(BY_ID.keys());
     $('prnTest').disabled = true;
+    showMsg('prnMsg', 'テスト印刷をしています…');
     const r = await printOmikuji(BY_ID.get(ids[randInt(ids.length)]).t);
-    alert(r.msg);
+    showMsg('prnMsg', 'テスト印刷：' + r.msg, !r.ok);
     updatePrnUI();
   });
-  [['setPaper', 'paper', String], ['setDensity', 'density', Number], ['setWidth', 'width', String], ['setChunk', 'chunk', String]].forEach(([id, k, conv]) => {
+  [['setLayout', 'layout', String], ['setPaper', 'paper', String], ['setDensity', 'density', Number], ['setWidth', 'width', String], ['setChunk', 'chunk', String]].forEach(([id, k, conv]) => {
     $(id).value = String(prnSet[k]);
     $(id).addEventListener('change', () => { prnSet[k] = conv($(id).value); savePrnSet(); updatePrnUI(); });
   });
-  $('adCloseBtn').addEventListener('click', () => { $('admin').hidden = true; });
+  $('adCloseBtn').addEventListener('click', () => { disarmReset(); $('admin').hidden = true; });
+  // 記録のリセット：まちがって押さないよう、2回押すと消える（1回目でボタンが赤くなる。6秒で元にもどる）
+  let resetArmed = 0;
+  function disarmReset() {
+    clearTimeout(resetArmed); resetArmed = 0;
+    $('resetBtn').classList.remove('armed'); $('resetBtn').textContent = '記録をすべてリセット';
+  }
   $('resetBtn').addEventListener('click', () => {
-    if (!confirm('出たおみくじの記録をすべて消します。\nすべての区分が最初から（20個ずつ）になります。よろしいですか？')) return;
+    if (!resetArmed) {
+      $('resetBtn').classList.add('armed'); $('resetBtn').textContent = '本当に消す？（もう一度おす）';
+      showMsg('adMsg', 'もう一度おすと、出たおみくじの記録をすべて消します。', true);
+      resetArmed = setTimeout(() => { disarmReset(); showMsg('adMsg', ''); }, 6000);
+      return;
+    }
+    disarmReset();
     store = { v: 1, groups: {} }; saveStore(); renderCounts();
+    showMsg('adMsg', canStore ? '記録をリセットしました。すべての区分が 20 / 20 にもどりました。' : 'リセットしましたが、このブラウザでは記録を保存できません。', !canStore);
   });
   // ---------- 全画面 ----------
   // ホーム画面のアプリから開いたときは、最初から全画面（manifest の設定）。
@@ -2150,7 +2202,7 @@ ID,性別,年代,カテゴリ,番号,おみくじ文言
     splitColumns, printColumns, makeImage, peek, commit, remaining, GROUPS, BY_ID,
     measure: t => { setText(t); const f = fitText(); otext.textContent = ''; return f; },
     get autoFullscreen() { return autoFullscreen; },
-    makeReceipt, printOmikuji, Printer, prnLog,
+    makeReceipt, makeA4Print, printOmikuji, Printer, prnLog,
     get store() { return store; }
   };
 })();
